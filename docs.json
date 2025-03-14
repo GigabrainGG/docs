@@ -4,8 +4,8 @@
   "name": "Gigabrain Docs",
   "colors": {
     "primary": "#22c55e",
-    "light": "#4ade80",
-    "dark": "#16a34a"
+    "light": "#86efac",
+    "dark": "#22c55e"
   },
   "fonts": {
     "body": {
@@ -21,7 +21,7 @@
       "weight": 700
     }
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/gigabrain.png",
   "navigation": {
     "tabs": [
       {
@@ -55,8 +55,13 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://gigabrain.gg/docs",
+          "anchor": "Terminal",
+          "href": "https://gigabrain.gg/login",
+          "icon": "terminal"
+        },
+        {
+          "anchor": "Dexscreener",
+          "href": "https://dexscreener.com/base/0xfbabdfb96900a6413455a4603324fa066f7f8a74",
           "icon": "book-open-cover"
         },
         {
