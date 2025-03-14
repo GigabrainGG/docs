@@ -3,53 +3,50 @@
   "theme": "mint",
   "name": "Gigabrain Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#22c55e",
+    "light": "#4ade80",
+    "dark": "#16a34a"
+  },
+  "fonts": {
+    "body": {
+      "family": "Avenir Next",
+      "source": "https://gigabrain.gg/fonts/AvenirNext-Medium.woff2",
+      "format": "woff2",
+      "weight": 500
+    },
+    "heading": {
+      "family": "Avenir Next",
+      "source": "https://gigabrain.gg/fonts/AvenirNext-Bold.woff2",
+      "format": "woff2",
+      "weight": 700
+    }
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Platform",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Overview",
             "pages": [
               "introduction",
-              "quickstart",
-              "development"
+              "problem-statement",
+              "features",
+              "architecture"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Token & Economics",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
+              "tokenomics",
+              "roadmap"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Help",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "faq"
             ]
           }
         ]
@@ -59,44 +56,43 @@
       "anchors": [
         {
           "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
+          "href": "https://gigabrain.gg/docs",
           "icon": "book-open-cover"
         },
         {
           "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "href": "https://t.me/gigabraingg",
+          "icon": "telegram"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "X",
+          "href": "https://x.com/gigabraingg",
+          "icon": "X"
         }
       ]
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/gigabrain.png",
+    "dark": "/logo/gigabrain.png"
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "https://t.me/gigabraingg"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Launch Terminal",
+      "href": "https://gigabrain.gg/login"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "twitter": "https://x.com/gigabraingg",
+      "telegram": "https://t.me/gigabraingg"
     }
   }
 }
