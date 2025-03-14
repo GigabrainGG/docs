@@ -94,5 +94,9 @@
       "twitter": "https://x.com/gigabraingg",
       "telegram": "https://t.me/gigabraingg"
     }
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": true
   }
 }
