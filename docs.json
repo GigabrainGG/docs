@@ -25,7 +25,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Platform",
+        "tab": "Terminal",
         "groups": [
           {
             "group": "Overview",
@@ -75,7 +75,7 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Terminal",
+          "anchor": "Open Terminal",
           "href": "https://gigabrain.gg/login",
           "icon": "terminal"
         },
