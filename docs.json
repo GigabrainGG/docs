@@ -30,9 +30,9 @@
           {
             "group": "Overview",
             "pages": [
-              "intro/introduction",
-              "intro/product",
-              "intro/architecture"
+              "overview/introduction",
+              "overview/product",
+              "overview/architecture"
             ]
           },
           {
