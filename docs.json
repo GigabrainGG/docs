@@ -30,23 +30,43 @@
           {
             "group": "Overview",
             "pages": [
-              "introduction",
-              "problem-statement",
-              "features",
-              "architecture"
+              "intro/introduction",
+              "intro/product",
+              "intro/architecture"
             ]
           },
           {
             "group": "Token & Economics",
             "pages": [
-              "tokenomics",
-              "roadmap"
+              "token/tokenomics",
+              "token/revenue",
+              "token/roadmap"
+            ]
+          },
+          {
+            "group": "Gigabrain Fund",
+            "pages": [
+              "funds/alpha-fund",
+              "funds/test-fund"
             ]
           },
           {
             "group": "Help",
             "pages": [
-              "faq"
+              "help/faq",
+              "help/contact",
+              "help/disclaimer"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Developers",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "developers/introduction"
             ]
           }
         ]
@@ -72,7 +92,7 @@
         {
           "anchor": "X",
           "href": "https://x.com/gigabraingg",
-          "icon": "X"
+          "icon": "x"
         }
       ]
     }
