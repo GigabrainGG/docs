@@ -9,15 +9,11 @@
   },
   "fonts": {
     "body": {
-      "family": "Avenir Next",
-      "source": "https://gigabrain.gg/fonts/AvenirNext-Medium.woff2",
-      "format": "woff2",
-      "weight": 500
+      "family": "Karla",
+      "weight": 400
     },
     "heading": {
-      "family": "Avenir Next",
-      "source": "https://gigabrain.gg/fonts/AvenirNext-Bold.woff2",
-      "format": "woff2",
+      "family": "Karla",
       "weight": 700
     }
   },
