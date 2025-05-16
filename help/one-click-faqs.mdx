@@ -1,0 +1,60 @@
+---
+title: "⚡ One-Click Trading — FAQ"
+---
+
+## 🛠 Trade Execution
+
+### **Why is my order sometimes executed as a market order instead of a limit order?**
+
+**Example:** BTC is trading at \$85K. You want to long at \$90K.\
+• A **limit order** at \$90K would fill immediately because the market is already below.\
+• A **stop-limit** is required to trigger only when price reaches \$90K.\
+However, Hyperliquid currently doesn’t support linking TP/SL orders to stop-based entries. Managing separate contingent orders exceeds API rate limits.
+
+## 📊 Position Management
+
+### **What does the Delete button on an open-position card do, and when should I use it?**
+
+**Function:** Permanently removes the position record from the Gigabrain terminal.\
+**Use it when:**\
+• You’ve manually closed the trade on Hyperliquid, but it still shows in the terminal\
+• You want to remove historical or irrelevant entries for clarity
+
+![Delete Pn](/images/delete.png)
+
+### **Can I disable invalidations after my position is live?**
+
+Yes. Use the toggle in the top-right corner of the position card to disable **Invalidation**.\
+Once disabled, the agent will no longer manage or exit the trade, even if the trade thesis is broken.
+
+![Invalidation Pn](/images/Invalidation.png)
+
+### **Can I modify my Stop-Loss (SL) and Take-Profit (TP) levels?**
+
+Yes. Click **Modify Position** on the position card to adjust SL and TP parameters during a live trade.
+
+![Modify Pn](/images/modify.png)
+
+## 🧠 Signal Behavior
+
+### **Why don’t some Alpha cards have an Open Trade button?**
+
+Only signals with a status of **Open** or **Active** display the "Open Trade" button.\
+Signals marked **Won**, **Lost**, or **Cancelled** are historical and not eligible for execution.
+
+### **Where can I review the agent’s actions on my position?**
+
+All automated activity — entries, exits, modifications, and cancellations — is recorded under **Brain Activity**.\
+Example:\
+`→ Cancelled BNB‑PERP | Reason: trade thesis invalidated`
+
+![Brain Feed Jpe](/images/brain_feed.jpeg)
+
+## 📈 Performance Metrics
+
+### **How is my win rate calculated?**
+
+Win rate only includes trades that were both **opened and closed through the Gigabrain terminal**.\
+If you close a trade manually on Hyperliquid, it’s marked as **Cancelled** and excluded from your win-loss metrics.
+
+---
