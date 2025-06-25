@@ -3,7 +3,6 @@ title: "FAQ"
 description: "Frequently Asked Questions"
 ---
 
-
 <AccordionGroup>
   <Accordion title="What is Gigabrain?">
     Gigabrain is an AI-powered trading intelligence platform for cryptocurrency markets, offering institutional-grade insights and real-time analytics in a single terminal.
@@ -25,5 +24,40 @@ description: "Frequently Asked Questions"
   </Accordion>
   <Accordion title="How often are new signals generated?">
     Signal frequency varies based on market conditions. Quality is prioritized over quantity, so signals are only generated when high-confidence opportunities are identified.
+  </Accordion>
+</AccordionGroup>
+
+### Auto-Trade FAQs
+
+<AccordionGroup>
+  <Accordion title="What happens if I already have an active position in a token that Auto-Trade opens a trade for?">
+    **If Auto-Trade opens a Long position:**
+
+    - Your **existing Long** position size will **increase** by the Auto-Trade order size.
+    - Your **existing Short** position size will **decrease** by the Auto-Trade order size.
+
+    **If Auto-Trade opens a Short position:**
+
+    - Your **existing Long** position size will **decrease** by the Auto-Trade order size.
+    - Your **existing Short** position size will **increase** by the Auto-Trade order size.
+  </Accordion>
+  <Accordion title="Why is the entry price for my trade different from the strategy's entry price?">
+    Entry prices may differ due to slight delays in order execution timing. Auto-Trade executes trades as signals are received, but network conditions and fills can vary per user.
+  </Accordion>
+  <Accordion title="How is trade size determined for each auto-executed order?">
+    Trades are opened based on proportion**of your total assigned value** . This ensures consistent risk management.
+  </Accordion>
+  <Accordion title="Can I change the amount I’ve subscribed to a strategy?">
+    Yes. To change the allocation:
+
+    - **Unsubscribe** from the strategy.
+    - **Re-subscribe** with new amount.
+  </Accordion>
+  <Accordion title="How many trades should I expect from Auto-Trade?">
+    - **Ramanujan Strategy**: ~4–5 high-conviction trades per week.
+    - **Agent Strategies**: Varies by strategy type and market conditions.
+  </Accordion>
+  <Accordion title="What if there are no active trades in the strategy, but I still have open positions on Hyperliquid opened by auto trade?">
+    This can happen due to API rate limits. You may manually close any leftover trades on your Hyperliquid account if they weren’t successfully closed by Auto-Trade.
   </Accordion>
 </AccordionGroup>
