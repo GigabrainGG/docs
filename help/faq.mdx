@@ -27,7 +27,7 @@ description: "Frequently Asked Questions"
   </Accordion>
 </AccordionGroup>
 
-## Auto-Trade FAQs
+## AutoTrade FAQs
 
 <AccordionGroup>
   <Accordion title="What happens if I already have an active position in a token that Auto-Trade opens a trade for?">
@@ -86,12 +86,12 @@ description: "Frequently Asked Questions"
     Auto-Trade places orders according to the strategy, but actual execution depends on prevailing market conditions on the Hyperliquid liquidity.
   </Accordion>
   <Accordion title="What happens to subscriber open orders if the master account order gets filled but subscriber orders don't get filled?">
-    **Unfilled subscriber orders are automatically cancelled after 1 minute.**\
+    **Unfilled subscriber orders are automatically cancelled after 3 minute.**\
     \
     Here's how the process works:\
     **Master order fills:** The strategy position becomes active in the master account.\
     **Subscriber orders remain unfilled:** Due to market conditions or liquidity constraints.\
-    **Automatic cancellation:** All unfilled subscriber orders are cancelled after 1 minute to prevent stale orders.\
+    **Automatic cancellation:** All unfilled subscriber orders are cancelled after 3 minute to prevent stale orders.\
     **Position synchronization:** This ensures subscribers don't have outdated orders that could execute at unfavorable prices.
 
     This automatic cancellation mechanism protects subscribers from executing orders that may no longer align with the current market conditions or strategy timing.
@@ -100,46 +100,35 @@ description: "Frequently Asked Questions"
 
 ## One Click Trade FAQs
 
-### Trade Execution
-
-<Accordion title="Why is my order sometimes executed as a market order instead of a limit order?">
-  **Example:** BTC is trading at \$85K. You want to long at \$90K.\
-  • A **limit order** at \$90K would fill immediately because the market is already below.\
-  • A **stop-limit** is required to trigger only when price reaches \$90K.\
-  However, Hyperliquid currently doesn’t support linking TP/SL orders to stop-based entries. Managing separate contingent orders exceeds API rate limits.
-</Accordion>
-
-### Position Management
-
-<Accordion title="What does the Delete button on an open-position card do, and when should I use it?">
-  **Function:** Permanently removes the position record from the Gigabrain terminal.\
-  **Use it when:**\
-  • You’ve manually closed the trade on Hyperliquid, but it still shows in the terminal\
-  • You want to remove historical or irrelevant entries for clarity
-</Accordion>
-
-<Accordion title="Can I disable invalidations after my position is live?">
-  Yes. Use the toggle in the top-right corner of the position card to disable **Invalidation**.\
-  Once disabled, the agent will no longer manage or exit the trade, even if the trade thesis is broken.
-</Accordion>
-
-<Accordion title="Can I modify my Stop-Loss (SL) and Take-Profit (TP) levels?">
-  Yes. Click **Modify Position** on the position card to adjust SL and TP parameters during a live trade.Yes. Click **Modify Position** on the position card to adjust SL and TP parameters during a live trade.
-</Accordion>
-
-### Signal Behavior
-
-<Accordion title="Why don’t some Alpha cards have an Open Trade button?">
-  Only signals with a status of **Open** or **Active** display the "Open Trade" button.\
-  Signals marked **Won**, **Lost**, or **Cancelled** are historical and not eligible for execution.
-</Accordion>
-
-<Accordion title=" Where can I review the agent’s actions on my position?">
-  All automated activity — entries, exits, modifications, and cancellations — is recorded under **Brain Activity**.\
-  Example:\
-  `→ Cancelled BNB‑PERP | Reason: trade thesis invalidated`
-</Accordion>
-
-### 
+<AccordionGroup>
+  <Accordion title="Why is my order sometimes executed as a market order instead of a limit order?">
+    **Example:** BTC is trading at \$85K. You want to long at \$90K.\
+    • A **limit order** at \$90K would fill immediately because the market is already below.\
+    • A **stop-limit** is required to trigger only when price reaches \$90K.\
+    However, Hyperliquid currently doesn’t support linking TP/SL orders to stop-based entries. Managing separate contingent orders exceeds API rate limits.
+  </Accordion>
+  <Accordion title="What does the Delete button on an open-position card do, and when should I use it?">
+    **Function:** Permanently removes the position record from the Gigabrain terminal.\
+    **Use it when:**\
+    • You’ve manually closed the trade on Hyperliquid, but it still shows in the terminal\
+    • You want to remove historical or irrelevant entries for clarity
+  </Accordion>
+  <Accordion title="Can I disable invalidations after my position is live?">
+    Yes. Use the toggle in the top-right corner of the position card to disable **Invalidation**.\
+    Once disabled, the agent will no longer manage or exit the trade, even if the trade thesis is broken.
+  </Accordion>
+  <Accordion title="Can I modify my Stop-Loss (SL) and Take-Profit (TP) levels?">
+    Yes. Click **Modify Position** on the position card to adjust SL and TP parameters during a live trade.Yes. Click **Modify Position** on the position card to adjust SL and TP parameters during a live trade.
+  </Accordion>
+  <Accordion title="Why don’t some Alpha cards have an Open Trade button?">
+    Only signals with a status of **Open** or **Active** display the "Open Trade" button.\
+    Signals marked **Won**, **Lost**, or **Cancelled** are historical and not eligible for execution.
+  </Accordion>
+  <Accordion title=" Where can I review the agent’s actions on my position?">
+    All automated activity — entries, exits, modifications, and cancellations — is recorded under **Brain Activity**.\
+    Example:\
+    `→ Cancelled BNB‑PERP | Reason: trade thesis invalidated`
+  </Accordion>
+</AccordionGroup>
 
 ---
