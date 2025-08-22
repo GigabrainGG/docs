@@ -1,13 +1,13 @@
 ---
 title: "Autotrade"
-description: "Auto-Trade lets you mirror high-conviction strategies on Hyperliquid — fully automated, risk-managed, and powered by Gigabrain."
+description: "Autotrade lets you mirror high conviction strategies on Hyperliquid fully automated, risk managed, and powered by Gigabrain."
 ---
 
 ## Overview
 
 ![Screenshot 2025-06-25 at 2.43.15 PM.png](/images/Screenshot2025-06-25at2.43.15PM.png)
 
-Auto-Trade is a fully integrated, rules-based trading infrastructure designed to mirror curated strategies in real time. It supports both human-validated and agentic (AI-led) strategies and operates natively on Hyperliquid via proprietary Gigabrain infrastructure. The system ensures low-latency execution, proportional risk exposure, and zero manual intervention post-subscription.
+Autotrade is a fully integrated, rules based trading infrastructure designed to mirror curated strategies in real time. It supports both human validated and agentic strategies and operates natively on Hyperliquid via proprietary Gigabrain infrastructure. The system ensures low latency execution, proportional risk exposure, and zero manual intervention post subscription.
 
 ## 1. System Architecture
 
@@ -21,34 +21,34 @@ Completely autonomous execution. Trades are identified, validated, and executed 
 
 ### Copy Trading Engine
 
-- Real-time replication of trades from strategy master accounts to user accounts
+- Real time replication of trades from strategy master accounts to user accounts
 - Enforces strict execution timing and position parity
-- Built for high-availability, concurrent load, and deterministic behavior
+- Built for high availability, concurrent load, and deterministic behavior
 
 ### Hyperliquid MCP Integration
 
 - Direct native execution on Hyperliquid
-- Ultra-low latency synchronization across user accounts
-- MCP (Multi-Counterparty Protocol) compliance for institutional-grade throughput
+- Ultra low latency synchronization across user accounts
+- MCP (Multi Counterparty Protocol) compliance for institutional grade throughput
 
 ## 2. Trade Execution Flow
 
-1. **Signal Triggered**: A trading opportunity is identified by the strategy (either human-initiated or agentic).
+1. **Signal Triggered**: A trading opportunity is identified by the strategy (either human initiated or agentic).
 2. **Master Account Execution**: Trade is executed on the strategy account.
-3. **Trade Replication**: The Copy Engine mirrors this trade across all subscribed user accounts in real-time.
+3. **Trade Replication**: The Copy Engine mirrors this trade across all subscribed user accounts in real time.
 4. **State Sync**: Risk parameters (position size, TP/SL levels) are applied uniformly across all instances.
 
 ## 3. Capital Allocation & Risk Management
 
 ### Proportional Sizing
 
-Each user’s trade size is a direct function of their allocated strategy capital. For instance, a \$1,000 subscription with a 10% per-trade allocation results in a ~\$100 notional per trade, regardless of their broader account balance on Hyperliquid.
+Each user’s trade size is a direct function of their allocated strategy capital. For instance, a \$1,000 subscription with a 10% per trade allocation results in a ~\$100 notional per trade, regardless of their broader account balance on Hyperliquid.
 
 ### Risk Parameter Enforcement
 
 - **Dynamic Stop Losses (SL)** and **Take Profits (TP)** are synchronized live from strategy parameters
-- System supports mid-trade updates to risk profiles across all accounts
-- All adjustments are atomic and timestamp-aligned
+- System supports mid trade updates to risk profiles across all accounts
+- All adjustments are atomic and timestamp aligned
 
 ### Future: Risk Profile Customization
 
@@ -60,7 +60,7 @@ Upcoming functionality will allow users to select from risk modes per strategy:
 
 ## 4. User Experience & Controls
 
-- **Zero manual intervention** post-subscription
+- **Zero manual intervention** post subscription
 - Full visibility into live and historical trade activity via Hyperliquid
 - Native support for unsubscription and capital reallocation
 
@@ -69,12 +69,12 @@ Upcoming functionality will allow users to select from risk modes per strategy:
 **Copy Trading Engine**: Infrastructure layer that mirrors strategy trades to user accounts\
 **Agentic Strategy**: Fully automated AI strategy executing without human involvement\
 **TP / SL**: Take Profit / Stop Loss thresholds\
-**MCP**: Hyperliquid’s execution protocol for multi-party trade synchronization\
-**Position Netting**: Real-time adjustment of opposing positions to reflect net exposure
+**MCP**: Hyperliquid’s execution protocol for multi party trade synchronization\
+**Position Netting**: Real time adjustment of opposing positions to reflect net exposure
 
 ## 6. Versioning & Forward Guidance
 
-This documentation is updated on a rolling basis as Auto-Trade functionality evolves. For questions, institutional inquiries, or to request custom strategy access, reach out to: [hello@gigabrain.gg](mailto:hello@gigabrain.gg)
+This documentation is updated on a rolling basis as Autotrade functionality evolves. For questions, institutional inquiries, or to request custom strategy access, reach out to: [hello@gigabrain.gg](mailto:hello@gigabrain.gg)
 
 <Info>
   This documentation is subject to updates as new features are implemented and system capabilities are expanded.
