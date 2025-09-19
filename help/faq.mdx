@@ -27,6 +27,60 @@ description: "Frequently Asked Questions"
   </Accordion>
 </AccordionGroup>
 
+## Vault FAQs
+
+<AccordionGroup>
+  <Accordion title=" Can I track vault trades?">
+    Yes. You can track all vault trades through the **provided vault link on the Hyperliquid UI**.
+  </Accordion>
+  <Accordion title="What is an associated address, and which wallet should I use to deposit funds in the vault?">
+    - The **associated address** is the wallet that holds **1M \$BRAIN**.
+    - You must deposit USDC from this wallet only, since **all withdrawals are returned to the associated wallet**.
+  </Accordion>
+  <Accordion title="What happens if I deposit more USDC than the maximum limit?">
+    Any USDC deposited **above the maximum limit** will be **automatically returned** to your associated wallet.\
+    \
+    **Example:** If the maximum deposit for the vault is **2,000 USDC per user** and you deposit **3,000 USDC**, then the **extra 1,000 USDC** will be returned to your associated wallet.
+  </Accordion>
+  <Accordion title="How are vault deposits processed?">
+    Vault deposits are processed at **fixed time intervals**. Pending deposits are placed in a **queue** and then deposited together into the vault.
+  </Accordion>
+  <Accordion title="Is there a cooldown period for vault deposits?">
+    Yes. There is a **24 hour cooldown period** before you can withdraw. \
+    This cooldown is **imposed by Hyperliquid vaults**, not by Gigabrain’s infrastructure.
+
+    ---
+  </Accordion>
+  <Accordion title="Why do I need to transfer USDC to a smart wallet instead of depositing directly into the vault?">
+    To keep the vault **token gated**, deposits are first collected in **smart wallets**. This ensures we can **return funds to users who sell their 1M \$BRAIN**.
+  </Accordion>
+  <Accordion title="Can money be withdrawn directly from smart wallets?">
+    No. Smart wallets are **non custodial**. Funds can **only be withdrawn back to the associated wallet** (the wallet holding 1M \$BRAIN). No other address is eligible to withdraw funds from this wallets.
+  </Accordion>
+  <Accordion title="Where will withdrawn money from vaults be sent?">
+    Withdrawn USDC will be sent back to your **associated wallet’s Spot account** on Hyperliquid.
+  </Accordion>
+  <Accordion title="Where can I track my returns?">
+    You can track your vault **returns and performance** directly on the **vault page in the Gigabrain terminal**.
+  </Accordion>
+  <Accordion title="What happens if I sell my 1M $BRAIN while still having deposited USDC in vaults?">
+    If you sell your 1M \$BRAIN:
+
+    - You will **lose access** to the platform.
+    - Your deposited USDC will be **returned to your associated wallet**.
+    - The returned amount may **differ** depending on vault’s **live positions and your PnL**.
+  </Accordion>
+  <Accordion title="Is there a minimum deposit requirement?">
+    Yes. The **minimum deposit** into the vault is **100 USDC**.
+  </Accordion>
+  <Accordion title="Can I withdraw partial amounts from vaults?">
+    Yes. Partial withdrawals are supported.
+  </Accordion>
+  <Accordion title="Which type of wallet/account should I use?">
+    Use only an **EOA (Externally Owned Account)** wallet. Avoid using **smart wallets** or **multisig wallets**, as these may cause deposit or withdrawal issues.
+  </Accordion>
+</AccordionGroup>
+
 ## AutoTrade FAQs
 
 <AccordionGroup>
@@ -130,5 +184,7 @@ description: "Frequently Asked Questions"
     `→ Cancelled BNB‑PERP | Reason: trade thesis invalidated`
   </Accordion>
 </AccordionGroup>
+
+## 
 
 ---
