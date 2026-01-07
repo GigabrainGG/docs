@@ -1,0 +1,216 @@
+---
+title: Hyperliquid Guide
+description: How to connect and trade on Hyperliquid with Gigabrain
+---
+
+# Hyperliquid Integration Guide
+
+Learn how to connect your Hyperliquid account to Gigabrain and start trading with AI-powered strategies.
+
+## What is Hyperliquid?
+
+Hyperliquid is a high-performance decentralized exchange (DEX) offering perpetual futures trading with deep liquidity and low fees.
+
+## Why Use Hyperliquid with Gigabrain?
+
+- **Low Fees**: Minimal trading costs
+- **High Leverage**: Up to 50x leverage on select pairs
+- **Deep Liquidity**: Tight spreads and minimal slippage
+- **On-Chain**: Fully decentralized and transparent
+- **Fast Execution**: Sub-second order confirmation
+
+## Prerequisites
+
+Before connecting Hyperliquid:
+
+1. **Hyperliquid Account**: Create an account at [hyperliquid.xyz](https://hyperliquid.xyz)
+2. **Wallet**: Compatible wallet (MetaMask, WalletConnect, etc.)
+3. **Funds**: Deposit USDC to your Hyperliquid account
+4. **Gigabrain Account**: Sign up at [gigabrain.gg](https://gigabrain.gg/login)
+
+## Connection Steps
+
+### Step 1: Generate API Key
+
+1. Log into your Hyperliquid account
+2. Navigate to **Settings** → **API Keys**
+3. Click **Create New API Key**
+4. Set permissions:
+   - ✅ Trading
+   - ❌ Withdrawals (keep disabled)
+5. Save your API key and secret securely
+
+### Step 2: Connect to Gigabrain
+
+1. Open [Gigabrain Terminal](https://gigabrain.gg/login)
+2. Go to **Settings** → **Exchange Connections**
+3. Click **Add Exchange**
+4. Select **Hyperliquid**
+5. Enter your API credentials:
+   - API Key
+   - API Secret
+6. Click **Connect**
+7. Verify connection status
+
+### Step 3: Configure Trading
+
+1. Set your trading preferences:
+   - **Default Leverage**: 1x-50x
+   - **Position Size**: Maximum per trade
+   - **Risk Level**: Conservative/Moderate/Aggressive
+2. Enable/disable specific trading pairs
+3. Set stop-loss and take-profit defaults
+
+## Trading on Hyperliquid
+
+### Manual Trading
+
+1. Navigate to **Trade** tab
+2. Select Hyperliquid as exchange
+3. Choose trading pair
+4. Set leverage and position size
+5. Execute trade with AI recommendations
+
+### Auto-Trading
+
+1. Go to **Auto-Trade** section
+2. Create new bot
+3. Select Hyperliquid as exchange
+4. Choose strategy template
+5. Configure parameters
+6. Deploy bot
+
+### Perpetual Futures
+
+Hyperliquid specializes in perpetuals:
+
+- **Long Positions**: Bet on price increase
+- **Short Positions**: Bet on price decrease
+- **Leverage**: Amplify gains (and losses)
+- **Funding Rates**: Periodic payments between longs/shorts
+
+## Risk Management
+
+### Leverage Risks
+
+Higher leverage = higher risk:
+
+- **1-5x**: Conservative, suitable for beginners
+- **5-20x**: Moderate, for experienced traders
+- **20-50x**: Aggressive, high risk/reward
+
+### Safety Features
+
+Gigabrain provides:
+
+- Automatic stop-losses
+- Position size limits
+- Liquidation price warnings
+- Real-time P&L tracking
+
+### Best Practices
+
+1. **Start Small**: Begin with low leverage
+2. **Use Stop-Losses**: Always protect your capital
+3. **Monitor Funding**: Check funding rates regularly
+4. **Diversify**: Don't put all capital in one position
+5. **Stay Informed**: Follow market news and updates
+
+## Fees
+
+### Hyperliquid Fees
+
+- Maker: 0.00% (rebate)
+- Taker: 0.035%
+- No withdrawal fees (on-chain gas only)
+
+### Gigabrain Fees
+
+- Platform fee: 0.2-0.3% (see [Revenue Model](/token/revenue))
+- Token holders get discounts
+
+## Supported Pairs
+
+Popular pairs on Hyperliquid:
+
+- BTC/USDC
+- ETH/USDC
+- SOL/USDC
+- ARB/USDC
+- And 50+ more
+
+Check the Terminal for the full list.
+
+## Troubleshooting
+
+### Connection Issues
+
+**Problem**: Can't connect API
+
+- **Solution**: Verify API key permissions (trading only)
+- Check API key is active on Hyperliquid
+- Ensure correct API key and secret
+
+**Problem**: Trades not executing
+
+- **Solution**: Check account balance
+- Verify leverage settings
+- Ensure pair is available
+
+### Trading Issues
+
+**Problem**: Liquidation warning
+
+- **Solution**: Reduce leverage or position size
+- Add more margin to position
+- Close position to prevent liquidation
+
+**Problem**: High funding rates
+
+- **Solution**: Consider closing position before funding
+- Switch to opposite side if rate is favorable
+- Factor funding into strategy
+
+## Advanced Features
+
+### Cross-Margin vs Isolated
+
+- **Cross-Margin**: All positions share margin
+- **Isolated**: Each position has separate margin
+
+Choose based on your risk preference.
+
+### Limit Orders
+
+Use limit orders for:
+
+- Better entry prices
+- Reduced slippage
+- Market making strategies
+
+### Stop Orders
+
+Protect positions with:
+
+- Stop-loss orders
+- Take-profit orders
+- Trailing stops
+
+## Resources
+
+- [Hyperliquid Documentation](https://hyperliquid.xyz/docs)
+- [Gigabrain Terminal Guide](/help/terminal-user-guide)
+- [Trading FAQ](/help/faq)
+- [Telegram Community](https://t.me/gigabraingg)
+
+## Support
+
+Need help with Hyperliquid integration?
+
+- Email: support@gigabrain.gg
+- Telegram: [t.me/gigabraingg](https://t.me/gigabraingg)
+- Check [FAQ](/help/faq)
+
+---
+
+_Trading perpetual futures involves significant risk. Only trade with capital you can afford to lose._
