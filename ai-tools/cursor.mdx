@@ -1,0 +1,190 @@
+---
+title: "Cursor setup"
+description: "Configure Cursor for working with Gigabrain's API"
+icon: "arrow-pointer"
+---
+
+Use Cursor to help you build integrations with Gigabrain's Intelligence Collective API. This guide shows how to configure Cursor for better results when working with market analysis, trading bots, and crypto data.
+
+## Prerequisites
+
+- Cursor editor installed
+- Gigabrain API key from your [Profile](https://gigabrain.gg/profile)
+
+## Project rules
+
+Create project rules that help Cursor understand Gigabrain's API and crypto trading context. In your project root:
+
+```bash
+mkdir -p .cursor
+```
+
+Create `.cursor/rules.md`:
+
+````markdown
+# Gigabrain API Integration Rules
+
+You are an AI assistant specialized in building integrations with Gigabrain's Intelligence Collective API for crypto market analysis and trading.
+
+## Gigabrain API Overview
+
+### Base URL
+
+```
+https://api.gigabrain.gg/v1
+```
+
+### Authentication
+
+All requests require an API key in the Authorization header:
+
+```bash
+Authorization: Bearer gb_sk_<your-key>
+```
+
+### Rate Limits
+
+- Per minute: 30 requests
+- Per day: 1,000 requests
+
+## Core Endpoints
+
+### POST /v1/chat
+
+Send queries to the Intelligence Collective for market analysis.
+
+**Request:**
+
+```json
+{
+  "message": "What is the price of BTC?",
+  "stream": false
+}
+```
+
+**Response:**
+
+```json
+{
+  "session_id": "uuid",
+  "message": "BTC is currently trading at $45,234...",
+  "timestamp": "2024-01-07T12:00:00Z"
+}
+```
+
+### GET /v1/sessions
+
+Retrieve chat session history.
+
+## Intelligence Collective Agents
+
+When crafting queries, understand the specialist agents:
+
+- **Macro Analyst**: DXY, VIX, Treasury yields, liquidity flows, risk-on/off
+- **Microstructure Analyst**: OI, funding rates, liquidations, positioning
+- **Fundamentals Analyst**: TVL, revenue, emissions, unlocks, ecosystem
+- **Market State Analyst**: Sentiment, high-impact alpha, regime shifts
+- **Price Movement Analyst**: EMAs, SMAs, momentum, support/resistance
+- **Trenches Analyst**: Micro-caps (<$100M), social intelligence, narratives
+- **Polymarket Analyst**: Prediction markets, odds, volume, resolutions
+
+## Code Standards
+
+### Error Handling
+
+Always handle these status codes:
+
+- `401`: Invalid or revoked API key
+- `429`: Rate limit exceeded (check `Retry-After` header)
+- `500`: Server error (retry with exponential backoff)
+
+### Best Practices
+
+- Store API keys in environment variables, never hardcode
+- Implement retry logic with exponential backoff
+- Cache responses when appropriate to stay within rate limits
+- Log `session_id` from responses for debugging
+
+## Example Integrations
+
+### Python Trading Bot
+
+```python
+import requests
+import os
+
+API_KEY = os.getenv("GIGABRAIN_API_KEY")
+BASE_URL = "https://api.gigabrain.gg"
+
+def analyze_market(query: str) -> dict:
+    response = requests.post(
+        f"{BASE_URL}/v1/chat",
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={"message": query}
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Example: Get BTC analysis
+result = analyze_market("Analyze BTC 4H chart with key levels")
+print(result["message"])
+```
+
+### JavaScript/Node.js
+
+```javascript
+const API_KEY = process.env.GIGABRAIN_API_KEY;
+
+async function analyzeMarket(query) {
+  const res = await fetch("https://api.gigabrain.gg/v1/chat", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message: query }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status}`);
+  }
+
+  return res.json();
+}
+```
+
+## Query Examples
+
+### Trading Analysis
+
+- "Analyze ETH's price movement, key levels, and is it a good time to long?"
+- "Give me a BTC trade setup based on the 4H timeframe"
+- "What's the TVL and revenue story for Aave?"
+
+### Microstructure
+
+- "Is OI spiking on ETH perps, indicating fresh longs?"
+- "Funding rates turning negative, short squeeze risk?"
+- "BTC liquidations above $95K, downside trigger if support breaks?"
+
+### Macro
+
+- "Fed pivot incoming, risk on for alts?"
+- "DXY strength pressuring BTC like in 2022?"
+- "Risk off mode, BTC tracking Nasdaq downside?"
+
+### Polymarket
+
+- "Will BTC hit $100K by EOY? Analyze the odds"
+- "What's hot on Polymarket right now for crypto?"
+
+## Security Requirements
+
+- Never expose API keys in client-side code or repositories
+- Use environment variables for all secrets
+- Rotate API keys periodically
+- Never log full API keys (first 10 chars only for debugging)
+````

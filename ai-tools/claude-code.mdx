@@ -1,0 +1,118 @@
+---
+title: "Claude Code setup"
+description: "Configure Claude Code for building Gigabrain integrations"
+icon: "asterisk"
+---
+
+Claude Code is Anthropic's official CLI tool. This guide will help you set up Claude Code to build integrations with Gigabrain's Intelligence Collective API.
+
+## Prerequisites
+
+- Active Claude subscription (Pro, Max, or API access)
+- Gigabrain API key from your [Profile](https://gigabrain.gg/profile)
+
+## Setup
+
+1. Install Claude Code globally:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+2. Navigate to your project directory.
+3. Add the `CLAUDE.md` file below to your project.
+4. Run `claude` to start.
+
+## Create `CLAUDE.md`
+
+Create a `CLAUDE.md` file at the root of your project to train Claude Code on Gigabrain's API:
+
+````markdown
+# Gigabrain Integration Project
+
+## Working relationship
+
+- You can push back on ideas - this leads to better code
+- ALWAYS ask for clarification rather than making assumptions
+- NEVER lie, guess, or make up information about the API
+
+## Gigabrain API Context
+
+### Base URL
+
+```
+https://api.gigabrain.gg/v1
+```
+
+### Authentication
+
+```bash
+Authorization: Bearer gb_sk_<your-key>
+```
+
+### Core Endpoint: POST /v1/chat
+
+Send market analysis queries to the Intelligence Collective.
+
+Request:
+
+```json
+{
+  "message": "Analyze BTC price action",
+  "stream": false
+}
+```
+
+Response:
+
+```json
+{
+  "session_id": "uuid",
+  "message": "Analysis response...",
+  "timestamp": "ISO-8601"
+}
+```
+
+### Rate Limits
+
+- 30 requests/minute
+- 1,000 requests/day
+- Handle 429 errors with exponential backoff
+
+## Intelligence Collective Agents
+
+The API routes queries to specialized agents:
+
+- **Macro**: DXY, VIX, yields, liquidity, risk regimes
+- **Microstructure**: OI, funding, liquidations, positioning
+- **Fundamentals**: TVL, revenue, unlocks, protocol health
+- **Price Movement**: Technical analysis, EMAs, support/resistance
+- **Trenches**: Micro-caps, social sentiment, narratives
+- **Polymarket**: Prediction market odds and analysis
+
+## Code Standards
+
+### Required Error Handling
+
+- 401: Invalid API key - prompt user to check key
+- 429: Rate limited - implement retry with backoff
+- 500: Server error - retry up to 3 times
+
+### Security
+
+- Store API keys in environment variables
+- Never commit keys to version control
+- Log only first 10 chars of keys for debugging
+
+## Git Workflow
+
+- NEVER use --no-verify when committing
+- Commit frequently with descriptive messages
+- Create feature branches for new integrations
+
+## Do Not
+
+- Hardcode API keys
+- Make assumptions about undocumented endpoints
+- Skip error handling for rate limits
+````

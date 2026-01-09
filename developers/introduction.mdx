@@ -8,10 +8,8 @@ The Gigabrain REST API provides programmatic access to the Intelligence Collecti
 ## Base URL
 
 ```
-https://api.gigabrain.gg
+https://api.gigabrain.gg/v1
 ```
-
-All endpoints are prefixed with `/v1`.
 
 ## Authentication
 
@@ -24,28 +22,20 @@ curl -X GET "https://api.gigabrain.gg/v1/sessions" \
 
 ### How to Get Your API Key
 
-Sign in and go to [Profile → API Keys](https://gigabrain.gg/profile) to generate your key.
-
-### API Key Format
-
-```
-gb_sk_a1b2c3d4_e5f6g7h8i9j0k1l2m3n4o5p6q7r8hb9t0
-```
+Sign in and go to [Profile → API Keys](https://gigabrain.gg/profile) to generate your key. Copy the full key as-is.
 
 ### Authentication Methods
-
-You can authenticate using either method:
 
 **Option 1: Authorization Header (Recommended)**
 
 ```bash
-Authorization: Bearer gb_sk_<your-key>
+Authorization: Bearer YOUR_API_KEY
 ```
 
 **Option 2: X-API-Key Header**
 
 ```bash
-X-API-Key: gb_sk_<your-key>
+X-API-Key: YOUR_API_KEY
 ```
 
 ## Rate Limits
@@ -118,7 +108,7 @@ All endpoints return a consistent JSON structure:
 
 ## Endpoints
 
-### POST /v1/chat
+### POST /chat
 
 Send a message to Gigabrain's Intelligence Collective and receive AI-powered market analysis.
 
@@ -151,7 +141,7 @@ curl -X POST https://api.gigabrain.gg/v1/chat \
 }
 ```
 
-### GET /v1/sessions
+### GET /sessions
 
 Retrieve your chat session history.
 
@@ -188,12 +178,13 @@ curl -X GET "https://api.gigabrain.gg/v1/sessions?limit=10" \
 
 ```python
 import requests
+import os
 
-API_KEY = "gb_sk_..."
-BASE_URL = "https://api.gigabrain.gg"
+API_KEY = os.getenv("GIGABRAIN_API_KEY")
+BASE_URL = "https://api.gigabrain.gg/v1"
 
 response = requests.post(
-    f"{BASE_URL}/v1/chat",
+    f"{BASE_URL}/chat",
     headers={
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
@@ -207,9 +198,10 @@ print(response.json())
 ### JavaScript (Node.js)
 
 ```javascript
-const API_KEY = "gb_sk_...";
+const API_KEY = process.env.GIGABRAIN_API_KEY;
+const BASE_URL = "https://api.gigabrain.gg/v1";
 
-const res = await fetch("https://api.gigabrain.gg/v1/chat", {
+const res = await fetch(`${BASE_URL}/chat`, {
   method: "POST",
   headers: {
     Authorization: `Bearer ${API_KEY}`,
@@ -227,8 +219,8 @@ console.log(await res.json());
 
 ```bash
 curl -X POST https://api.gigabrain.gg/v1/chat \
-  -H "Authorization: Bearer gb_sk_<your-key>" \
-  -H "Content-Type: "application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
   -d '{"message": "Analyze BTC 4H chart"}'
 ```
 
