@@ -1,25 +1,321 @@
 ---
-title: "Introduction" 
-description: "Gigabrain API & Developer Resources"
+title: REST API
+description: Programmatic access to Gigabrain's Intelligence Collective
 ---
 
-<Note>
-  **Interested in our APIs?** Please email hello@gigabrain.gg to discuss API integration opportunities.
-</Note>
+The Gigabrain REST API provides programmatic access to the Intelligence Collective for automated market analysis. It is architected for seamless integration with trading bots, terminal applications, custom scripts, and backend services.
 
-## API Capabilities
+## Base URL
 
-Our API enables powerful integration possibilities:
+```
+https://api.gigabrain.gg
+```
 
-- **Signal Integration**: Pipe trading signals directly into your trading infrastructure
-- **Custom Alerts**: Create personalized notification systems based on Gigabrain data
-- **Portfolio Integration**: Connect your existing portfolio tools with Gigabrain intelligence
-- **Data Analysis**: Access raw data for proprietary analytics and backtesting
-- **Trading Automation**: Build automated trading systems powered by Gigabrain signals
+All endpoints are prefixed with `/v1`.
 
-Additionally, the API enables powerful AI agent development:
+## Authentication
 
-- **Agent Development**: Build custom AI trading agents using Gigabrain's market intelligence
-- **Signal Processing**: Create agents that analyze and act on Gigabrain trading signals
-- **Strategy Automation**: Develop autonomous agents that execute custom trading strategies
-- **Multi-Agent Systems**: Build coordinated agent networks for complex trading operations
+Include your API key in the `Authorization` header with every request:
+
+```bash
+curl -X GET "https://api.gigabrain.gg/v1/sessions" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### How to Get Your API Key
+
+Sign in and go to [Profile → API Keys](https://gigabrain.gg/profile) to generate your key.
+
+### API Key Format
+
+```
+gb_sk_a1b2c3d4_e5f6g7h8i9j0k1l2m3n4o5p6q7r8hb9t0
+```
+
+### Authentication Methods
+
+You can authenticate using either method:
+
+**Option 1: Authorization Header (Recommended)**
+
+```bash
+Authorization: Bearer gb_sk_<your-key>
+```
+
+**Option 2: X-API-Key Header**
+
+```bash
+X-API-Key: gb_sk_<your-key>
+```
+
+## Rate Limits
+
+- **Per minute:** 30 requests
+- **Per day:** 1,000 requests
+
+### Rate Limit Headers
+
+Every response includes headers showing your current usage:
+
+```
+X-RateLimit-Limit-Minute: 30
+X-RateLimit-Remaining-Minute: 29
+X-RateLimit-Reset-Minute: 2026-01-07T13:21:00.000Z
+X-RateLimit-Limit-Day: 1000
+X-RateLimit-Remaining-Day: 999
+X-RateLimit-Reset-Day: 2026-01-08T00:00:00.000Z
+```
+
+### Rate Limit Exceeded
+
+When you exceed a limit, you'll receive a `429` response:
+
+```json
+{
+  "statusCode": 429,
+  "message": "Rate limit exceeded",
+  "retryAfter": 45,
+  "resetAt": "2026-01-07T13:21:00.000Z"
+}
+```
+
+The response includes a `Retry-After` header with the number of seconds to wait.
+
+## Response Format
+
+All endpoints return a consistent JSON structure:
+
+### Success Response
+
+```json
+{
+  "session_id": "uuid",
+  "message": "BTC is currently trading at $45,234...",
+  "timestamp": "2026-01-07T12:00:00Z"
+}
+```
+
+### Error Response
+
+```json
+{
+  "statusCode": 400,
+  "message": "Invalid request parameters",
+  "error": "Bad Request"
+}
+```
+
+## HTTP Status Codes
+
+| Status | Code                  | Meaning                             |
+| ------ | --------------------- | ----------------------------------- |
+| `200`  | -                     | Success                             |
+| `400`  | -                     | Bad request - check your parameters |
+| `401`  | `INVALID_API_KEY`     | API key is invalid or revoked       |
+| `404`  | -                     | Resource not found                  |
+| `429`  | `RATE_LIMIT_EXCEEDED` | Rate limit exceeded                 |
+| `500`  | `API_ERROR`           | Server error                        |
+
+## Endpoints
+
+### POST /v1/chat
+
+Send a message to Gigabrain's Intelligence Collective and receive AI-powered market analysis.
+
+**Request:**
+
+```bash
+curl -X POST https://api.gigabrain.gg/v1/chat \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "What is the price of BTC?",
+    "stream": false
+  }'
+```
+
+**Parameters:**
+
+| Parameter | Type    | Required | Default | Description                               |
+| --------- | ------- | -------- | ------- | ----------------------------------------- |
+| `message` | string  | Yes      | -       | Your query to the Intelligence Collective |
+| `stream`  | boolean | No       | false   | Enable streaming response                 |
+
+**Response:**
+
+```json
+{
+  "session_id": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "BTC is currently trading at $45,234. The 4H chart shows...",
+  "timestamp": "2026-01-07T12:00:00Z"
+}
+```
+
+### GET /v1/sessions
+
+Retrieve your chat session history.
+
+**Request:**
+
+```bash
+curl -X GET "https://api.gigabrain.gg/v1/sessions?limit=10" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**Parameters:**
+
+| Parameter | Type    | Required | Default | Description                  |
+| --------- | ------- | -------- | ------- | ---------------------------- |
+| `limit`   | integer | No       | 10      | Number of sessions to return |
+
+**Response:**
+
+```json
+{
+  "sessions": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "created_at": "2026-01-07T12:00:00Z",
+      "messages_count": 5
+    }
+  ]
+}
+```
+
+## Code Examples
+
+### Python
+
+```python
+import requests
+
+API_KEY = "gb_sk_..."
+BASE_URL = "https://api.gigabrain.gg"
+
+response = requests.post(
+    f"{BASE_URL}/v1/chat",
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={"message": "What is the price of ETH?"}
+)
+
+print(response.json())
+```
+
+### JavaScript (Node.js)
+
+```javascript
+const API_KEY = "gb_sk_...";
+
+const res = await fetch("https://api.gigabrain.gg/v1/chat", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    message: "What is the price of ETH?",
+  }),
+});
+
+console.log(await res.json());
+```
+
+### cURL
+
+```bash
+curl -X POST https://api.gigabrain.gg/v1/chat \
+  -H "Authorization: Bearer gb_sk_<your-key>" \
+  -H "Content-Type: "application/json" \
+  -d '{"message": "Analyze BTC 4H chart"}'
+```
+
+## Error Handling
+
+### 401 Unauthorized
+
+Invalid or revoked API key.
+
+```json
+{
+  "statusCode": 401,
+  "message": "Invalid or revoked API key"
+}
+```
+
+**Solution:** Check your API key is correct and active in your [profile settings](https://gigabrain.gg/profile).
+
+### 429 Too Many Requests
+
+Rate limit exceeded.
+
+```json
+{
+  "statusCode": 429,
+  "message": "Rate limit exceeded",
+  "retryAfter": 45,
+  "resetAt": "2026-01-07T13:21:00.000Z"
+}
+```
+
+**Solution:** Wait for the time specified in `retryAfter` (seconds) or `resetAt` (timestamp) before making another request.
+
+### 500 Internal Server Error
+
+Server error occurred.
+
+```json
+{
+  "error": {
+    "message": "Internal server error",
+    "type": "api_error"
+  },
+  "session_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+**Solution:** Retry your request. If the issue persists, contact support with the `session_id`.
+
+## Best Practices
+
+1. **Secure Your API Key**
+
+   - Never expose in client-side code or public repositories
+   - Use environment variables to store keys
+   - Rotate keys periodically
+
+2. **Handle Rate Limits**
+
+   - Monitor rate limit headers in responses
+   - Implement exponential backoff when hitting limits
+   - Cache responses when appropriate
+
+3. **Error Handling**
+
+   - Always handle API errors gracefully
+   - Implement retry logic for transient errors (500, 503)
+   - Log `session_id` for debugging and support requests
+
+4. **Optimize Requests**
+   - Batch related queries when possible
+   - Use streaming for real-time responses
+   - Implement request timeouts
+
+## Support
+
+Need help? We're here for you:
+
+- **Email:** support@gigabrain.gg
+- **Telegram:** [t.me/gigabraingg](https://t.me/gigabraingg)
+
+When contacting support, include:
+
+- Your API key (first 10 characters only)
+- Session ID from error responses
+- Request/response examples
+
+---
+
+**Ready to build?** Get your API key from your [Profile](https://gigabrain.gg/profile) and start integrating!

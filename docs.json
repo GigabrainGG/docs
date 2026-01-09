@@ -9,55 +9,41 @@
   },
   "fonts": {
     "body": {
-      "family": "Karla",
+      "family": "Geist",
       "weight": 400
     },
     "heading": {
-      "family": "Karla",
+      "family": "Geist",
       "weight": 700
     }
   },
   "favicon": "/logo/gigabrain.png",
+  "css": "/styles.css",
   "navigation": {
     "tabs": [
       {
         "tab": "Terminal",
         "groups": [
           {
-            "group": "Overview",
+            "group": "About",
             "pages": [
-              "overview/introduction",
-              "overview/product",
-              "overview/architecture",
-              "overview/alpha-community"
+              "index"
             ]
           },
           {
-            "group": "Token & Economics",
+            "group": "Core Features & Interface",
             "pages": [
-              "token/tokenomics",
-              "token/revenue",
-              "token/roadmap"
+              "core-features/chat",
+              "core-features/alpha",
+              "core-features/workflows"
             ]
           },
           {
-            "group": "Gigabrain Fund",
+            "group": "Support",
             "pages": [
-              "funds/alpha-fund",
-              "funds/test-fund",
-              "funds/auto-trade"
-            ]
-          },
-          {
-            "group": "Help",
-            "pages": [
-              "help/faq",
-              "help/hyperliquid-guide",
-              "help/builder-codes-guide",
-              "help/vault-guide",
-              "help/terminal-user-guide",
-              "help/disclaimer",
-              "help/contact"
+              "support/faqs",
+              "support/contact",
+              "support/disclaimer"
             ]
           }
         ]
@@ -116,14 +102,22 @@
       "href": "https://gigabrain.gg/login"
     }
   },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
   "footer": {
     "socials": {
       "twitter": "https://x.com/gigabraingg",
       "telegram": "https://t.me/gigabraingg"
     }
-  },
-  "appearance": {
-    "default": "dark",
-    "strict": true
   }
 }
