@@ -17,7 +17,7 @@
       "weight": 700
     }
   },
-  "favicon": "/logo/gigabrain.png",
+  "favicon": "/logo/logo.svg",
   "css": "/styles.css",
   "navigation": {
     "tabs": [
@@ -94,8 +94,8 @@
     }
   },
   "logo": {
-    "light": "/logo/gigabrain.png",
-    "dark": "/logo/gigabrain.png"
+    "light": "/logo/logo.svg",
+    "dark": "/logo/logo.svg"
   },
   "navbar": {
     "links": [
