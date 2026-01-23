@@ -42,7 +42,14 @@
             "pages": [
               "support/faqs",
               "support/contact",
-              "support/disclaimer"
+              "support/risk-disclosure"
+            ]
+          },
+          {
+            "group": "Legal",
+            "pages": [
+              "legal/terms-and-conditions",
+              "legal/privacy-policy"
             ]
           }
         ]
