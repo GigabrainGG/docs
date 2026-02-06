@@ -35,14 +35,15 @@
             "pages": [
               "core-features/chat",
               "core-features/alpha",
-              "core-features/workflows"
+              "core-features/agents"
             ]
           },
           {
             "group": "Support",
             "pages": [
               "support/faqs",
-              "support/contact"
+              "support/contact",
+              "support/agents-guide"
             ]
           }
         ]
