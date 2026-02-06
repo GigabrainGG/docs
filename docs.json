@@ -17,12 +17,8 @@
       "weight": 700
     }
   },
-  "logo": {
-    "light": "/logo/logo.svg",
-    "dark": "/logo/logo.svg"
-  },
-  "favicon": "/logo/gigabrain.png",
-  "css": "/style.css",
+  "favicon": "/logo/logo.svg",
+  "css": "/styles.css",
   "navigation": {
     "tabs": [
       {
@@ -39,7 +35,7 @@
             "pages": [
               "core-features/chat",
               "core-features/alpha",
-              "core-features/workflows"
+              "core-features/agents"
             ]
           },
           {
@@ -47,7 +43,15 @@
             "pages": [
               "support/faqs",
               "support/contact",
-              "support/disclaimer"
+              "support/agents-guide",
+              "support/risk-disclosure"
+            ]
+          },
+          {
+            "group": "Legal",
+            "pages": [
+              "legal/terms-and-conditions",
+              "legal/privacy-policy"
             ]
           }
         ]
@@ -59,6 +63,14 @@
             "group": "Getting Started",
             "pages": [
               "developers/introduction"
+            ]
+          },
+          {
+            "group": "AI Tools",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
             ]
           }
         ]
@@ -89,6 +101,10 @@
       ]
     }
   },
+  "logo": {
+    "light": "/logo/logo.svg",
+    "dark": "/logo/logo.svg"
+  },
   "navbar": {
     "links": [
       {
@@ -102,9 +118,21 @@
       "href": "https://gigabrain.gg/login"
     }
   },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
   "footer": {
     "socials": {
-      "twitter": "https://x.com/gigabraingg",
+      "x": "https://x.com/gigabraingg",
       "telegram": "https://t.me/gigabraingg"
     }
   }
