@@ -30,9 +30,7 @@
         "groups": [
           {
             "group": "About",
-            "pages": [
-              "index"
-            ]
+            "pages": ["index"]
           },
           {
             "group": "Core Features & Interface",
@@ -44,11 +42,11 @@
           },
           {
             "group": "Support",
-            "pages": [
-              "support/faqs",
-              "support/contact",
-              "support/disclaimer"
-            ]
+            "pages": ["support/faqs", "support/contact", "support/disclaimer"]
+          },
+          {
+            "group": "Legal",
+            "pages": ["legal/terms", "legal/privacy"]
           }
         ]
       },
@@ -57,8 +55,13 @@
         "groups": [
           {
             "group": "Getting Started",
+            "pages": ["developers/introduction"]
+          },
+          {
+            "group": "Agents",
             "pages": [
-              "developers/introduction"
+              "developers/agents",
+              "developers/agent-setup"
             ]
           }
         ]
