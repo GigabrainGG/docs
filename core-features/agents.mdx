@@ -5,9 +5,9 @@ description: Autonomous trading execution with adaptive intelligence
 
 Agents are autonomous programs that execute trading strategies on your behalf. Each agent runs on a configurable schedule, analyzes market conditions using the Intelligence Collective, and executes trades according to your defined rules.
 
-## How it works
+## Overview
 
-An agent consists of four components:
+An agent consists of five components:
 
 <CardGroup cols={2}>
   <Card title="Instructions" icon="list-check">
@@ -17,23 +17,46 @@ An agent consists of four components:
     Your strategic objective and risk parameters
   </Card>
   <Card title="Trigger" icon="clock">
-    The schedule on which your agent runs (e.g., every 1 hr)
+    The schedule on which your agent runs (e.g. every 1 hr)
+  </Card>
+  <Card title="Memory" icon="database">
+    Learning edge that tracks past trades and patterns to improve future
+    decisions
   </Card>
   <Card title="Integrations" icon="plug">
     Connected exchange accounts and notification channels
   </Card>
 </CardGroup>
 
+## How agents work
+
 ### Execution cycle
 
-Every time your agent's trigger fires:
+Every time your agent's trigger fires, it follows this sequence:
 
 1. **Query current state**: Retrieve account balance, open positions, and recent performance
-2. **Analyze market conditions**: Delegate to relevant specialists (Macro, Microstructure, Price Movement, etc.)
-3. **Evaluate instructions**: Determine whether entry, exit, or risk management criteria are satisfied
-4. **Execute actions**: Place orders, modify positions, or do nothing based on evaluation
-5. **Record outcome**: Log the reasoning, actions taken, and market state to the Learnings database
+2. **Consult memory**: Review past trades under similar conditions from the Learnings database
+3. **Analyze market conditions**: Delegate to relevant specialists (Macro, Microstructure, Price Movement, etc.)
+4. **Evaluate instructions**: Determine whether entry, exit, or risk management criteria are satisfied, informed by both current analysis and historical outcomes
+5. **Execute actions**: Place orders, modify positions, or do nothing based on evaluation
+6. **Record outcome**: Log the reasoning, actions taken, and market state to the Learnings database for future reference
 
+### Memory and decision making
+
+Unlike traditional bots that treat every market condition the same way, Gigabrain Agents build institutional knowledge from every trade. Before executing, your Agent reviews past trades under similar conditions checking what worked, what didn't, and why.
+
+**What gets recorded:**
+
+- Trade outcomes relative to initial analysis
+- Market conditions when trades succeeded or failed
+- Patterns in profitable vs. unprofitable setups
+- Strategy adjustments made over time
+
+**How memory improves decisions:** 
+
+Before executing any trade, Agents consult their memory to review past performance under similar market conditions. For example, if your Agent took three losing trades during low-volume consolidation periods despite meeting all entry criteria, it will recognize this pattern and apply more caution when similar conditions appear again potentially requiring stronger confirmation signals or skipping marginal setups entirely.
+
+This memory doesn't automatically modify your Instructions, but it informs how the Agent interprets market conditions and applies your rules. Over time, this creates institutional knowledge specific to your strategy the Agent develops "track record awareness" that improves execution quality without requiring manual backtesting or constant instruction updates.
 
 ## Configuration
 
@@ -260,3 +283,4 @@ Connect your exchange account in [Integrations](https://gigabrain.gg/profile?tab
 <Warning>
 **Not financial advice**: Agents execute your strategy, but they do not provide financial advice. You are responsible for defining appropriate risk parameters, understanding the strategies you implement, monitoring agent performance, and complying with relevant regulations.
 </Warning>
+```
