@@ -1,19 +1,90 @@
 ---
 title: Alpha
-description: Curated Market Insights
+description: Market intelligence synthesis for crypto trading
 ---
 
-![Alpha Feed](/images/alpha.png)
+![Alpha Feed](/images/alpha-feed.png)
 
-Alpha in Gigabrain is a way to get important market stories and insights that can really move prices. It pulls from smart searches, news about specific cryptocurrencies (like big investor buys or new rules), and recent events to highlight key indicators: think whale activity, regulations, or shifts in sectors like DeFi or AI.
+Alpha is a market intelligence system that identifies price relevant events and narratives by analyzing news, onchain activity, and social signals. It surfaces actionable insights before they reach broader market awareness.
 
-Unlike just reading raw headlines from news sites or aggregators, Alpha combines this info with fresh data (like current prices) to give you clear, practical summaries. This helps you spot trading opportunities early, before everyone else jumps in. It's like having a quick briefing from a team of analysts who connect the dots, saving you hours of scrolling through unrelated noise.
+## What Alpha monitors
 
-## Why Use Alpha?
+<CardGroup cols={2}>
+  <Card title="News sources" icon="newspaper">
+    Protocol announcements, regulatory developments, macroeconomic events
+  </Card>
+  <Card title="Onchain activity" icon="link">
+    Large wallet movements, exchange flows, smart contract interactions
+  </Card>
+  <Card title="Social signals" icon="comments">
+    Narrative formation, KOL positioning, community sentiment shifts
+  </Card>
+  <Card title="Market microstructure" icon="chart-candlestick">
+    Liquidation clusters, funding rate anomalies, OI/price divergences, squeeze
+    detection
+  </Card>
+  <Card title="Dynamic risk regimes" icon="globe">
+    Correlation tracking between crypto, equities, and DXY to identify
+    decoupling or global liquidity trends
+  </Card>
+  <Card title="Sector intelligence" icon="layer-group">
+    Protocol-specific metrics: TVL growth for DeFi, API usage for AI, node
+    growth for infrastructure
+  </Card>
+</CardGroup>
 
-- **Spot Hidden Edges**: It uncovers narratives that aren't obvious, such as a whale quietly building a position in a low-cap token or a regulatory rumor gaining traction.
-- **Time Saver**: Instead of manual research, get synthesized overviews with context, like how a Fed announcement might ripple through crypto.
-- **Actionable Focus**: Every insight includes an "impact rating" (low to high) and ties to real-time data, so you can decide if it's worth digging deeper.
-- **Tailored to Crypto**: Optimized for markets like BTC/ETH trends, protocol launches, or meme coin hype, with cross-checks for accuracy.
+Each insight includes an **impact rating** (Low/Medium/High), **context** on market conditions, **real-time data**, **actionability assessment**, and **invalidation criteria** for high-impact signals.
 
-To access Alpha, navigate to the [Alpha Feed](https://gigabrain.gg/alpha) in the Gigabrain Terminal.
+## How it works
+
+### Information sources
+
+Alpha continuously ingests data from:
+
+1. **Crypto native news**: Protocol blogs, governance forums, official announcements
+2. **Traditional financial media**: Fed statements, regulatory filings, macro developments
+3. **Onchain indexers**: Whale wallet tracking, exchange inflows/outflows, gas consumption
+4. **Social platforms**: Twitter/X activity, Telegram signals, Discord announcements
+5. **Prediction markets**: Polymarket odds, event probabilities
+6. **Macro indicators**: VIX, DXY (Dollar Strength), Treasury Yields for risk regime classification
+
+### Synthesis process
+
+Raw information is filtered and analyzed to:
+
+- **Identify catalysts**: Events likely to drive price action (token unlocks, partnerships)
+- **Detect early narratives**: Emerging themes before mainstream attention (sector rotation to AI tokens)
+- **Flag anomalies**: Z-score anomalies (metrics 2+ standard deviations from 30-day mean) indicating statistically significant moves
+- **Cross reference sources**: Verify information across channels to reduce false signals
+- **Classify risk regime**: Determine if market is Risk-On, Risk-Off, or Neutral based on macro volatility
+- **Detect squeeze setups**: Identify liquidation clusters where price is likely to be pulled to trigger stops
+
+### Insight format
+
+Each Alpha card displays:
+
+- **Headline**: Concise summary of the key development
+- **Analysis**: Expandable section with market context, directional bias, and timing considerations
+- **Invalidation criteria**: For high-impact insights, the specific price or event that nullifies the thesis
+- **Tags**: Sentiment (BULLISH ↗ / BEARISH ↘), Impact level, Category, Timestamp
+- **Actions**: Star to bookmark, "Suggest Trade" button for trade ideas
+
+### Suggest Trade
+
+Each insight includes a **Suggest Trade** button that:
+
+1. Analyzes the specific insight and current market conditions
+2. Generates concrete trade ideas with entry criteria, position sizing, and exit rules
+3. Can be used to manually execute trades or configure an Agent to act on similar signals automatically
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Explore Alpha Feed" icon="bolt" href="https://gigabrain.gg/alpha">
+    Start discovering market insights in real-time
+  </Card>
+
+  <Card title="Set Up Agents" icon="robot" href="/core-features/agents">
+    Configure agents to act on Alpha signals automatically
+  </Card>
+</CardGroup>

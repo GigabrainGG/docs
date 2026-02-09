@@ -18,20 +18,22 @@
     }
   },
   "favicon": "/logo/logo.svg",
-  "css": "/styles.css",
+  "css": "/style.css",
   "navigation": {
     "tabs": [
       {
         "tab": "Terminal",
         "groups": [
           {
-            "group": "About",
+            "group": "Getting Started",
             "pages": [
-              "index"
+              "index",
+              "quickstart",
+              "pricing"
             ]
           },
           {
-            "group": "Core Features & Interface",
+            "group": "Core Features",
             "pages": [
               "core-features/chat",
               "core-features/alpha",
@@ -39,11 +41,17 @@
             ]
           },
           {
+            "group": "Guides",
+            "pages": [
+              "guides/agents-setup",
+              "guides/integrations"
+            ]
+          },
+          {
             "group": "Support",
             "pages": [
               "support/faqs",
               "support/contact",
-              "support/agents-guide",
               "support/risk-disclosure"
             ]
           },
@@ -62,6 +70,7 @@
           {
             "group": "Getting Started",
             "pages": [
+              "developers/brain-api-overview",
               "developers/introduction"
             ]
           },

@@ -1,45 +1,262 @@
 ---
 title: Agents
-description: Automate Your Intuition
+description: Autonomous trading execution with adaptive intelligence
 ---
 
-Agents are autonomous units that are powered by the [The Intelligence Collective](https://docs.gigabrain.gg/#the-intelligence-collective). Moving beyond static "workflows," these agents use a recursive feedback loop to analyze, execute, and most importantly learn from every market outcome.
+Agents are autonomous programs that execute trading strategies on your behalf. Each agent runs on a configurable schedule, analyzes market conditions using the Intelligence Collective, and executes trades according to your defined rules.
 
-### Adaptive Learning: The Feedback Loop
+## How it works
 
-The core strength of an Agent is its ability to learn from its own "mistakes."
+An agent consists of four components:
 
-- **Outcome Monitoring**: Agents track entries against actual price action—identifying if a signal was overridden by macro volatility or a microstructure shift.
-- **Strategy Refinement**: Every post-mortem updates the agent's internal **Learnings** database, refining how it weights different variables (e.g., favoring macro news over technical indicators during high-volatility events).
-- **Transparent Reasoning**: Use the **Changelog** and **Learnings** tabs to audit how your agent is evolving its strategy over time.
+<CardGroup cols={2}>
+  <Card title="Instructions" icon="list-check">
+    The rules that define when and how your agent trades
+  </Card>
+  <Card title="Goal" icon="bullseye">
+    Your strategic objective and risk parameters
+  </Card>
+  <Card title="Trigger" icon="clock">
+    The schedule on which your agent runs (e.g., every 1 hr)
+  </Card>
+  <Card title="Integrations" icon="plug">
+    Connected exchange accounts and notification channels
+  </Card>
+</CardGroup>
 
-### Agent Archetypes: What You Can Build
+### Execution cycle
 
-#### 1. The Adaptive Swing Trader (BTC Focus)
+Every time your agent's trigger fires:
 
-> _"Analyze 4H BTC chart, microstructure, and whale positioning every 4 hours. Place a trade with 10% margin once confidence exceeds 75%. Re-analyze open trades every 30 minutes and send a performance summary to Telegram."_
+1. **Query current state**: Retrieve account balance, open positions, and recent performance
+2. **Analyze market conditions**: Delegate to relevant specialists (Macro, Microstructure, Price Movement, etc.)
+3. **Evaluate instructions**: Determine whether entry, exit, or risk management criteria are satisfied
+4. **Execute actions**: Place orders, modify positions, or do nothing based on evaluation
+5. **Record outcome**: Log the reasoning, actions taken, and market state to the Learnings database
 
-#### 2. The Alpha Sniper (Asset-Agnostic)
 
-> _"Monitor the Intelligence Feed. When a high-conviction signal (Confidence >75%) is flagged for **any** supported token, instantly open a $100 position at 5x leverage on that specific asset."_
+## Configuration
 
-#### 3. The Protocol KPI Hunter (Fundamental)
+### Instructions
 
-> _"Monitor Hyperliquid protocol fees daily. If daily fees exceed $3M, open a long HYPE position with 10% account margin."_
+Define your trading logic using natural language. Be explicit about entry criteria, position sizing, exit rules, and risk limits.
 
-#### 4. The Macro Guardian (Risk Mitigation)
+<Accordion title="View example instructions">
+```
+Monitor BTC and ETH on the 15m timeframe.
 
-> _"Monitor global news and the **Macro Analyst** for keywords like 'war', 'invasion', or 'geopolitical escalation'. If a high-impact macro shock is detected, immediately close 50% of all altcoin exposure and open an OCO hedge on BTC."_
+ENTRY CRITERIA:
 
-### Specialist Delegation
+- Price breaks above previous 4H high with volume >150% of 20-period average
+- RSI(14) between 55-70 (momentum confirmed, not overbought)
+- Funding rate <0.03% (avoiding overleveraged longs)
+- Taker buy volume >55% over last 3 candles (aggressive buying)
 
-Agents route tasks to specialized domain experts in real-time:
+FILTERS (DO NOT ENTER IF):
 
-- **Macro Analyst**: Monitors global liquidity, Fed policy, and geopolitical shocks.
-- **Market State Analyst**: Classifies the regime (Risk-On/Off) to define current strategy.
-- **Microstructure Analyst**: Identifies liquidation clusters and funding skews.
-- **Trenches Analyst**: Scours social sentiment for micro-cap tokens (Rank 500+).
+- VIX >30 (macro risk-off environment)
+- Major resistance within 2% above entry
+- Ongoing high-impact news event within next 2 hours
 
-### Intelligent Synthesis
+POSITION SIZING:
 
-Every run is delivered as a structured report featuring a **Convicted Thesis**, **Risk Assessment**, **Execution Details**, **Learnings**, and **Invalidation Points**.
+- Base size: 5% of account balance
+- Leverage: 3x (15% notional exposure)
+- Maximum 2 concurrent positions
+
+EXIT RULES:
+
+- Take profit: +6% from entry (trim 50%), +10% (close remaining)
+- Stop loss: -3% from entry (hard stop)
+- Time stop: Close after 48 hours if neither TP nor SL hit
+- Trailing stop: Once +5%, trail stop at -2% from peak
+
+RISK MANAGEMENT:
+
+- Daily loss limit: -5% of account (halt all trading)
+- Weekly profit target: +15% (reduce position sizes by 50%)
+- Maximum 4 trades per day (prevent overtrading)
+
+```
+</Accordion>
+
+<Note>
+Instructions are interpreted by the agent's language model. Ambiguous phrasing may lead to unexpected behavior. Test new instructions with small position sizes.
+</Note>
+
+### Triggers
+
+Choose how often your agent analyzes the market:
+
+| Frequency | Best for |
+|-----------|----------|
+| Every 5 minutes | Scalping strategies requiring frequent monitoring |
+| Every 15 minutes | Intraday momentum trading |
+| Hourly | Swing trading setups |
+| Every 4 hours | Position trading with lower frequency |
+| Daily | Fundamental-based strategies |
+
+### Integrations
+
+Connect your exchange account in [Integrations](https://gigabrain.gg/profile?tab=integrations) to enable live trading. Set read-only for monitoring or read-write for execution.
+
+## Monitoring
+
+<Tabs>
+  <Tab title="Reasoning">
+    Each agent run generates a trace showing:
+    - Current account state (balance, open positions, P&L)
+    - Market analysis from consulted specialists
+    - Evaluation of entry/exit criteria
+    - Actions taken or reasons for inaction
+
+    Use this to verify the agent interprets your instructions correctly.
+  </Tab>
+
+  <Tab title="Learnings">
+    View accumulated knowledge from past trades:
+    - Position history with entry/exit details
+    - Post-trade analysis of what worked and what didn't
+    - Evolving market pattern recognition
+    - Strategy refinement notes
+  </Tab>
+
+  <Tab title="Changelog">
+    Audit trail of all agent modifications:
+    - Instruction updates
+    - Goal changes
+    - Trigger frequency adjustments
+    - Integration modifications
+  </Tab>
+</Tabs>
+
+## Example strategies
+
+<AccordionGroup>
+
+  <Accordion title="Momentum breakout">
+    **Objective**: Identify and ride explosive moves across any asset.
+
+    - **Trigger**: Every 15 minutes
+    - **Specialists**: Market State Analyst, Trenches Analyst, Price Movement Analyst
+    - **Entry**: High-conviction signal from Intelligence Feed (>75% confidence)
+    - **Position sizing**: 5% of account per trade, 5x leverage
+    - **Exit**: Trailing stop at 2% below peak, manual review after 24h
+    - **Risk limit**: Maximum 3 concurrent positions
+  </Accordion>
+
+  <Accordion title="Macro-aligned swing trading">
+    **Objective**: Take directional positions when technical and macro factors align.
+
+    - **Trigger**: Every 4 hours
+    - **Specialists**: Macro Analyst, Market State Analyst, Price Movement Analyst
+    - **Entry**: 4H chart setup + favorable risk regime + positive BTC correlation
+    - **Position sizing**: 10% of account, 3x leverage
+    - **Exit**: TP at +8%, SL at -4%
+    - **Risk limit**: No new entries during risk-off regimes
+  </Accordion>
+
+  <Accordion title="Protocol fundamentals">
+    **Objective**: Trade based on on-chain metrics and protocol health.
+
+    - **Trigger**: Daily at 00:00 UTC
+    - **Specialists**: Fundamentals Analyst, Market State Analyst
+    - **Entry**: Daily protocol fees >$3M, TVL increasing week-over-week
+    - **Position sizing**: 10% of account, 2x leverage
+    - **Exit**: Hold until fundamentals deteriorate or -10% SL
+    - **Risk limit**: Maximum 2 protocol-based positions
+  </Accordion>
+</AccordionGroup>
+
+## Best practices
+
+<CardGroup cols={2}>
+  <Card title="Start conservative" icon="shield-check">
+    Use small position sizes (1-5%), set tight stops, and monitor the first 10-20 reasoning traces closely before scaling up.
+  </Card>
+
+  <Card title="Iterate based on learnings" icon="arrows-rotate">
+    Review the Learnings tab weekly to identify failure modes, optimal conditions, and opportunities to refine entry criteria.
+  </Card>
+
+  <Card title="Use daily caps" icon="gauge-high">
+    Set profit caps at 2-5% of account value to prevent overtrading and lock in gains.
+  </Card>
+
+  <Card title="Monitor macro regime" icon="earth-americas">
+    Reduce position sizes during high VIX, avoid mean-reversion in trending Fed policy, pause during major geopolitical events.
+  </Card>
+
+  <Card title="Test with read-only" icon="eye">
+    Run agents in read-only mode for at least one week, review all traces, then switch to read-write only when confident.
+  </Card>
+
+  <Card title="Review reasoning traces" icon="magnifying-glass">
+    Regularly check traces to verify correct interpretation and identify edge cases in your strategy logic.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent not executing trades">
+    **Possible causes**:
+    1. Trigger is not firing (check agent state is "Online")
+    2. Entry criteria are not being met (review reasoning traces)
+    3. Daily cap has been reached (check recent P&L)
+    4. Risk limit has been triggered (check account balance vs. floor)
+    5. Integration permissions are read-only (verify exchange API settings)
+  </Accordion>
+
+  <Accordion title="Unexpected trade execution">
+    **Possible causes**:
+    1. Instructions are ambiguous (refine phrasing and test again)
+    2. Market conditions changed rapidly between trigger intervals
+    3. Specialist data was stale or delayed
+    4. Edge case not covered in your instructions
+
+    Review the reasoning trace for the specific run to understand what triggered the trade.
+  </Accordion>
+
+  <Accordion title="Performance degradation">
+    **Possible causes**:
+    1. Market regime has shifted (e.g., trending to range-bound)
+    2. Strategy has attracted attention (edge degradation)
+    3. Position sizing is too large for current volatility
+    4. Stop losses are too tight for current ATR
+
+    Review learnings for patterns and adjust instructions accordingly.
+  </Accordion>
+</AccordionGroup>
+
+## Limitations
+
+<AccordionGroup>
+  <Accordion title="Execution latency">
+    Agent actions are subject to trigger interval (minimum 5 minutes), API latency to exchanges, order processing time, and network conditions. Do not use agents for strategies requiring sub-minute execution.
+  </Accordion>
+
+  <Accordion title="Market conditions">
+    Agents cannot predict unexpected events (exchange outages, liquidity crises), guarantee fills at expected prices during volatile markets, or prevent slippage on large orders in illiquid markets.
+  </Accordion>
+
+  <Accordion title="Model limitations">
+    The language model may misinterpret ambiguous phrasing, cannot execute logic requiring external data not available through specialists, and has a knowledge cutoff. Review reasoning traces to verify correct interpretation.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Agent Setup Guide" icon="rocket" href="/guides/agents-setup">
+    Step-by-step instructions for creating your first agent
+  </Card>
+
+  <Card title="Integrations" icon="plug" href="/guides/integrations">
+    Connect Hyperliquid and Telegram to enable live trading
+  </Card>
+</CardGroup>
+
+<Warning>
+**Not financial advice**: Agents execute your strategy, but they do not provide financial advice. You are responsible for defining appropriate risk parameters, understanding the strategies you implement, monitoring agent performance, and complying with relevant regulations.
+</Warning>

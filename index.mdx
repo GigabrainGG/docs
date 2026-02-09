@@ -3,20 +3,55 @@ title: What is Gigabrain?
 description: Your AI trading desk for crypto markets
 ---
 
-##
-
-Gigabrain is an advanced reasoning engine designed for real-time market analysis. It emulates the structured thinking of a professional trader by integrating data from multiple sources, including live prices, on-chain metrics, news, and sentiment. Users can query Gigabrain via natural language prompts to obtain synthesized insights, eliminating the need for manual data aggregation across liquidations, microstructure, fundamentals, technical analysis, and external events. This enables faster, more informed decision making while adhering to best practices for market analysis.
+Gigabrain is an advanced reasoning engine designed for real-time market analysis. It emulates the structured thinking of a professional trader by integrating data from multiple sources, including live prices, onchain metrics, news, and sentiment. Users can query Gigabrain via natural language prompts to obtain synthesized insights eliminating the need for manual data aggregation across liquidations, microstructure, fundamentals, technical analysis, and external events. This enables faster, more informed decision making while adhering to best practices for market analysis.
 
 ## The Intelligence Collective
 
-Gigabrain operates through a team of domain specific agents, each equipped with tailored tools and expertise. These agents work in parallel under a central coordinator to gather, analyze, and reconcile data, providing comprehensive market intelligence that turns raw inputs into alpha-generating insights. The core agents are:
+Gigabrain operates through a team of domain specific agents, each equipped with tailored tools and expertise. These agents work in parallel under a central coordinator to gather, analyze, and reconcile data, providing comprehensive market intelligence that turns raw inputs into alpha-generating insights.
 
-- **Macro Analyst**: Examines global economic regimes, including DXY, VIX, Treasury yields, commodities (e.g., gold/silver), and liquidity flows to contextualize risk on/off environments.
-- **Microstructure Analyst**: Focuses on perpetual futures dynamics, such as open interest (OI), funding rates, liquidations, and positioning to identify imbalances and short-term moves.
-- **Fundamentals Analyst**: Assesses protocol health via metrics like TVL, revenue, emissions, unlocks, and ecosystem activity, tailored to asset type.
-- **Market State Analyst**: Evaluates overall sentiment, high impact alphas, and regime shifts using news, events, and macro insights for broad market overviews.
-- **Price Movement Analyst**: Performs technical analysis on price action, including EMAs, SMAs, momentum indicators, volume profiles, and key support/resistance zones to spot patterns and trends.
-- **Trenches Analyst**: Specializes in micro cap tokens (under $100M market cap), leveraging social intelligence and narratives analysis, sentiment, and low liquidity risks.
-- **Polymarket Analyst**: Analyzes prediction markets for odds, volume, and resolutions across crypto, politics, and events to gauge probabilistic outcomes.
+<CardGroup cols={2}>
+  <Card title="Macro Analyst" icon="globe">
+    Global economic regimes DXY, VIX, Treasury yields (2Y, 10Y), Fed Funds rate, S&P 500/Nasdaq, gold, risk regime classification, and crypto-macro correlations.
+  </Card>
+
+  <Card title="Microstructure Analyst" icon="chart-mixed">
+    Perpetual futures dynamics open interest, funding rates, liquidation data, long/short ratios, whale positioning, taker flow imbalance, and CVD.
+  </Card>
+
+  <Card title="Fundamentals Analyst" icon="magnifying-glass-chart">
+    Protocol health TVL, revenue, fees, chain deployments, utilization rates, active users, governance data, and token metrics (price, market cap, PE ratio).
+  </Card>
+
+  <Card title="Market State Analyst" icon="gauge-high">
+    Overall sentiment Fear & Greed Index, BTC dominance, Altcoin Season Index, total market cap, volume data, narrative tracking, and regime classification.
+  </Card>
+
+  <Card title="Price Movement Analyst" icon="chart-line">
+    Technical analysis EMAs (20, 50, 200), RSI, MACD, ADX, Supertrend, support/resistance levels, volume analysis, and trade setups with entry/exit.
+  </Card>
+
+  <Card title="Trenches Analyst" icon="fire">
+    Micro-cap tokens (under $100M market cap) social momentum, KOL/influencer mentions, narrative analysis, volume spikes, and risk assessment.
+  </Card>
+
+  <Card title="Polymarket Analyst" icon="scale-balanced">
+    Prediction markets trending markets, odds (yes/no), volume, resolution dates, and cross-referencing with macro and crypto data.
+  </Card>
+</CardGroup>
+
+## Beyond the Agents
+
+In addition to the specialized agents, Gigabrain provides access to a wide range of market data:
+
+| Category | Examples |
+| --- | --- |
+| **Market Data** | Token prices, funding rates, open interest, liquidations, order book depth |
+| **Onchain** | TVL, protocol revenue, DEX volumes, whale activity, exchange flows, bridge flows |
+| **Macro** | ETF flows, options data, mining data, macro events calendar, correlations |
+| **Derivatives** | Short squeeze candidates, perp DEX rankings, top gainers/losers |
+| **Research** | Yield opportunities, token unlocks, L2 metrics, NFT collections, relative strength |
+| **Sentiment** | Fear & Greed, narrative tracking, Polymarket predictions, portfolio analysis |
+
+All data types support **structured JSON responses** when explicitly requested, making Gigabrain ideal for building trading bots, dashboards, and data pipelines. See the [Brain API Overview](/guides/brain-api-overview) for details.
 
 Gigabrain is your personal market intelligence engine thinking with you, to provide professional grade, real-time edge comparable to top quant funds. It transforms data overload into decisive insights, all from a simple prompt.

@@ -1,74 +1,268 @@
 ---
-title: "FAQs"
-description: "Frequently Asked Questions"
+title: FAQ
+description: Frequently asked questions
 ---
 
 <AccordionGroup>
-  <Accordion title="How does the Intelligence Collective work?">
-    The Intelligence Collective is Gigabrain's team of specialized agents (e.g.,
-    Macro, Microstructure, Fundamentals) that work in parallel to analyze data
-    and synthesize unified insights. A central coordinator routes queries for
-    comprehensive coverage of regimes, imbalances, and catalysts.
+  <Accordion title="What is Gigabrain?">
+    Gigabrain is a market intelligence platform for crypto trading. It analyzes markets in real-time by combining price data, onchain metrics, derivatives positioning, fundamentals, news, and social sentiment. You ask questions in natural language and get structured analysis with clear trade theses, supporting data, and risk assessments.
   </Accordion>
 
-{" "}
-
-<Accordion title="What data sources does Gigabrain use?">
-  Gigabrain pulls real-time data from crypto markets (OHLCV, OI, funding), macro
-  indicators (DXY, VIX, yields, commodities), on-chain metrics (TVL, revenue,
-  unlocks), fundamentals (protocol activity), social sentiment (X/Twitter), and
-  curated news. All sources are processed through secure pipelines for accuracy.
+<Accordion title="How is this different from ChatGPT or other AI tools?">
+  ChatGPT is a general purpose AI with a knowledge cutoff it doesn't have access
+  to live market data or specialized crypto analysis tools. Gigabrain pulls
+  real-time prices, funding rates, onchain flows, whale activity, and news as
+  you query. It's built specifically for crypto trading with specialized
+  analysts for macro, microstructure, fundamentals, technicals, and more.
 </Accordion>
 
-{" "}
-
-<Accordion title="How often is the data updated?">
-  Data is fetched live for every query, with our own scoring mechanisms,
-  regimes, and alphas recalculated on demand.
+<Accordion title="Do I need coding skills to use Gigabrain?">
+  No. Chat works entirely through natural language just type questions like
+  "Analyze ETH on the 4H chart"
 </Accordion>
 
-{" "}
-
-<Accordion title="Can I trust Gigabrain's analysis?">
-  Gigabrain uses verifiable, deterministic data to avoid hallucinations and
-  provide objective insights. Markets are volatile, so always verify with your
-  own research it's a tool for informed decisions, not financial advice. Do your
-  due diligence before acting.
+<Accordion title="Can I try it before paying?">
+  Yes. You can explore Alpha Feed and for chat access and agents access you will
+  need API credits
 </Accordion>
 
-{" "}
+  <Accordion title="What kind of questions can I ask?">
+    Anything related to crypto markets:
+    - Trade setups: "Give me a BTC long setup on the 1H chart"
+    - Market conditions: "What's moving the market today?"
+    - Fundamentals: "Analyze Aave's TVL and revenue"
+    - Positioning: "Are longs crowded on SOL?"
+    - Macro: "Is the market risk on or risk off right now?"
+    - Data requests: "Get token unlocks for next 14 days"
 
-<Accordion title="Can Gigabrain show sources and citations?">
-  Yes, responses include key references such as metrics (e.g., OI changes),
-  sources, and data timestamps. While not all raw data is shown, specific data
-  can be requested in your query, and all essential insights are highlighted.
-</Accordion>
+    See the [Chat documentation](/core-features/chat) for more examples.
 
-{" "}
-
-<Accordion title="Will Gigabrain become more personalized?">
-  We are planning to add watchlists for alerts on shifts, imbalances, or
-  catalysts, and scheduled automated reports via email or integrations. These
-  features will be part of the upcoming Personalization feature set.
-</Accordion>
-
-{" "}
-
-<Accordion title="Does Gigabrain support external integrations?">
-  Yes, Gigabrain integrates with platforms like Hyperliquid for trading and
-  Telegram for real-time alerts. We are continuously expanding our integrations
-  to include more exchanges. check profile page for more [details](https://gigabrain.gg/profile).
-</Accordion>
-
-  <Accordion title="What are the subscription tiers?">
-    Gigabrain offers three subscription tiers: Lite ($29/month) for trying Brain's capabilities with Chat Access and Alpha Feed; Pro ($149/month, coming soon) for active decision-making with Full Chat Access, Realtime Alpha Feed, 10 Workflows, and API Access; and Elite (Hold 1M $BRAIN) for those ahead of the curve with Full Chat Access, Alpha Feed, Unlimited Workflows, Alpha Community Access, and Beta Features.  [Visit](https://gigabrain.gg/pricing) for details.
   </Accordion>
 
+<Accordion title="How accurate is the analysis?">
+  Gigabrain synthesizes current market data and applies established analytical
+  frameworks (technical analysis, onchain metrics, macro correlations). It's as
+  accurate as the data it receives and the patterns it recognizes. However,
+  markets are inherently unpredictable no analysis tool can guarantee future
+  price movements. Use Gigabrain to inform your decisions, not replace your
+  judgment.
+</Accordion>
 
+<Accordion title="Can I execute trades directly from Chat?">
+  Yes, if you connect your exchange account in Integrations. Once connected, you
+  can ask Chat to place trades like "Long ETH with $500 at 5x leverage" and it
+  will execute after confirmation. See [Integrations](/guides/integrations) for
+  setup details.
+</Accordion>
+
+<Accordion title="Does Chat remember my previous questions?">
+  Yes, within the same conversation session. You can ask follow up questions
+  without repeating context. For example, after asking "Analyze BTC," you can
+  follow up with "What about the fundamentals?" and it will understand you're
+  still talking about BTC. Starting a new chat resets the context.
+</Accordion>
+
+<Accordion title="How current is the data in Chat responses?">
+  Data is pulled in real-time when you query. Prices, funding rates, and most
+  market metrics are current within seconds.
+</Accordion>
+
+<Accordion title="What is the Alpha Feed?">
+  Alpha is an automated intelligence feed that surfaces market moving events as
+  they happen. It monitors news, onchain activity, social signals, whale
+  movements, and macro developments, then alerts you to things that could affect
+  prices before they reach mainstream awareness.
+</Accordion>
+
+<Accordion title="How is Alpha different from just reading crypto news?">
+  News sites show you everything most of it is noise. Alpha filters for events
+  with actual price relevance, provides context on why it matters, cross
+  references with current market data, and assigns impact ratings. It's
+  synthesized intelligence not raw headlines.
+</Accordion>
+
+<Accordion title="Can I filter Alpha by topic?">
+  Yes. You can filter by category (MACRO, FUNDAMENTALS, WHALES, ONCHAIN,
+  INSTITUTIONAL, MARKET STRUCTURE) and view only STARRED insights you've
+  bookmarked.
+</Accordion>
+
+<Accordion title="What are Agents?">
+  Agents are autonomous programs that execute trading strategies on your behalf.
+  You define the rules (when to enter, how much to risk, when to exit), connect
+  your exchange, and the Agent monitors markets 24/7 and trades when your
+  criteria are met.
+</Accordion>
+
+<Accordion title="Do Agents trade automatically without my approval?">
+  Yes, that's the point. You set the strategy in the Instructions, and the Agent
+  executes automatically when conditions match. If you want manual approval for
+  each trade, use Chat with exchange integration instead Chat requires you to
+  explicitly request each trade.
+</Accordion>
+
+<Accordion title="Can I see what my Agent is thinking before it trades?">
+  Yes. Every Agent run produces a reasoning trace in the Reasoning tab that
+  shows exactly what data it analyzed, which criteria were met or not met, and
+  why it decided to trade or stay sidelined. You can review these in real-time.
+</Accordion>
+
+<Accordion title="What if my Agent makes bad trades?">
+  Agents execute the strategy you define. If trades are unprofitable, the
+  strategy needs refinement adjust your Instructions based on what you learn
+  from the Learnings tab. Start with small position sizes, tight stop losses,
+  and daily profit caps until you're confident the strategy works.
+</Accordion>
+
+<Accordion title="Can I pause my Agent if the market gets crazy?">
+  Yes. Click the Pause button and the Agent stops immediately. You can resume it
+  anytime. You can also set risk limits in your Instructions like "Halt all
+  trading if account drops to $X" or "Stop trading during high VIX
+  environments."
+</Accordion>
+
+<Accordion title="Can I run multiple Agents at once?">
+  Yes. You can deploy multiple Agents with different strategies on different
+  assets or timeframes. For example, one Agent could scalp BTC on 5m while
+  another swing trades ETH on 4H.
+</Accordion>
+
+<Accordion title="Which exchanges does Gigabrain support?">
+  Currently supported exchanges are listed in the Integrations section of your
+  account settings. This includes major perpetual futures platforms. The list is
+  updated as new integrations are added.
+</Accordion>
+
+<Accordion title="Can Gigabrain withdraw funds from my exchange?">
+  No. APIs wallets used for trade execution does not have withdrawal
+  permissions.
+</Accordion>
+
+<Accordion title="Can I backtest strategies before running an Agent live?">
+  Yes, you can run paper trading with your Agent.
+</Accordion>
+
+<Accordion title="Can I analyze my own portfolio?">
+  Yes. You can ask Chat questions like "Analyze a portfolio of 50% BTC, 30% ETH,
+  20% SOL" and get risk assessment, correlation analysis, and suggestions for
+  rebalancing.
+</Accordion>
+
+<Accordion title="Does Gigabrain provide price predictions?">
+  No. Gigabrain analyzes current conditions and identifies potential setups
+  based on technical, fundamental, macro, and positioning factors. It provides
+  probabilistic assessments (e.g., "bearish bias until support holds") not price
+  targets with certainty.
+</Accordion>
+
+  <Accordion title="What's the difference between the specialists?">
+    Each specialist focuses on one domain of market analysis:
+    - **Macro Analyst** examines Fed policy, DXY, yields, risk environment
+    - **Microstructure Analyst** tracks funding rates, open interest, liquidations
+    - **Fundamentals Analyst** analyzes TVL, revenue, protocol health
+    - **Price Movement Analyst** does technical analysis and chart patterns
+    - **Market State Analyst** assesses overall sentiment and narratives
+    - **Trenches Analyst** focuses on low cap tokens and social momentum
+    - **Polymarket Analyst** interprets prediction market odds
+
+    When you ask a question, the relevant specialists are consulted automatically. See [What is Gigabrain](/index#the-intelligence-collective) for full details.
+
+  </Accordion>
+
+<Accordion title="Can I get raw data without analysis?">
+  Yes. You can request specific data points like "Get funding rates for top 20
+  perpetual contracts" or "Get token unlocks for next 14 days" and receive
+  structured data with minimal commentary.
+</Accordion>
+
+  <Accordion title="What's the difference between pay-as-you-go and token-gated access?">
+    **Pay-as-you-go**: Start at $5, pay per Chat query, includes API and Agents access.
+
+    **Token-gated (1M BRAIN)**: Hold 1M BRAIN tokens for unlimited Chat, included monthly API credits, and access to Alpha Community.
+
+    See [Pricing](/pricing) for full comparison.
+
+  </Accordion>
+
+<Accordion title="How much does each Chat query cost with pay-as-you-go?">
+  Pricing is usage based and depends on query complexity. Simple questions
+  consume fewer credits than multi specialist deep dives. Your account dashboard
+  shows credit consumption per query.
+</Accordion>
+
+<Accordion title="Do API credits expire?">
+  API Credits purchased has expiry date of 1 year.
+</Accordion>
+
+<Accordion title="Can I use Gigabrain to build my own trading bot?">
+  Yes. All Chat queries can return structured JSON responses when you add
+  "Respond as JSON" to your question. This enables programmatic integration for
+  bots, dashboards, and automated systems. See the [Brain API
+  documentation](/developers/brain-api-overview) for implementation details.
+</Accordion>
+
+<Accordion title="Does trading via Gigabrain incur any fees?">
+  Yes. Trading via Gigabrain incurs a small fee charged as builder fees. This
+  applies to trades executed through Chat (when exchange is connected) and
+  trades executed by Agents.
+</Accordion>
+
+<Accordion title="Can I self-host Gigabrain?">
+  No. Gigabrain runs on cloud infrastructure with access to real-time data
+  feeds, exchange integrations, and the Intelligence Collective. It's not
+  available for self-hosting.
+</Accordion>
+
+<Accordion title="What is the Alpha Community?">
+  A private community for BRAIN token holders (1M+ tokens). It includes
+  exclusive channels for strategy discussion, early alpha sharing, and direct
+  interaction with the Gigabrain team.
+</Accordion>
+
+<Accordion title="How do I get support if something doesn't work?">
+  For technical issues and general discussion, join the [Gigabrain
+  Telegram](https://t.me/gigabraingg).
+</Accordion>
+
+<Accordion title="Can I request new features or data sources?">
+  Yes. Feature requests are welcome via the community channels. The team
+  prioritizes features based on user demand and technical feasibility.
+</Accordion>
+
+<Accordion title="Is there documentation for developers?">
+  Yes. The Brain API documentation covers structured JSON output, programmatic
+  query formatting, and integration patterns for building custom tools. Access
+  it from [Brain API Overview](/developers/brain-api-overview).
+</Accordion>
+
+<Accordion title="Is Gigabrain financial advice?">
+  No. Gigabrain is a tool for market analysis and trade execution. It does not
+  provide personalized financial advice or recommendations. You are responsible
+  for your own trading decisions and risk management.
+</Accordion>
+
+<Accordion title="Can I rely on Gigabrain to manage my entire trading account?">
+  You should never rely solely on any automated tool for all trading decisions.
+  Use Gigabrain to inform your analysis, validate your ideas, and execute
+  strategies you understand. Always maintain appropriate position sizing, stop
+  losses, and risk limits.
+</Accordion>
+
+<Accordion title="What happens if Gigabrain's analysis is wrong?">
+  Markets are unpredictable. Even high conviction analysis can be invalidated by
+  unexpected events (regulatory changes, exchange hacks, black swan events).
+  This is why every response includes invalidation criteria conditions under
+  which the thesis no longer holds. Use stop losses, position size
+  appropriately, and never risk more than you can afford to lose.
+</Accordion>
+
+  <Accordion title="Who is responsible if an Agent loses money?">
+    Agents execute strategies you define with rules you set. Profitable or unprofitable outcomes result from the strategy, market conditions, and your risk management not from Gigabrain making decisions on your behalf.
+  </Accordion>
 </AccordionGroup>
 
-
-
-##
-
 ---
+
+## Still have questions?
+
+For questions not covered in the docs, join the [Gigabrain Telegram](https://t.me/gigabraingg).

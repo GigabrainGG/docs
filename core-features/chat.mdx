@@ -3,70 +3,199 @@ title: Chat
 description: Interactive Market Queries
 ---
 
-![Chat Interface](/images/chat.png)
 
-Gigabrain Chat is the conversational access to of the platform, enabling real-time market queries via natural language. It routes inputs to the Intelligence Collective, a team of specialized agents for parallel analysis, fetching live data from sources like prices, order books, onchain metrics, news, and sentiment. Responses synthesize insights with clear theses, risks, and invalidations, drawing from our four pillars for objective, trader-grade outputs. Chat supports iterative follow ups with session memory, allowing you to refine queries like a live trading desk conversation.
 
-## Use Cases
+![Chat Response Example](/images/chat-response.png)
 
-### Trading
+Gigabrain Chat is your conversational interface to the Intelligence Collective a team of specialized market analysts that work together to answer your questions in real-time. Instead of scrolling through charts, reading news, and checking onchain data separately, just ask a question and get a synthesized answer with a clear thesis, risk assessment, and invalidation points.
 
-Get real-time price action, technical levels, and actionable edges for daily trading.
+Chat pulls live data from prices, order books, funding rates, onchain metrics, news feeds, and social sentiment. It supports follow up questions with session memory, so you can refine your analysis like you're having a conversation with a trading desk.
 
-- **Token Analysis**: "Analyze ETH's price movement, key levels, and is it a good time to long?"
-- **Fundamentals**: "What's the TVL and revenue story for Aave?"
-- **Trade Setups**: "Give me a BTC trade setup based on the 4H timeframe"
-- **Market Updates**: "What's moving the market today?"
-- **Sentiment Research**: "What's the buzz on Solana DeFi?"
-- **Low-Cap Evaluation**: "Analyze the low-cap token PEPE"
-- **Risk Regime**: "Is the market risk-on or risk-off right now?"
+## How it works
 
-### Polymarket
+<Steps>
+  <Step title="Routes to specialists">
+    Your query is sent to the right analysts (Macro, Microstructure,
+    Fundamentals, Price Action, etc.)
+  </Step>
+  <Step title="Fetches live data">
+    Pulls current prices, funding rates, whale activity, protocol metrics, and
+    news
+  </Step>
+  <Step title="Synthesizes insights">
+    Combines all the data into a clear answer with a verdict, setup, and trade
+    idea
+  </Step>
+  <Step title="Maintains context">
+    Remembers your conversation so you can ask follow ups without repeating
+    yourself
+  </Step>
+</Steps>
 
-Prediction market odds cross referenced with crypto/macro data for probability leans.
+You don't need to know which specialist to ask the system figures it out automatically.
 
-- **Price Predictions**: "Will BTC hit $100K by EOY? Analyze the odds"
-- **Event Analysis**: "Analyze the US election winner odds on Polymarket"
-- **Token Markets**: "What's the lean on this token's FDV market one day after launch?"
-- **Macro Alignment**: "How do Polymarket Fed rate cut odds align with macro liquidity?"
-- **Trending Events**: "What's hot on Polymarket right now for crypto?"
+## What you can ask
 
-### Microstructure
+<Tabs>
+  <Tab title="Trading">
+    Get actionable trade ideas with entry zones, targets, and invalidation levels. If your exchange is connected, you can execute trades directly from Chat.
 
-Target perp futures dynamics for liquid tokens, spotting leverage risks and flows.
+    **Analysis examples:**
+    - "Analyze ETH's price movement, key levels, and is it a good time to long?"
+    - "Give me a BTC trade setup based on the 4H timeframe"
+    - "What's moving the market today?"
 
-- **OI Tracking**: "Is OI spiking on ETH perps, indicating fresh longs?"
-- **Funding Rates**: "Funding rates turning negative, short squeeze risk?"
-- **Liquidations**: "BTC liquidations above $95K, downside trigger if support breaks?"
-- **Long/Short Ratios**: "Longs at 70%, crowded trade, watch for reversals?"
-- **Whale Positioning**: "Whales adding to shorts on SOL, bearish indicator?"
+    **Execution examples** (requires connected exchange):
+    - "Long ETH with $500 at 5x leverage"
+    - "Buy 0.5 SOL at market price"
+    - "Close my entire HYPE position"
 
-### Macro
+    **What you get:** Current price action, technical levels, momentum analysis, and a clear verdict on whether there's an edge.
 
-Evaluate economic regimes and policy impacts on crypto as a risk asset.
+  </Tab>
 
-- **Fed Policy**: "Fed pivot incoming, risk on for alts?"
-- **Liquidity**: "Liquidity drying up, correlated BTC pullback likely?"
-- **Risk Environment**: "Risk off mode, BTC tracking Nasdaq downside?"
-- **Economic Events**: "Post CPI, hot inflation caps upside to $100K?"
-- **Correlations**: "DXY strength pressuring BTC like in 2022?"
-- **Geopolitical**: "Election uncertainty boosting BTC as hedge?"
-- **Regime Shifts**: "Disinflation regime favors alts over BTC?"
+  <Tab title="Fundamentals">
+    Deep dive into protocols, DeFi metrics, and token economics.
 
-## Best Practices for Using Gigabrain Chat
+    **Examples:**
+    - "What's the TVL and revenue story for Aave?"
+    - "Deep dive on Aave TVL, revenue, utilization, token metrics"
+    - "What's the buzz on Solana DeFi?"
 
-Gigabrain is built for sharp, data driven crypto market intel think real-time analysis, specialist breakdowns, and alpha hunting. Treat it like consulting a team of traders, not a general AI. Here's how to get the most value:
+    **What you get:** Protocol health metrics, revenue trends, competitive positioning, and whether fundamentals support the current price.
 
-1. **Be Specific and Actionable**: Frame questions around decisions, like "What's the edge on SOL long here?" or "Break down ETH fundamentals post-Dencun." Vague asks like "Tell me about crypto" get generic responses; tie to timeframes, tokens, or events for depth.
+  </Tab>
 
-2. **Leverage the Specialist Team**: Mention what you need (e.g., "Macro view on BTC" or "Microstructure for UNI perps") to route to the right agent. We handle macro regimes, token fundamentals, price action, low cap narratives, and Polymarket odds.
+  <Tab title="Microstructure">
+    Understand leverage, positioning, and where the market is vulnerable.
 
-3. **Iterate on Responses**: Follow up on key points, like "Elaborate on the invalidation level" or "Compare to last FOMC." This builds a conversation without restarting.
+    **Examples:**
+    - "Is OI spiking on ETH perps, indicating fresh longs?"
+    - "Funding rates turning negative, short squeeze risk?"
+    - "Longs at 70%, crowded trade, watch for reversals?"
 
-4. **Combine Angles**: Ask for multi faceted views, e.g., "Fundamentals + technicals on ARB." We cross validate indicators for conviction.
+    **What you get:** Funding rates, open interest, long/short ratios, liquidation zones, and whale positioning with interpretation of what it means for price.
 
-5. **Time It Right**: Use for pre trade checks or event previews (CPI, unlocks). Responses pull live data, so they're freshest during market hours.
+  </Tab>
 
-## Have a Market Query?
+  <Tab title="Macro">
+    Evaluate how broader economic conditions affect crypto.
 
-Head to the [Gigabrain Terminal](https://gigabrain.gg/chat) and start chatting with the agent swarm!Ready to start querying?
+    **Examples:**
+    - "Fed pivot incoming, risk on for alts?"
+    - "Risk off mode, BTC tracking Nasdaq downside?"
+    - "DXY strength pressuring BTC like in 2022?"
+
+    **What you get:** Analysis of Fed policy, liquidity conditions, DXY, VIX, yields, and how they're affecting crypto as a risk asset.
+
+  </Tab>
+
+  <Tab title="Polymarket">
+    Cross reference prediction market odds with crypto and macro data.
+
+    **Examples:**
+    - "Will BTC hit $100K by EOY? Analyze the odds"
+    - "What's hot on Polymarket right now for crypto?"
+
+    **What you get:** Current odds, trend direction, and whether the prediction market signal aligns with other data.
+
+  </Tab>
+
+  <Tab title="Portfolio">
+    Run analysis across multiple assets and discover opportunities.
+
+    **Examples:**
+    - "Analyze a portfolio of 50% BTC, 30% ETH, 20% SOL"
+    - "List all tokens that gained more than 20% in the last 24 hours"
+    - "Get token unlocks for the next 14 days"
+
+    **What you get:** Structured data, rankings, upcoming events, and context on what to watch.
+
+  </Tab>
+</Tabs>
+
+
+### Integrations
+
+Connect your exchange account to enable direct trade execution from Chat.
+
+<AccordionGroup>
+  <Accordion title="How to connect" icon="plug">
+    1. Navigate to Settings → Integrations
+    2. Select your exchange (Hyperliquid, Binance, etc.)
+    3. Authorize API access with trading permissions
+    4. Return to Chat
+  </Accordion>
+
+  <Accordion title="How to trade" icon="chart-line">
+    Once connected, ask Chat to execute trades directly:
+    - "Buy 0.1 ETH at market price"
+    - "Long BTC with $500, 3x leverage"
+    - "Place limit order for SOL at $140"
+    - "Close 50% of my ETH position"
+
+    Chat will confirm the order details before execution. For automated trading without manual approval, use [Agents](/core-features/agents).
+
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Only connect exchanges you trust and understand the API permissions you're
+  granting. Always start with small position sizes to test functionality.
+</Note>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Be specific" icon="bullseye">
+    **Vague:** "Tell me about crypto"  
+    **Better:** "Analyze BTC on the 4H chart. Is this a continuation or reversal setup?"
+  </Card>
+
+<Card title="Include timeframes" icon="clock">
+  **5m-15m** — Scalping **1H-4H** — Intraday/swing **1D-1W** — Position trading
+</Card>
+
+<Card title="Ask for multiple angles" icon="layer-group">
+  "Analyze SOL: fundamentals + technicals + microstructure" When all three
+  align, you have a stronger edge.
+</Card>
+
+<Card title="Pre-trade checks" icon="shield-check">
+  "ETH long at $2,050. Check for major resistance nearby, funding rate extremes,
+  and upcoming macro events"
+</Card>
+
+<Card title="Follow up to go deeper" icon="comments">
+  - "Elaborate on the invalidation level" - "What historical precedent supports
+  this?" - "How does this compare to last FOMC?"
+</Card>
+
+  <Card title="Time it right" icon="calendar">
+    Most useful during market hours, before major events (CPI, FOMC), or when you need a quick read on current conditions.
+  </Card>
+</CardGroup>
+
+## What Chat is (and isn't)
+
+<Tabs>
+  <Tab title="What it does">
+    ✓ Analyzes current market conditions across price, fundamentals, macro, and positioning  
+    ✓ Provides clear theses with entry, target, and invalidation levels  
+    ✓ Synthesizes data from multiple sources into one coherent view  
+    ✓ Maintains conversation context for iterative follow ups  
+    ✓ Pulls live data so analysis reflects current state  
+    ✓ Executes trades directly when your exchange is connected
+  </Tab>
+
+  <Tab title="What it doesn't do">
+    ✗ Make trading decisions for you (it provides analysis, you decide whether to trade)  
+    ✗ Predict the future with certainty (it analyzes current data and patterns)  
+    ✗ Replace your own judgment (it's a tool to inform decisions, not make them)  
+    ✗ Cover non-crypto markets in depth (focus is crypto with macro context)
+  </Tab>
+</Tabs>
+
+## Ready to start?
+
+Head to the [Gigabrain Terminal](https://gigabrain.gg/chat) and ask your first question.

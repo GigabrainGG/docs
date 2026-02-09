@@ -1,0 +1,275 @@
+---
+title: "Brain API Overview"
+description: "Everything you can query from Gigabrain agents, data types, market intelligence, and response formats"
+---
+
+The Gigabrain API gives you programmatic access to the full Intelligence Collective, 7 specialized agents and 30+ data categories covering every corner of the crypto market. This page is the complete reference for what you can query, what data comes back, and how to use it.
+
+## The Intelligence Collective
+
+Every query is routed to one or more specialized agents. Here's what each agent covers and what you can ask.
+
+### Macro Analyst
+
+Global economic regimes and their crypto impact.
+
+**What it provides:** DXY, VIX, Treasury yields (2Y, 10Y), Fed Funds rate, S&P 500/Nasdaq changes, gold price, risk regime classification (Risk-On/Risk-Off/Neutral), and crypto macro correlations.
+
+**Example query:**
+```
+Get current macro indicators. Respond as JSON with: dxy (value, change_24h),
+vix (value, change_24h), us_10y_yield, us_2y_yield, fed_funds_rate,
+sp500_change_24h, nasdaq_change_24h, gold_price, risk_regime, crypto_correlation
+```
+
+**Example response:**
+```json
+{
+  "dxy": { "value": 97.52, "change_24h": "+0.08%" },
+  "vix": { "value": 16.22, "change_24h": "-7.00%" },
+  "us_10y_yield": "4.28%",
+  "us_2y_yield": "4.27%",
+  "fed_funds_rate": "3.64%",
+  "sp500_change_24h": "-0.84%",
+  "nasdaq_change_24h": "-1.43%",
+  "gold_price": 4947.55,
+  "risk_regime": "Risk-Neutral",
+  "crypto_correlation": "Mixed (BTC/SPX: -0.54, BTC/DXY: +0.68)"
+}
+```
+
+---
+
+### Microstructure Analyst
+
+Perpetual futures dynamics the leverage and positioning layer.
+
+**What it provides:** Open interest (absolute and delta), funding rates (current and predicted), long/short ratios, liquidation data (longs vs shorts, totals), whale positioning, taker flow imbalance, and CVD (Cumulative Volume Delta).
+
+**Funding rates:**
+```
+Get funding rates for top 20 perpetual contracts. Respond as JSON array with:
+symbol, funding_rate, predicted_rate, open_interest, long_short_ratio
+```
+
+```json
+[
+  { "symbol": "BTC", "funding_rate": 0.004495, "open_interest": 48667142312.64, "long_short_ratio": 2.93 },
+  { "symbol": "ETH", "funding_rate": -0.009918, "open_interest": 26435246163.78, "long_short_ratio": 3.15 },
+  { "symbol": "SOL", "funding_rate": -0.041527, "open_interest": 6356234179.05, "long_short_ratio": 4.45 }
+]
+```
+
+**Liquidations:**
+```
+Get liquidation data for past 24 hours. Respond as JSON with:
+total_liquidations_usd, long_liquidations, short_liquidations,
+largest_single_liquidation, top_liquidated_tokens (array with symbol and amount)
+```
+
+```json
+{
+  "total_liquidations_usd": 808370000,
+  "long_liquidations": 629650000,
+  "short_liquidations": 178720000,
+  "largest_single_liquidation": {
+    "amount_usd": 13390000,
+    "token": "ETH",
+    "exchange": "Hyperliquid",
+    "side": "long"
+  },
+  "top_liquidated_tokens": [
+    { "symbol": "ETH", "amount": 312540000 },
+    { "symbol": "BTC", "amount": 305360000 },
+    { "symbol": "SOL", "amount": 64990000 }
+  ]
+}
+```
+
+---
+
+### Fundamentals Analyst
+
+Protocol health and onchain metrics.
+
+**What it provides:** Total Value Locked (TVL) with changes, protocol revenue/fees, chain deployment info, utilization rates, active users, governance data, and token metrics (price, market cap, PE ratio). Supports deep dives on individual protocols.
+
+**DeFi rankings:**
+```
+List top 15 DeFi protocols by TVL. Respond as JSON array with:
+protocol, chain, tvl_usd, tvl_change_24h, tvl_change_7d, category, fees_24h
+```
+
+```json
+[
+  {
+    "protocol": "Aave",
+    "chain": "Ethereum",
+    "tvl_usd": 29268445970,
+    "tvl_change_24h": -0.78,
+    "tvl_change_7d": -15.77,
+    "category": "Lending",
+    "fees_24h": 3590000
+  },
+  {
+    "protocol": "Lido",
+    "chain": "Ethereum",
+    "tvl_usd": 28450000000,
+    "tvl_change_24h": -0.5,
+    "tvl_change_7d": -10.2,
+    "category": "Liquid Staking",
+    "fees_24h": 640000
+  }
+]
+```
+
+**Protocol deep dive:**
+```
+Deep dive on Aave protocol. Respond as JSON with: tvl, tvl_change_7d,
+chains_deployed, total_borrowed, total_supplied, utilization_rate,
+revenue_24h, revenue_30d, active_users_daily, top_markets,
+governance_proposals_active, token_price, token_mcap, pe_ratio
+```
+
+---
+
+### Market State Analyst
+
+Overall sentiment and regime shifts.
+
+**What it provides:** Fear & Greed Index, BTC dominance, Altcoin Season Index, total market cap, volume data, narrative tracking with momentum scoring, and regime classification.
+
+**Sentiment indicators:**
+```
+Get BTC fear and greed index and market sentiment indicators. Respond as JSON with:
+fear_greed_index, fear_greed_label, btc_dominance, altcoin_season_index,
+market_cap_total, market_cap_change_24h, volume_24h_total
+```
+
+```json
+{
+  "fear_greed_index": 14,
+  "fear_greed_label": "Extreme Fear",
+  "btc_dominance": 58.9,
+  "altcoin_season_index": 34,
+  "market_cap_total": 2490000000000,
+  "market_cap_change_24h": -1.42,
+  "volume_24h_total": 171610000000
+}
+```
+
+**Narrative tracking:**
+```
+Get current crypto narratives ranked by momentum. Respond as JSON array with:
+narrative, momentum_score (1-100), top_tokens, sentiment, key_catalyst
+```
+
+```json
+[
+  { "narrative": "Advanced Perp DEXs", "momentum_score": 95, "top_tokens": ["HYPE", "DYDX", "GMX"], "sentiment": "bullish" },
+  { "narrative": "AI Agents & Compute", "momentum_score": 88, "top_tokens": ["FET", "TAO", "RENDER"], "sentiment": "bullish" },
+  { "narrative": "Prediction Markets", "momentum_score": 82, "top_tokens": ["UMA", "GNO", "DRIFT"], "sentiment": "bullish" }
+]
+```
+
+---
+
+### Price Movement Analyst
+
+Technical analysis and trade signals.
+
+**What it provides:** Price and changes, EMAs (20, 50, 200), RSI, MACD, ADX, Supertrend, support/resistance levels, volume analysis, and trade setups with entry/exit/stop-loss.
+
+**Trading signals:**
+```
+Get top trading signals right now. Respond as JSON array with:
+symbol, signal_type, timeframe, entry_price, stop_loss, take_profit_1,
+take_profit_2, risk_reward_ratio, confidence, reasoning
+```
+
+```json
+[
+  {
+    "symbol": "ETH",
+    "signal_type": "long",
+    "timeframe": "4h",
+    "entry_price": 2148,
+    "stop_loss": 2105,
+    "take_profit_1": 2231,
+    "take_profit_2": 2300,
+    "risk_reward_ratio": 1.9,
+    "confidence": 8,
+    "reasoning": "Extreme short crowding signals a contrarian squeeze..."
+  }
+]
+```
+
+**Multi-asset comparison:**
+```
+Compare BTC, ETH, and SOL for trading. Respond as JSON array with:
+symbol, current_price, trend, momentum, support, resistance,
+funding_rate, recommendation, confidence, key_catalyst
+```
+
+---
+
+### Trenches Analyst
+
+Micro-cap discovery (under $100M market cap).
+
+**What it provides:** Micro-cap token discovery, social momentum tracking, KOL/influencer mentions, narrative analysis, risk assessment, and volume spikes.
+
+**Example query:**
+```
+What micro-cap tokens under 50M are showing unusual social momentum right now?
+```
+
+---
+
+### Polymarket Analyst
+
+Prediction markets.
+
+**What it provides:** Trending markets, odds (yes/no), volume data, resolution dates, and cross-referencing with macro/crypto data.
+
+**Trending predictions:**
+```
+Get trending Polymarket crypto predictions. Respond as JSON array with:
+market_title, yes_odds, no_odds, volume_24h, total_volume, end_date, category
+```
+
+```json
+[
+  {
+    "market_title": "Bitcoin all time high by March 31, 2026?",
+    "yes_odds": "3%",
+    "no_odds": "97%",
+    "volume_24h": "Low",
+    "total_volume": "$17,903",
+    "end_date": "2026-04-01",
+    "category": "Crypto"
+  }
+]
+```
+
+---
+
+## All Available Data
+
+All 30+ data categories support structured JSON responses. Here's what you can query across every domain, with examples.
+
+| Domain | Data Types |
+| --- | --- |
+| **Market Data** | Token prices, order book depth, short squeeze candidates, top gainers/losers, perp DEX rankings |
+| **onchain & DeFi** | Whale activity, exchange flows, DEX volumes, L2 metrics, ETH onchain, yield opportunities, bridge flows, NFT collections, TVL, protocol revenue |
+| **Macro & Derivatives** | ETF flows, options data, mining data, macro events calendar, correlations, DXY, VIX, yields |
+| **Microstructure** | Funding rates, open interest, liquidations, long/short ratios, CVD, taker flow |
+| **Sentiment & Research** | Fear & Greed, narratives, Polymarket predictions, portfolio analysis, relative strength, token unlocks, trading signals |
+
+<Note>
+Some complex queries may time out (504 error) after approximately 600 seconds. This can happen with very broad social sentiment queries, large dataset NFT queries, or complex multi chain aggregations. If you hit a timeout, break the query into smaller, more specific requests.
+</Note>
+
+<Warning>
+Gigabrain provides market intelligence and research tools not financial advice. Always do your own research before trading. See the [Risk Disclosure](/support/risk-disclosure).
+</Warning>
