@@ -1,0 +1,53 @@
+---
+title: "Agent Setup Guide"
+description: "Step-by-step guide to creating and configuring your first Agent"
+---
+
+## Prerequisites
+
+- You have connected your exchange account to Gigabrain in [integrations](https://gigabrain.gg/profile?tab=integrations).
+- You have funded your account and have api credits available.
+- For getting notifications you need to connect your telegram account to Gigabrain in [integrations](https://gigabrain.gg/profile?tab=integrations).
+
+## Getting Started
+
+
+<Steps>
+
+<Step title="Navigate to Agents">
+- Visit [Agents page](https://gigabrain.gg/agents)
+
+- Click **Create New Agent** to begin
+</Step>
+  <Step title="Define strategy">
+    Write your agent's strategy in natural language in the input box. Be specific about:
+    - Entry conditions (e.g., confidence thresholds, market state requirements)
+    - Exit strategy (e.g., invalidation points, confidence drops)
+    - Risk management rules (e.g., position sizing, stop losses)
+    
+    **Example:**
+    ```
+    Analyze the 4H BTC chart, microstructure data, and whale positioning
+    every 4 hours. Place a trade with 10% of account margin when:
+    - Confidence exceeds 75%
+    - Market State is Risk-On
+    - Funding rate is neutral or favorable
+    
+    Re-analyze open positions every 30 minutes. Close position if:
+    - Invalidation point is hit
+    - Confidence drops below 50%
+    - Macro Analyst flags high-impact geopolitical event
+    ```
+  </Step>
+
+  <Step title="Confirm your strategy">
+    Review the generated strategy details:
+    - **Analysis Frequency**: How often your agent will analyze market conditions (Real-time, Hourly, or Daily)
+    - **Position Sizing**: Fixed amount or percentage of portfolio
+    - **Leverage**: Leverage multiplier for trades
+    - **Confidence Threshold**: Minimum confidence required to execute
+    - **Specialists**: Which analysts will be consulted
+    
+    Make any necessary adjustments and click **Confirm** to proceed.
+  </Step>
+</Steps>

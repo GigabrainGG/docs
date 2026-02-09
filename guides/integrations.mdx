@@ -1,0 +1,58 @@
+---
+title: "Integrations"
+description: "Connect exchanges and messaging platforms to Gigabrain"
+---
+
+Gigabrain integrates with third-party platforms for trade execution and real-time notifications. All integrations are managed from your [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations) page.
+
+<Warning>
+Gigabrain is non-custodial. We never have access to your funds. Exchange API keys only allow Gigabrain to place orders you configure, it cannot withdraw funds. Never share your wallet seed phrase or recovery phrase through the platform.
+</Warning>
+
+## Hyperliquid
+
+Hyperliquid is the primary execution venue for Gigabrain Agents. Connecting it allows your Agents to place, monitor, and close trades on your behalf based on the strategies you define.
+
+### Setup
+
+<Steps>
+  <Step title="Visit integrations page">
+    1. Go to [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations).
+    2. Select **Hyperliquid**.
+    3. Connect your wallet and sign transactions to authorize generate apis wallet to trade on your behalf.
+  </Step>
+  <Step title="Verify connection">
+    Once connected, you should see a **Connected** status on your Integrations page. Your Agents can now execute trades on Hyperliquid.
+  </Step>
+</Steps>
+
+### Key considerations
+
+- **Execution risk**: Orders are submitted to Hyperliquid under its rules. Slippage, partial fills, and liquidation mechanics are controlled by Hyperliquid, not Gigabrain. See the [Risk Disclosure](/support/risk-disclosure) for details.
+
+## Telegram Notifications
+
+Connect Telegram to receive real-time alerts from your Agents, including trade executions, performance summaries, and market signals.
+
+### Setup
+
+<Steps>
+  <Step title="Visit integrations page">
+    1. Go to [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations).
+    2. Select **Telegram**.
+    3. Copy the displayed code and message it to [telegram bot](https://t.me/AskGigabrainBot).
+  </Step>
+
+  <Step title="Verify connection">
+    1. You should see a **Connected** status on your Integrations page.
+  </Step>
+
+</Steps>
+
+## Managing Integrations
+
+- View and manage all connected integrations from your [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations) page.
+- You can disconnect any integration at any time.
+- Disconnecting an exchange integration will stop any active Agents from executing trades.
+
+Need help? Contact on [Telegram](https://t.me/gigabraingg).

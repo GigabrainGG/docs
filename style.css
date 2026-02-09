@@ -1,0 +1,38 @@
+/* Import Geist Sans from Vercel CDN */
+@import url('https://cdn.jsdelivr.net/npm/@geist/font/sans.css');
+
+:root {
+  --font-family: Geist, system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: #f0f0f0;
+}
+
+/* Improve code block styling */
+pre {
+  border-radius: 8px;
+}
+
+/* Enhance table styling */
+table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Custom accordion styling */
+.accordion {
+  margin-bottom: 0.5rem;
+}
+
+/* Improve link colors */
+a {
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}

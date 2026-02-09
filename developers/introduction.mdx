@@ -1,0 +1,400 @@
+---
+title: REST API
+description: Programmatic access to Gigabrain's Intelligence Collective
+---
+
+The Gigabrain REST API provides programmatic access to the Intelligence Collective for automated market analysis. It is architected for seamless integration with trading bots, terminal applications, custom scripts, and backend services. The API supports both markdown and **structured JSON responses**.
+
+## Base URL
+
+```
+https://api.gigabrain.gg
+```
+
+All endpoints are prefixed with `/v1`.
+
+## Authentication
+
+Include your API key in the `Authorization` header with every request:
+
+```bash
+curl -X GET "https://api.gigabrain.gg/v1/sessions" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### How to Get Your API Key
+
+Sign in and go to [Profile → API Keys](https://gigabrain.gg/profile) to generate your key.
+
+### API Key Format
+
+```
+gb_sk_a1b2c3d4_e5f6g7h8i9j0k1l2m3n4o5p6q7r8hb9t0
+```
+
+### Authentication Methods
+
+You can authenticate using either method:
+
+**Option 1: Authorization Header (Recommended)**
+
+```bash
+Authorization: Bearer gb_sk_<your-key>
+```
+
+**Option 2: X-API-Key Header**
+
+```bash
+X-API-Key: gb_sk_<your-key>
+```
+
+## Rate Limits
+
+- **Per minute:** 30 requests
+- **Per day:** 1,000 requests
+
+### Rate Limit Headers
+
+Every response includes headers showing your current usage:
+
+```
+X-RateLimit-Limit-Minute: 30
+X-RateLimit-Remaining-Minute: 29
+X-RateLimit-Reset-Minute: 2026-01-07T13:21:00.000Z
+X-RateLimit-Limit-Day: 1000
+X-RateLimit-Remaining-Day: 999
+X-RateLimit-Reset-Day: 2026-01-08T00:00:00.000Z
+```
+
+### Rate Limit Exceeded
+
+When you exceed a limit, you'll receive a `429` response:
+
+```json
+{
+  "statusCode": 429,
+  "message": "Rate limit exceeded",
+  "retryAfter": 45,
+  "resetAt": "2026-01-07T13:21:00.000Z"
+}
+```
+
+The response includes a `Retry-After` header with the number of seconds to wait.
+
+## Response Format
+
+All endpoints return a consistent JSON structure. The analysis response is in the `content` field.
+
+<Note>
+The response field is `content` (not `message`). This applies to all chat responses.
+</Note>
+
+### Success Response
+
+```json
+{
+  "session_id": "uuid",
+  "content": "BTC is currently trading at $73,722...",
+  "timestamp": "2026-01-07T12:00:00Z"
+}
+```
+
+### JSON Response
+
+When you include "Respond as JSON" in your query message, the `content` field contains structured JSON data:
+
+```json
+{
+  "session_id": "uuid",
+  "content": "{\"fear_greed_index\": 14, \"fear_greed_label\": \"Extreme Fear\", \"btc_dominance\": 58.9}",
+  "timestamp": "2026-01-07T12:00:00Z"
+}
+```
+
+Parse the `content` field to access the structured data. See the [Brain API Overview](/guides/structured-data) for all available query patterns and data types.
+
+### Error Response
+
+```json
+{
+  "statusCode": 400,
+  "message": "Invalid request parameters",
+  "error": "Bad Request"
+}
+```
+
+## Response Times
+
+Response times vary depending on query complexity:
+
+| Query Type | Typical Response Time |
+| --- | --- |
+| Simple data lookups (prices, funding rates, Fear & Greed) | 40–60 seconds |
+| Multi-agent analysis (trade setups, protocol deep dives) | 60–120 seconds |
+| Complex aggregations (yield opportunities, perp DEX rankings) | 120–180 seconds |
+| Maximum timeout | ~600 seconds |
+
+<Warning>
+Set your HTTP client timeout to at least 600 seconds. If a query times out (504 error), break it into smaller, more specific requests.
+</Warning>
+
+## HTTP Status Codes
+
+| Status | Code                  | Meaning                             |
+| ------ | --------------------- | ----------------------------------- |
+| `200`  | -                     | Success                             |
+| `400`  | -                     | Bad request - check your parameters |
+| `401`  | `INVALID_API_KEY`     | API key is invalid or revoked       |
+| `404`  | -                     | Resource not found                  |
+| `429`  | `RATE_LIMIT_EXCEEDED` | Rate limit exceeded                 |
+| `500`  | `API_ERROR`           | Server error                        |
+| `504`  | -                     | Query timeout (try a simpler query) |
+
+## Endpoints
+
+### POST /v1/chat
+
+Send a message to Gigabrain's Intelligence Collective and receive AI-powered market analysis.
+
+**Request:**
+
+```bash
+curl -X POST https://api.gigabrain.gg/v1/chat \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "What is the price of BTC?",
+    "stream": false
+  }'
+```
+
+**Parameters:**
+
+| Parameter | Type    | Required | Default | Description                               |
+| --------- | ------- | -------- | ------- | ----------------------------------------- |
+| `message` | string  | Yes      | -       | Your query to the Intelligence Collective |
+| `stream`  | boolean | No       | false   | Enable streaming response                 |
+
+**Response:**
+
+```json
+{
+  "session_id": "550e8400-e29b-41d4-a716-446655440000",
+  "content": "BTC is currently trading at $73,722. The 4H chart shows...",
+  "timestamp": "2026-01-07T12:00:00Z"
+}
+```
+
+### GET /v1/sessions
+
+Retrieve your chat session history.
+
+**Request:**
+
+```bash
+curl -X GET "https://api.gigabrain.gg/v1/sessions?limit=10" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**Parameters:**
+
+| Parameter | Type    | Required | Default | Description                  |
+| --------- | ------- | -------- | ------- | ---------------------------- |
+| `limit`   | integer | No       | 10      | Number of sessions to return |
+
+**Response:**
+
+```json
+{
+  "sessions": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "created_at": "2026-01-07T12:00:00Z",
+      "messages_count": 5
+    }
+  ]
+}
+```
+
+## Code Examples
+
+### Python — Standard Query
+
+```python
+import requests
+
+API_KEY = "gb_sk_..."
+BASE_URL = "https://api.gigabrain.gg"
+
+response = requests.post(
+    f"{BASE_URL}/v1/chat",
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={"message": "What is the price of ETH?"},
+    timeout=600
+)
+
+data = response.json()
+print(data["content"])
+```
+
+### Python — JSON Query
+
+```python
+import requests
+import json
+
+API_KEY = "gb_sk_..."
+BASE_URL = "https://api.gigabrain.gg"
+
+response = requests.post(
+    f"{BASE_URL}/v1/chat",
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "message": "Get funding rates for top 10 perps. Respond as JSON array with: symbol, funding_rate, open_interest"
+    },
+    timeout=600
+)
+
+data = response.json()
+funding_data = json.loads(data["content"])
+
+for token in funding_data:
+    print(f"{token['symbol']}: {token['funding_rate']}")
+```
+
+### JavaScript (Node.js)
+
+```javascript
+const API_KEY = "gb_sk_...";
+
+const res = await fetch("https://api.gigabrain.gg/v1/chat", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    message: "Get BTC fear and greed. Respond as JSON with: fear_greed_index, fear_greed_label",
+  }),
+  signal: AbortSignal.timeout(600000),
+});
+
+const data = await res.json();
+const sentiment = JSON.parse(data.content);
+console.log(`Fear & Greed: ${sentiment.fear_greed_index} (${sentiment.fear_greed_label})`);
+```
+
+### cURL
+
+```bash
+curl -X POST https://api.gigabrain.gg/v1/chat \
+  -H "Authorization: Bearer gb_sk_<your-key>" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Analyze BTC 4H chart"}'
+```
+
+## Error Handling
+
+### 401 Unauthorized
+
+Invalid or revoked API key.
+
+```json
+{
+  "statusCode": 401,
+  "message": "Invalid or revoked API key"
+}
+```
+
+**Solution:** Check your API key is correct and active in your [profile settings](https://gigabrain.gg/profile).
+
+### 429 Too Many Requests
+
+Rate limit exceeded.
+
+```json
+{
+  "statusCode": 429,
+  "message": "Rate limit exceeded",
+  "retryAfter": 45,
+  "resetAt": "2026-01-07T13:21:00.000Z"
+}
+```
+
+**Solution:** Wait for the time specified in `retryAfter` (seconds) or `resetAt` (timestamp) before making another request.
+
+### 500 Internal Server Error
+
+Server error occurred.
+
+```json
+{
+  "error": {
+    "message": "Internal server error",
+    "type": "api_error"
+  },
+  "session_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+**Solution:** Retry your request. If the issue persists, contact support with the `session_id`.
+
+### 504 Gateway Timeout
+
+Query took too long to process.
+
+**Solution:** Break your query into smaller, more specific requests. Avoid very broad social sentiment queries, large-dataset NFT queries, or complex multi-chain aggregations in a single request.
+
+## Best Practices
+
+1. **Secure Your API Key**
+
+   - Never expose in client-side code or public repositories
+   - Use environment variables to store keys
+   - Rotate keys periodically
+
+2. **Handle Rate Limits**
+
+   - Monitor rate limit headers in responses
+   - Implement exponential backoff when hitting limits
+   - Cache responses when appropriate
+
+3. **Set Appropriate Timeouts**
+
+   - Set HTTP client timeout to at least 600 seconds
+   - Break complex queries into smaller requests to reduce response time
+
+4. **Use JSON for Automation**
+
+   - Add "Respond as JSON" to queries for parseable responses
+   - Specify exact fields for consistent data structures
+   - See [Brain API Overview](/guides/structured-data) for query patterns
+
+5. **Error Handling**
+
+   - Always handle API errors gracefully
+   - Implement retry logic for transient errors (500, 503, 504)
+   - Log `session_id` for debugging and support requests
+
+## Support
+
+Need help? We're here for you:
+
+- **Email:** support@gigabrain.gg
+- **Telegram:** [t.me/gigabraingg](https://t.me/gigabraingg)
+
+When contacting support, include:
+
+- Your API key (first 10 characters only)
+- Session ID from error responses
+- Request/response examples
+
+---
+
+**Ready to build?** Get your API key from your [Profile](https://gigabrain.gg/profile) and start integrating!

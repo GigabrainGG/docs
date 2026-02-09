@@ -1,0 +1,148 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Gigabrain Docs",
+  "colors": {
+    "primary": "#22c55e",
+    "light": "#86efac",
+    "dark": "#22c55e"
+  },
+  "fonts": {
+    "body": {
+      "family": "Geist",
+      "weight": 400
+    },
+    "heading": {
+      "family": "Geist",
+      "weight": 700
+    }
+  },
+  "favicon": "/logo/logo.svg",
+  "css": "/style.css",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Terminal",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "index",
+              "quickstart",
+              "pricing"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "core-features/chat",
+              "core-features/alpha",
+              "core-features/agents"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/agents-setup",
+              "guides/integrations"
+            ]
+          },
+          {
+            "group": "Support",
+            "pages": [
+              "support/faqs",
+              "support/contact",
+              "support/risk-disclosure"
+            ]
+          },
+          {
+            "group": "Legal",
+            "pages": [
+              "legal/terms-and-conditions",
+              "legal/privacy-policy"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Developers",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "developers/brain-api-overview",
+              "developers/introduction"
+            ]
+          },
+          {
+            "group": "AI Tools",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Open Terminal",
+          "href": "https://gigabrain.gg/login",
+          "icon": "terminal"
+        },
+        {
+          "anchor": "Dexscreener",
+          "href": "https://dexscreener.com/base/0xfbabdfb96900a6413455a4603324fa066f7f8a74",
+          "icon": "book-open-cover"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://t.me/gigabraingg",
+          "icon": "telegram"
+        },
+        {
+          "anchor": "X",
+          "href": "https://x.com/gigabraingg",
+          "icon": "x"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/logo.svg",
+    "dark": "/logo/logo.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://t.me/gigabraingg"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Launch Terminal",
+      "href": "https://gigabrain.gg/login"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/gigabraingg",
+      "telegram": "https://t.me/gigabraingg"
+    }
+  }
+}
