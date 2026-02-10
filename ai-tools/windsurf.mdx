@@ -1,96 +1,604 @@
 ---
-title: "Windsurf setup"
-description: "Configure Windsurf for your documentation workflow"
+title: "Windsurf + Gigabrain"
+description: "Build trading dashboards with Gigabrain API using Windsurf Cascade"
 icon: "water"
 ---
 
-Configure Windsurf's Cascade AI assistant to help you write and maintain documentation. This guide shows how to set up Windsurf specifically for your Mintlify documentation workflow.
+Use Windsurf's Cascade AI assistant to build trading dashboards and analysis tools powered by Gigabrain's Intelligence Collective. This guide shows you how to integrate the Gigabrain API into your Windsurf workflow.
 
 ## Prerequisites
 
 - Windsurf editor installed
-- Access to your documentation repository
+- Gigabrain API key from your [Profile](https://gigabrain.gg/profile)
+- Basic knowledge of Python or JavaScript
 
-## Workspace rules
+## Setup
 
-Create workspace rules that provide Windsurf with context about your documentation project and standards.
+<Steps>
+  <Step title="Get your API key">
+    1. Sign in to [Gigabrain](https://gigabrain.gg/login)
+    2. Navigate to [Profile → API Keys](https://gigabrain.gg/profile)
+    3. Generate a new API key (starts with `gb_sk_`)
+  </Step>
 
-Create `.windsurf/rules.md` in your project root:
+  <Step title="Create your project">
+    Set up a new project directory:
 
-````markdown
-# Mintlify technical writing rule
+    ```bash
+    mkdir gigabrain-dashboard
+    cd gigabrain-dashboard
+    ```
 
-## Project context
+    Create `.env` for your API key:
 
-- This is a documentation project on the Mintlify platform
-- We use MDX files with YAML frontmatter  
-- Navigation is configured in `docs.json`
-- We follow technical writing best practices
+    ```bash
+    GIGABRAIN_API_KEY=gb_sk_your_key_here
+    ```
 
-## Writing standards
+    <Warning>
+    Never commit `.env` to version control. Add it to `.gitignore`.
+    </Warning>
 
-- Use second person ("you") for instructions
-- Write in active voice and present tense
-- Start procedures with prerequisites
-- Include expected outcomes for major steps
-- Use descriptive, keyword-rich headings
-- Keep sentences concise but informative
+  </Step>
 
-## Required page structure
+  <Step title="Configure Windsurf workspace rules">
+    Create `.windsurf/rules.md` to teach Cascade about Gigabrain API:
 
-Every page must start with frontmatter:
+    ````markdown
+    # Gigabrain API Development Rules
 
-```yaml
----
-title: "Clear, specific title"
-description: "Concise description for SEO and navigation"
----
+    ## API Configuration
+    - **Base URL**: `https://api.gigabrain.gg`
+    - **Endpoint**: `/v1/chat` (POST)
+    - **Auth**: `Authorization: Bearer gb_sk_...`
+    - **Response field**: `content` (not `message`)
+    - **Timeout**: Minimum 600 seconds
+
+    ## Rate Limits
+    - 30 requests per minute
+    - 1,000 requests per day
+    - Check `X-RateLimit-Remaining-Minute` header
+    - Implement exponential backoff on 429 errors
+
+    ## Intelligence Collective
+    The API routes queries to 7 specialized agents:
+
+    1. **Macro Analyst**: DXY, VIX, yields, Fed Funds, S&P 500, risk regime
+    2. **Microstructure Analyst**: Funding rates, OI, liquidations, long/short ratios, CVD
+    3. **Fundamentals Analyst**: TVL, protocol revenue, fees, active users, token metrics
+    4. **Market State Analyst**: Fear & Greed, narratives, sentiment, regime classification
+    5. **Price Movement Analyst**: EMAs, RSI, MACD, support/resistance, trade setups
+    6. **Trenches Analyst**: Micro-cap tokens, social momentum, KOL mentions
+    7. **Polymarket Analyst**: Prediction markets, odds, volume, resolution dates
+
+    ## Query Patterns
+    For structured data, always specify exact JSON fields:
+
+    ```
+    Get funding rates for top 10 perps. Respond as JSON array with:
+    symbol, funding_rate, open_interest, long_short_ratio
+    ```
+
+    ## Error Handling
+    - **401**: Invalid API key → Check key in profile settings
+    - **429**: Rate limit → Retry after `Retry-After` seconds
+    - **500/503/504**: Server error → Retry with exponential backoff
+    - Always log `session_id` for debugging
+
+    ## Best Practices
+    - Use environment variables for API keys
+    - Cache responses to reduce API calls
+    - Implement retry logic for transient errors
+    - Break complex queries into smaller requests
+    - Monitor rate limit headers
+    - Parse `content` field to access JSON data
+    ````
+
+  </Step>
+
+  <Step title="Start building with Cascade">
+    Open Windsurf and start Cascade. It will automatically read your `.windsurf/rules.md` and understand Gigabrain API patterns.
+  </Step>
+</Steps>
+
+## Example: Multi-Agent Analysis Dashboard
+
+Build a real-time dashboard that displays insights from multiple Gigabrain agents.
+
+<Tabs>
+  <Tab title="Python + Streamlit">
+    ```python dashboard.py
+    import os
+    import streamlit as st
+    import requests
+    import json
+    from datetime import datetime
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    API_KEY = os.getenv("GIGABRAIN_API_KEY")
+    BASE_URL = "https://api.gigabrain.gg"
+
+    st.set_page_config(
+        page_title="Gigabrain Dashboard",
+        page_icon="🧠",
+        layout="wide"
+    )
+
+    @st.cache_data(ttl=300)  # Cache for 5 minutes
+    def query_gigabrain(message):
+        """Query Gigabrain API with caching"""
+        try:
+            response = requests.post(
+                f"{BASE_URL}/v1/chat",
+                headers={
+                    "Authorization": f"Bearer {API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                json={"message": message},
+                timeout=600
+            )
+
+            if response.status_code == 200:
+                data = response.json()
+                return json.loads(data["content"])
+            else:
+                st.error(f"API Error: {response.status_code}")
+                return None
+        except Exception as e:
+            st.error(f"Error: {e}")
+            return None
+
+    def main():
+        st.title("🧠 Gigabrain Intelligence Dashboard")
+        st.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        # Refresh button
+        if st.button("🔄 Refresh Data"):
+            st.cache_data.clear()
+            st.rerun()
+
+        # Create columns for different agents
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.header("📈 Market Sentiment")
+            with st.spinner("Fetching Fear & Greed..."):
+                sentiment = query_gigabrain("""
+                    Get BTC fear and greed index. Respond as JSON with:
+                    fear_greed_index, fear_greed_label, btc_dominance,
+                    altcoin_season_index, market_cap_total
+                """)
+
+            if sentiment:
+                # Fear & Greed gauge
+                fg_index = sentiment["fear_greed_index"]
+                fg_label = sentiment["fear_greed_label"]
+
+                st.metric("Fear & Greed Index", f"{fg_index}/100", fg_label)
+                st.progress(fg_index / 100)
+
+                # Other metrics
+                st.metric("BTC Dominance", f"{sentiment['btc_dominance']}%")
+                st.metric("Altcoin Season Index", sentiment['altcoin_season_index'])
+
+        with col2:
+            st.header("💰 Funding Rates")
+            with st.spinner("Fetching funding rates..."):
+                funding = query_gigabrain("""
+                    Get funding rates for BTC, ETH, SOL. Respond as JSON array with:
+                    symbol, funding_rate, open_interest, long_short_ratio
+                """)
+
+            if funding:
+                for token in funding:
+                    rate_pct = token["funding_rate"] * 100
+                    direction = "🟢 LONG" if rate_pct > 0 else "🔴 SHORT"
+
+                    st.metric(
+                        f"{token['symbol']} Funding",
+                        f"{rate_pct:.4f}%",
+                        f"{direction} paying"
+                    )
+                    st.caption(f"OI: ${token['open_interest']:,.0f}")
+
+        # Full width section for narratives
+        st.header("🔥 Trending Narratives")
+        with st.spinner("Fetching narratives..."):
+            narratives = query_gigabrain("""
+                Get current crypto narratives ranked by momentum. Respond as JSON array with:
+                narrative, momentum_score, top_tokens, sentiment
+            """)
+
+        if narratives:
+            for i, narrative in enumerate(narratives[:5], 1):
+                with st.expander(f"{i}. {narrative['narrative']} (Momentum: {narrative['momentum_score']}/100)"):
+                    st.write(f"**Sentiment**: {narrative['sentiment']}")
+                    st.write(f"**Top Tokens**: {', '.join(narrative['top_tokens'])}")
+                    st.progress(narrative['momentum_score'] / 100)
+
+        # Liquidations section
+        st.header("⚡ Liquidations (24h)")
+        with st.spinner("Fetching liquidation data..."):
+            liquidations = query_gigabrain("""
+                Get liquidation data for past 24 hours. Respond as JSON with:
+                total_liquidations_usd, long_liquidations, short_liquidations,
+                top_liquidated_tokens
+            """)
+
+        if liquidations:
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                st.metric("Total Liquidations", f"${liquidations['total_liquidations_usd']:,.0f}")
+            with col2:
+                st.metric("Long Liquidations", f"${liquidations['long_liquidations']:,.0f}")
+            with col3:
+                st.metric("Short Liquidations", f"${liquidations['short_liquidations']:,.0f}")
+
+            if "top_liquidated_tokens" in liquidations:
+                st.subheader("Top Liquidated Tokens")
+                for token in liquidations["top_liquidated_tokens"][:5]:
+                    st.write(f"**{token['symbol']}**: ${token['amount']:,.0f}")
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    **Run the dashboard:**
+    ```bash
+    pip install streamlit requests python-dotenv
+    streamlit run dashboard.py
+    ```
+
+  </Tab>
+
+  <Tab title="JavaScript + React">
+    ```javascript Dashboard.jsx
+    import React, { useState, useEffect } from 'react';
+    import './Dashboard.css';
+
+    const API_KEY = process.env.REACT_APP_GIGABRAIN_API_KEY;
+    const BASE_URL = "https://api.gigabrain.gg";
+
+    async function queryGigabrain(message) {
+      try {
+        const response = await fetch(`${BASE_URL}/v1/chat`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message }),
+          signal: AbortSignal.timeout(600000),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          return JSON.parse(data.content);
+        } else {
+          console.error(`API Error: ${response.status}`);
+          return null;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        return null;
+      }
+    }
+
+    function Dashboard() {
+      const [sentiment, setSentiment] = useState(null);
+      const [funding, setFunding] = useState(null);
+      const [narratives, setNarratives] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [lastUpdate, setLastUpdate] = useState(new Date());
+
+      const fetchData = async () => {
+        setLoading(true);
+
+        const [sentimentData, fundingData, narrativesData] = await Promise.all([
+          queryGigabrain(`
+            Get BTC fear and greed index. Respond as JSON with:
+            fear_greed_index, fear_greed_label, btc_dominance,
+            altcoin_season_index
+          `),
+          queryGigabrain(`
+            Get funding rates for BTC, ETH, SOL. Respond as JSON array with:
+            symbol, funding_rate, open_interest
+          `),
+          queryGigabrain(`
+            Get current crypto narratives ranked by momentum. Respond as JSON array with:
+            narrative, momentum_score, top_tokens, sentiment
+          `)
+        ]);
+
+        setSentiment(sentimentData);
+        setFunding(fundingData);
+        setNarratives(narrativesData);
+        setLastUpdate(new Date());
+        setLoading(false);
+      };
+
+      useEffect(() => {
+        fetchData();
+        const interval = setInterval(fetchData, 300000); // Refresh every 5 min
+        return () => clearInterval(interval);
+      }, []);
+
+      if (loading) {
+        return <div className="loading">🧠 Loading Gigabrain Intelligence...</div>;
+      }
+
+      return (
+        <div className="dashboard">
+          <header>
+            <h1>🧠 Gigabrain Intelligence Dashboard</h1>
+            <p>Last updated: {lastUpdate.toLocaleString()}</p>
+            <button onClick={fetchData}>🔄 Refresh</button>
+          </header>
+
+          <div className="grid">
+            <div className="card">
+              <h2>📈 Market Sentiment</h2>
+              {sentiment && (
+                <>
+                  <div className="metric">
+                    <span className="label">Fear & Greed Index</span>
+                    <span className="value">{sentiment.fear_greed_index}/100</span>
+                    <span className="sublabel">{sentiment.fear_greed_label}</span>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${sentiment.fear_greed_index}%` }}
+                    />
+                  </div>
+                  <div className="metric">
+                    <span className="label">BTC Dominance</span>
+                    <span className="value">{sentiment.btc_dominance}%</span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="card">
+              <h2>💰 Funding Rates</h2>
+              {funding && funding.map(token => {
+                const ratePct = (token.funding_rate * 100).toFixed(4);
+                const direction = token.funding_rate > 0 ? "🟢 LONG" : "🔴 SHORT";
+                return (
+                  <div key={token.symbol} className="metric">
+                    <span className="label">{token.symbol}</span>
+                    <span className="value">{ratePct}%</span>
+                    <span className="sublabel">{direction} paying</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="card full-width">
+            <h2>🔥 Trending Narratives</h2>
+            {narratives && narratives.slice(0, 5).map((narrative, i) => (
+              <div key={i} className="narrative">
+                <h3>{i + 1}. {narrative.narrative}</h3>
+                <p>Momentum: {narrative.momentum_score}/100</p>
+                <p>Tokens: {narrative.top_tokens.join(', ')}</p>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${narrative.momentum_score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    export default Dashboard;
+    ```
+
+  </Tab>
+</Tabs>
+
+## Using Windsurf Cascade
+
+Windsurf's Cascade feature is perfect for building complex trading applications. Here's how to use it with Gigabrain:
+
+### Example Cascade Prompts
+
+**Build a portfolio analyzer:**
+
+```
+Create a portfolio analysis tool that:
+1. Takes a list of tokens and allocation percentages
+2. Fetches current prices and 24h changes from Gigabrain
+3. Calculates total portfolio value and performance
+4. Shows correlation matrix between assets
+5. Provides rebalancing suggestions
+
+Use the Gigabrain API patterns from .windsurf/rules.md
 ```
 
-## Mintlify components
+**Create a trade signal aggregator:**
 
-### Callouts
+```
+Build a multi-timeframe trade signal aggregator:
+1. Query Gigabrain for BTC analysis on 1H, 4H, 1D timeframes
+2. Extract technical indicators (RSI, MACD, EMAs) from each
+3. Calculate consensus signal (bullish/bearish/neutral)
+4. Display in a clean terminal UI with colors
+5. Save signals to SQLite database with timestamps
+```
 
-- `<Note>` for helpful supplementary information
-- `<Warning>` for important cautions and breaking changes
-- `<Tip>` for best practices and expert advice  
-- `<Info>` for neutral contextual information
-- `<Check>` for success confirmations
+**Implement a narrative tracker:**
 
-### Code examples
+```
+Create a narrative momentum tracker that:
+1. Fetches trending narratives from Gigabrain every hour
+2. Tracks momentum score changes over time
+3. Alerts when a narrative crosses 80+ momentum
+4. Stores historical data in JSON files
+5. Generates a daily summary report
+```
 
-- When appropriate, include complete, runnable examples
-- Use `<CodeGroup>` for multiple language examples
-- Specify language tags on all code blocks
-- Include realistic data, not placeholders
-- Use `<RequestExample>` and `<ResponseExample>` for API docs
+## Integration Patterns
 
-### Procedures
+### Pattern 1: Real-time Data Fetching
 
-- Use `<Steps>` component for sequential instructions
-- Include verification steps with `<Check>` components when relevant
-- Break complex procedures into smaller steps
+Use async/await for parallel queries:
 
-### Content organization
+```javascript
+async function fetchAllData() {
+  const [macro, funding, sentiment] = await Promise.all([
+    queryGigabrain("Get macro indicators..."),
+    queryGigabrain("Get funding rates..."),
+    queryGigabrain("Get fear and greed..."),
+  ]);
 
-- Use `<Tabs>` for platform-specific content
-- Use `<Accordion>` for progressive disclosure
-- Use `<Card>` and `<CardGroup>` for highlighting content
-- Wrap images in `<Frame>` components with descriptive alt text
+  return { macro, funding, sentiment };
+}
+```
 
-## API documentation requirements
+### Pattern 2: Webhook Integration
 
-- Document all parameters with `<ParamField>` 
-- Show response structure with `<ResponseField>`
-- Include both success and error examples
-- Use `<Expandable>` for nested object properties
-- Always include authentication examples
+Build a webhook server that triggers on market events:
 
-## Quality standards
+```python
+from flask import Flask, request
+import requests
 
-- Test all code examples before publishing
-- Use relative paths for internal links
-- Include alt text for all images
-- Ensure proper heading hierarchy (start with h2)
-- Check existing patterns for consistency
-````
+app = Flask(__name__)
+
+@app.route('/webhook/liquidation', methods=['POST'])
+def handle_liquidation():
+    event = request.json
+
+    # Query Gigabrain for context
+    analysis = query_gigabrain(f"""
+        Analyze the impact of a ${event['amount']} {event['token']}
+        liquidation on current market conditions. Respond as JSON with:
+        impact_level, affected_tokens, recommended_action
+    """)
+
+    # Send alert
+    send_telegram_alert(analysis)
+
+    return {"status": "processed"}
+```
+
+### Pattern 3: Scheduled Reports
+
+Generate daily market reports:
+
+```python
+import schedule
+import time
+
+def generate_daily_report():
+    """Generate comprehensive market report"""
+    report = {
+        "sentiment": query_gigabrain("Get fear and greed..."),
+        "funding": query_gigabrain("Get funding rates..."),
+        "narratives": query_gigabrain("Get narratives..."),
+        "liquidations": query_gigabrain("Get liquidations...")
+    }
+
+    # Save to file
+    with open(f"report_{datetime.now().date()}.json", "w") as f:
+        json.dump(report, f, indent=2)
+
+    print(f"✅ Daily report generated")
+
+# Run every day at 9 AM
+schedule.every().day.at("09:00").do(generate_daily_report)
+
+while True:
+    schedule.run_pending()
+    time.sleep(60)
+```
+
+## Best Practices
+
+### 1. Response Caching
+
+Reduce API calls with intelligent caching:
+
+```python
+from functools import lru_cache
+import time
+
+@lru_cache(maxsize=128)
+def cached_query(message, ttl_hash):
+    return query_gigabrain(message)
+
+# Use with TTL
+ttl = 300  # 5 minutes
+ttl_hash = int(time.time() / ttl)
+data = cached_query("Get funding rates...", ttl_hash)
+```
+
+### 2. Rate Limit Handling
+
+Monitor and respect rate limits:
+
+```python
+def check_rate_limits(response):
+    remaining = int(response.headers.get("X-RateLimit-Remaining-Minute", 30))
+
+    if remaining < 5:
+        print(f"⚠️  Only {remaining} requests remaining this minute")
+        time.sleep(60)  # Wait for reset
+```
+
+### 3. Error Recovery
+
+Implement exponential backoff:
+
+```python
+import time
+
+def query_with_retry(message, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(...)
+            if response.status_code == 200:
+                return response.json()
+            elif response.status_code in [500, 503, 504]:
+                wait_time = 2 ** attempt
+                time.sleep(wait_time)
+                continue
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(2 ** attempt)
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Brain API Overview" icon="brain" href="/developers/brain-api-overview">
+    Complete reference for all Intelligence Collective agents
+  </Card>
+
+<Card title="REST API Docs" icon="terminal" href="/developers/introduction">
+  Authentication, endpoints, and response formats
+</Card>
+
+<Card title="Cursor Integration" icon="arrow-pointer" href="/ai-tools/cursor">
+  Build trading bots with Cursor AI
+</Card>
+
+  <Card title="Claude Code Integration" icon="asterisk" href="/ai-tools/claude-code">
+    Use Claude Code CLI with Gigabrain API
+  </Card>
+</CardGroup>
+
+<Warning>
+  Gigabrain provides market intelligence tools, not financial advice. Always
+  implement proper risk management in your trading applications. See the [Risk
+  Disclosure](/support/risk-disclosure).
+</Warning>

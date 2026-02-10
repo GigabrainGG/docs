@@ -1,76 +1,538 @@
 ---
-title: "Claude Code setup"
-description: "Configure Claude Code for your documentation workflow"
+title: "Claude Code + Gigabrain"
+description: "Build trading applications with Gigabrain API using Claude Code"
 icon: "asterisk"
 ---
 
-Claude Code is Anthropic's official CLI tool. This guide will help you set up Claude Code to help you write and maintain your documentation.
+Claude Code is Anthropic's official CLI tool for AI-assisted development. Use it to build trading bots and market analysis tools powered by Gigabrain's Intelligence Collective.
 
 ## Prerequisites
 
 - Active Claude subscription (Pro, Max, or API access)
+- Gigabrain API key from your [Profile](https://gigabrain.gg/profile)
+- Node.js or Python installed
 
 ## Setup
 
-1. Install Claude Code globally:
+<Steps>
+  <Step title="Install Claude Code">
+    Install Claude Code globally via npm:
 
-  ```bash
-  npm install -g @anthropic-ai/claude-code
+    ```bash
+    npm install -g @anthropic-ai/claude-code
+    ```
+
+  </Step>
+
+  <Step title="Create your project">
+    Set up a new trading bot project:
+
+    ```bash
+    mkdir sentiment-analyzer
+    cd sentiment-analyzer
+    ```
+
+    Create `.env` file:
+
+    ```bash
+    GIGABRAIN_API_KEY=gb_sk_your_key_here
+    ```
+
+  </Step>
+
+  <Step title="Configure Claude Code">
+    Create `CLAUDE.md` in your project root to teach Claude about Gigabrain API:
+
+    ````markdown
+    # Gigabrain Trading Bot Development
+
+    ## API Details
+    - Base URL: `https://api.gigabrain.gg`
+    - Endpoint: `/v1/chat` (POST)
+    - Auth header: `Authorization: Bearer gb_sk_...`
+    - Response field: `content` (not `message`)
+    - Timeout: Minimum 600 seconds
+
+    ## Rate Limits
+    - 30 requests/minute
+    - 1,000 requests/day
+    - Handle 429 errors with exponential backoff
+    - Monitor `X-RateLimit-Remaining-Minute` header
+
+    ## Query Patterns
+    For structured data, always add "Respond as JSON" and specify exact fields:
+    ```
+    Get fear and greed index. Respond as JSON with:
+    fear_greed_index, fear_greed_label, btc_dominance
+    ```
+
+    ## Intelligence Collective Agents
+    - **Macro Analyst**: DXY, VIX, yields, Fed Funds, S&P 500, risk regime
+    - **Microstructure Analyst**: Funding rates, OI, liquidations, long/short ratios
+    - **Fundamentals Analyst**: TVL, protocol revenue, active users, token metrics
+    - **Market State Analyst**: Fear & Greed, narratives, sentiment, regime shifts
+    - **Price Movement Analyst**: Technical analysis, EMAs, RSI, MACD, trade setups
+    - **Trenches Analyst**: Micro-cap tokens, social momentum, KOL mentions
+    - **Polymarket Analyst**: Prediction markets, odds, volume, resolution dates
+
+    ## Error Handling
+    - 401: Invalid API key
+    - 429: Rate limit exceeded (retry after `Retry-After` seconds)
+    - 500/503/504: Retry with exponential backoff
+    - Always log `session_id` for debugging
+
+    ## Best Practices
+    - Use environment variables for API keys
+    - Cache responses when appropriate
+    - Implement retry logic for transient errors
+    - Break complex queries into smaller requests
+    - Specify exact JSON fields for consistency
+    ````
+
+  </Step>
+
+  <Step title="Start Claude Code">
+    Run Claude Code in your project directory:
+
+    ```bash
+    claude
+    ```
+
+    Claude will read your `CLAUDE.md` and understand Gigabrain API patterns.
+
+  </Step>
+</Steps>
+
+## Example: Market Sentiment Analyzer
+
+Build a tool that aggregates multiple sentiment indicators into a single market regime score.
+
+<CodeGroup>
+```python sentiment_analyzer.py
+import os
+import requests
+import json
+from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_KEY = os.getenv("GIGABRAIN_API_KEY")
+BASE_URL = "https://api.gigabrain.gg"
+
+class SentimentAnalyzer:
+def **init**(self):
+self.session = requests.Session()
+self.session.headers.update({
+"Authorization": f"Bearer {API_KEY}",
+"Content-Type": "application/json"
+})
+
+    def query_gigabrain(self, message):
+        """Query Gigabrain API with error handling"""
+        try:
+            response = self.session.post(
+                f"{BASE_URL}/v1/chat",
+                json={"message": message},
+                timeout=600
+            )
+
+            if response.status_code == 200:
+                data = response.json()
+                return json.loads(data["content"])
+            elif response.status_code == 429:
+                retry_after = int(response.headers.get("Retry-After", 60))
+                print(f"⏳ Rate limited. Waiting {retry_after}s...")
+                import time
+                time.sleep(retry_after)
+                return self.query_gigabrain(message)
+            else:
+                raise Exception(f"API Error {response.status_code}: {response.text}")
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            return None
+
+    def get_fear_greed(self):
+        """Fetch Fear & Greed Index"""
+        query = """
+        Get BTC fear and greed index. Respond as JSON with:
+        fear_greed_index, fear_greed_label, btc_dominance,
+        altcoin_season_index, market_cap_total, market_cap_change_24h
+        """
+        return self.query_gigabrain(query)
+
+    def get_funding_sentiment(self):
+        """Analyze funding rates for sentiment"""
+        query = """
+        Get funding rates for BTC, ETH, SOL. Respond as JSON array with:
+        symbol, funding_rate, open_interest, long_short_ratio
+        """
+        return self.query_gigabrain(query)
+
+    def get_narratives(self):
+        """Fetch trending narratives"""
+        query = """
+        Get current crypto narratives ranked by momentum. Respond as JSON array with:
+        narrative, momentum_score, top_tokens, sentiment
+        """
+        return self.query_gigabrain(query)
+
+    def calculate_regime_score(self, fear_greed, funding, narratives):
+        """Calculate overall market regime score (0-100)"""
+        scores = []
+
+        # Fear & Greed contribution (0-40 points)
+        if fear_greed:
+            fg_index = fear_greed.get("fear_greed_index", 50)
+            scores.append(fg_index * 0.4)
+
+        # Funding rate contribution (0-30 points)
+        if funding:
+            avg_funding = sum(abs(t["funding_rate"]) for t in funding) / len(funding)
+            # High funding = extreme positioning = lower score
+            funding_score = max(0, 30 - (avg_funding * 1000))
+            scores.append(funding_score)
+
+        # Narrative momentum contribution (0-30 points)
+        if narratives:
+            avg_momentum = sum(n["momentum_score"] for n in narratives[:3]) / 3
+            scores.append(avg_momentum * 0.3)
+
+        return sum(scores) if scores else 50
+
+    def get_regime_label(self, score):
+        """Convert score to regime label"""
+        if score >= 70:
+            return "🟢 RISK ON"
+        elif score >= 50:
+            return "🟡 NEUTRAL"
+        elif score >= 30:
+            return "🟠 CAUTIOUS"
+        else:
+            return "🔴 RISK OFF"
+
+    def analyze(self):
+        """Run complete sentiment analysis"""
+        print("🧠 Gigabrain Market Sentiment Analyzer")
+        print("=" * 60)
+        print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+
+        # Fetch all data
+        print("📊 Fetching market data...")
+        fear_greed = self.get_fear_greed()
+        funding = self.get_funding_sentiment()
+        narratives = self.get_narratives()
+
+        # Display results
+        if fear_greed:
+            print(f"\n📈 Fear & Greed Index: {fear_greed['fear_greed_index']} ({fear_greed['fear_greed_label']})")
+            print(f"   BTC Dominance: {fear_greed['btc_dominance']}%")
+            print(f"   Altcoin Season Index: {fear_greed['altcoin_season_index']}")
+
+        if funding:
+            print(f"\n💰 Funding Rates:")
+            for token in funding:
+                rate_pct = token['funding_rate'] * 100
+                direction = "LONG" if rate_pct > 0 else "SHORT"
+                print(f"   {token['symbol']}: {rate_pct:.4f}% ({direction} paying)")
+
+        if narratives:
+            print(f"\n🔥 Top Narratives:")
+            for i, narrative in enumerate(narratives[:3], 1):
+                print(f"   {i}. {narrative['narrative']} (Momentum: {narrative['momentum_score']}/100)")
+                print(f"      Tokens: {', '.join(narrative['top_tokens'])}")
+
+        # Calculate regime
+        regime_score = self.calculate_regime_score(fear_greed, funding, narratives)
+        regime_label = self.get_regime_label(regime_score)
+
+        print(f"\n{'=' * 60}")
+        print(f"🎯 MARKET REGIME: {regime_label}")
+        print(f"   Score: {regime_score:.1f}/100")
+        print(f"{'=' * 60}")
+
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "regime_score": regime_score,
+            "regime_label": regime_label,
+            "fear_greed": fear_greed,
+            "funding": funding,
+            "narratives": narratives
+        }
+
+if **name** == "**main**":
+analyzer = SentimentAnalyzer()
+result = analyzer.analyze()
+
+    # Save to file
+    with open("sentiment_report.json", "w") as f:
+        json.dump(result, f, indent=2)
+
+    print(f"\n💾 Report saved to sentiment_report.json")
+
+````
+
+```javascript sentimentAnalyzer.js
+import 'dotenv/config';
+import fs from 'fs/promises';
+
+const API_KEY = process.env.GIGABRAIN_API_KEY;
+const BASE_URL = "https://api.gigabrain.gg";
+
+class SentimentAnalyzer {
+  async queryGigabrain(message) {
+    try {
+      const response = await fetch(`${BASE_URL}/v1/chat`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+        signal: AbortSignal.timeout(600000),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        return JSON.parse(data.content);
+      } else if (response.status === 429) {
+        const retryAfter = parseInt(response.headers.get("Retry-After") || "60");
+        console.log(`⏳ Rate limited. Waiting ${retryAfter}s...`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        return this.queryGigabrain(message);
+      } else {
+        throw new Error(`API Error ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`❌ Error: ${error.message}`);
+      return null;
+    }
+  }
+
+  async getFearGreed() {
+    const query = `
+      Get BTC fear and greed index. Respond as JSON with:
+      fear_greed_index, fear_greed_label, btc_dominance,
+      altcoin_season_index, market_cap_total, market_cap_change_24h
+    `;
+    return this.queryGigabrain(query);
+  }
+
+  async getFundingSentiment() {
+    const query = `
+      Get funding rates for BTC, ETH, SOL. Respond as JSON array with:
+      symbol, funding_rate, open_interest, long_short_ratio
+    `;
+    return this.queryGigabrain(query);
+  }
+
+  async getNarratives() {
+    const query = `
+      Get current crypto narratives ranked by momentum. Respond as JSON array with:
+      narrative, momentum_score, top_tokens, sentiment
+    `;
+    return this.queryGigabrain(query);
+  }
+
+  calculateRegimeScore(fearGreed, funding, narratives) {
+    const scores = [];
+
+    if (fearGreed) {
+      const fgIndex = fearGreed.fear_greed_index || 50;
+      scores.push(fgIndex * 0.4);
+    }
+
+    if (funding) {
+      const avgFunding = funding.reduce((sum, t) => sum + Math.abs(t.funding_rate), 0) / funding.length;
+      const fundingScore = Math.max(0, 30 - (avgFunding * 1000));
+      scores.push(fundingScore);
+    }
+
+    if (narratives) {
+      const avgMomentum = narratives.slice(0, 3).reduce((sum, n) => sum + n.momentum_score, 0) / 3;
+      scores.push(avgMomentum * 0.3);
+    }
+
+    return scores.length > 0 ? scores.reduce((a, b) => a + b, 0) : 50;
+  }
+
+  getRegimeLabel(score) {
+    if (score >= 70) return "🟢 RISK ON";
+    if (score >= 50) return "🟡 NEUTRAL";
+    if (score >= 30) return "🟠 CAUTIOUS";
+    return "🔴 RISK OFF";
+  }
+
+  async analyze() {
+    console.log("🧠 Gigabrain Market Sentiment Analyzer");
+    console.log("=".repeat(60));
+    console.log(`Timestamp: ${new Date().toISOString()}\n`);
+
+    console.log("📊 Fetching market data...");
+    const [fearGreed, funding, narratives] = await Promise.all([
+      this.getFearGreed(),
+      this.getFundingSentiment(),
+      this.getNarratives()
+    ]);
+
+    if (fearGreed) {
+      console.log(`\n📈 Fear & Greed Index: ${fearGreed.fear_greed_index} (${fearGreed.fear_greed_label})`);
+      console.log(`   BTC Dominance: ${fearGreed.btc_dominance}%`);
+      console.log(`   Altcoin Season Index: ${fearGreed.altcoin_season_index}`);
+    }
+
+    if (funding) {
+      console.log(`\n💰 Funding Rates:`);
+      funding.forEach(token => {
+        const ratePct = token.funding_rate * 100;
+        const direction = ratePct > 0 ? "LONG" : "SHORT";
+        console.log(`   ${token.symbol}: ${ratePct.toFixed(4)}% (${direction} paying)`);
+      });
+    }
+
+    if (narratives) {
+      console.log(`\n🔥 Top Narratives:`);
+      narratives.slice(0, 3).forEach((narrative, i) => {
+        console.log(`   ${i + 1}. ${narrative.narrative} (Momentum: ${narrative.momentum_score}/100)`);
+        console.log(`      Tokens: ${narrative.top_tokens.join(', ')}`);
+      });
+    }
+
+    const regimeScore = this.calculateRegimeScore(fearGreed, funding, narratives);
+    const regimeLabel = this.getRegimeLabel(regimeScore);
+
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`🎯 MARKET REGIME: ${regimeLabel}`);
+    console.log(`   Score: ${regimeScore.toFixed(1)}/100`);
+    console.log(`${"=".repeat(60)}`);
+
+    const result = {
+      timestamp: new Date().toISOString(),
+      regime_score: regimeScore,
+      regime_label: regimeLabel,
+      fear_greed: fearGreed,
+      funding,
+      narratives
+    };
+
+    await fs.writeFile("sentiment_report.json", JSON.stringify(result, null, 2));
+    console.log(`\n💾 Report saved to sentiment_report.json`);
+
+    return result;
+  }
+}
+
+const analyzer = new SentimentAnalyzer();
+analyzer.analyze().catch(console.error);
+````
+
+</CodeGroup>
+
+## Using Claude Code Effectively
+
+### Example Prompts
+
+Ask Claude Code to help you build trading tools:
+
+**Build a liquidation tracker:**
+
+```
+Create a script that monitors liquidations from Gigabrain API and sends
+alerts when total liquidations exceed $500M in 24h. Use the API patterns
+from CLAUDE.md. Include error handling and rate limiting.
 ```
 
-2. Navigate to your docs directory.
-3. (Optional) Add the `CLAUDE.md` file below to your project.
-4. Run `claude` to start.
+**Create a narrative momentum dashboard:**
 
-## Create `CLAUDE.md`
+```
+Build a web dashboard that displays trending crypto narratives from
+Gigabrain with momentum scores. Auto-refresh every 5 minutes.
+Use React and the Gigabrain API.
+```
 
-Create a `CLAUDE.md` file at the root of your documentation repository to train Claude Code on your specific documentation standards:
+**Implement a multi-timeframe analyzer:**
 
-````markdown
-# Mintlify documentation
+```
+Create a tool that analyzes BTC across 1H, 4H, and 1D timeframes using
+Gigabrain's Price Movement Analyst. Compare technical indicators and
+generate a consensus signal.
+```
 
-## Working relationship
-- You can push back on ideas-this can lead to better documentation. Cite sources and explain your reasoning when you do so
-- ALWAYS ask for clarification rather than making assumptions
-- NEVER lie, guess, or make up information
+## Best Practices
 
-## Project context
-- Format: MDX files with YAML frontmatter
-- Config: docs.json for navigation, theme, settings
-- Components: Mintlify components
+### 1. Structured Queries
 
-## Content strategy
-- Document just enough for user success - not too much, not too little
-- Prioritize accuracy and usability of information
-- Make content evergreen when possible
-- Search for existing information before adding new content. Avoid duplication unless it is done for a strategic reason
-- Check existing patterns for consistency
-- Start by making the smallest reasonable changes
+Always specify exact JSON fields for consistency:
 
-## Frontmatter requirements for pages
-- title: Clear, descriptive page title
-- description: Concise summary for SEO/navigation
+```python
+# Good
+query = "Get funding rates for top 10 perps. Respond as JSON array with: symbol, funding_rate, open_interest"
 
-## Writing standards
-- Second-person voice ("you")
-- Prerequisites at start of procedural content
-- Test all code examples before publishing
-- Match style and formatting of existing pages
-- Include both basic and advanced use cases
-- Language tags on all code blocks
-- Alt text on all images
-- Relative paths for internal links
+# Bad
+query = "What are the funding rates?"
+```
 
-## Git workflow
-- NEVER use --no-verify when committing
-- Ask how to handle uncommitted changes before starting
-- Create a new branch when no clear branch exists for changes
-- Commit frequently throughout development
-- NEVER skip or disable pre-commit hooks
+### 2. Error Recovery
 
-## Do not
-- Skip frontmatter on any MDX file
-- Use absolute URLs for internal links
-- Include untested code examples
-- Make assumptions - always ask for clarification
-````
+Implement robust error handling:
+
+```python
+def safe_api_call(message, retries=3):
+    for attempt in range(retries):
+        try:
+            response = requests.post(...)
+            if response.status_code == 200:
+                return response.json()
+            elif response.status_code in [500, 503, 504]:
+                time.sleep(2 ** attempt)
+                continue
+        except requests.exceptions.Timeout:
+            if attempt < retries - 1:
+                continue
+            raise
+```
+
+### 3. Response Caching
+
+Cache responses to reduce API calls:
+
+```python
+import time
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def get_cached_data(query, ttl_hash):
+    # ttl_hash changes every N seconds to invalidate cache
+    return query_gigabrain(query)
+
+# Use with TTL
+ttl = 300  # 5 minutes
+ttl_hash = int(time.time() / ttl)
+data = get_cached_data(query, ttl_hash)
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Brain API Overview" icon="brain" href="/developers/brain-api-overview">
+    Complete reference for all agents and data types
+  </Card>
+
+<Card title="REST API Docs" icon="terminal" href="/developers/introduction">
+  Authentication, endpoints, and error handling
+</Card>
+
+<Card title="Cursor Integration" icon="arrow-pointer" href="/ai-tools/cursor">
+  Build trading bots with Cursor AI
+</Card>
+
+  <Card title="Windsurf Integration" icon="water" href="/ai-tools/windsurf">
+    Use Windsurf Cascade with Gigabrain API
+  </Card>
+</CardGroup>
+
+<Warning>
+  Gigabrain provides market intelligence tools, not financial advice. Implement
+  proper risk management in all trading applications. See the [Risk
+  Disclosure](/support/risk-disclosure).
+</Warning>
