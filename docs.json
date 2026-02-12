@@ -43,7 +43,8 @@
             "group": "Guides",
             "pages": [
               "guides/agents-setup",
-              "guides/integrations"
+              "guides/integrations",
+              "guides/agents-building"
             ]
           },
           {
