@@ -3,14 +3,13 @@ title: "Agent Builder Reference"
 description: "Build and run autonomous trading strategies with AI-powered market intelligence"
 ---
 
-> This file describes the Gigabrain trading agent platform. Use it as context
-> when helping users design, configure, and refine their autonomous trading agents.
+Everything you need to design, configure, and refine your autonomous trading agents.
 
 ---
 
 ## What Is Gigabrain?
 
-Gigabrain is an autonomous crypto trading agent platform. Users create agents that:
+Gigabrain is an autonomous crypto trading agent platform. You create agents that:
 
 1. Monitor markets using AI-powered specialist analysis
 2. Fire on triggers (scheduled or news-driven)
@@ -54,7 +53,7 @@ Agents support multiple triggers simultaneously:
 - Configurable `min_confidence` (0.0–1.0): minimum news quality to trigger on
 - Lower threshold = more triggers, higher threshold = only highly relevant news
 
-**Manual triggers** — user explicitly runs the agent on demand.
+**Manual triggers** — you explicitly run the agent on demand.
 
 ### Memory & Learning
 
@@ -83,7 +82,7 @@ Agents can be configured with memory enabled, allowing them to learn and improve
 - Run 3: Similar setup appears — agent recalls the learning, requires tighter structural alignment before signaling
 - Over time: The agent builds a personalized knowledge base of what works for its specific strategy
 
-When designing a strategy, recommend enabling memory for agents that:
+Enable memory for agents that:
 
 - Trade repeatedly on the same setups (squeeze, regime, narrative)
 - Need to adapt to changing market conditions
@@ -98,7 +97,7 @@ Memory is less useful for:
 
 ## Available Specialists
 
-The platform has these domain specialists that agents can query:
+Your agents can query these domain specialists:
 
 ### Macro Specialist
 
@@ -184,7 +183,7 @@ Beyond specialist analysis, agents have access to:
 
 ## Strategy Archetypes
 
-These are proven strategy patterns that play to the system's strengths. Use them as templates — combine and adapt to the user's goals.
+These are proven strategy patterns that play to the platform's strengths. Use them as templates — combine and adapt to your goals.
 
 ### 1. Positioning Squeeze / Extreme Reversion
 
@@ -501,9 +500,9 @@ triggers:
 
 ## Strategy Design Principles
 
-When helping users build strategies, follow these principles:
+Keep these principles in mind when building your strategies:
 
-### Play to the System's Strengths
+### Play to the Platform's Strengths
 
 - **DO:** Cross-domain synthesis (macro + positioning + fundamentals + sentiment)
 - **DO:** Information edge (processing news and market intel faster than manual traders)
@@ -525,7 +524,7 @@ When helping users build strategies, follow these principles:
 ### Always Define Invalidation
 
 - Every strategy should specify: "This thesis breaks if [specific condition]."
-- Invalidation should be measurable (a price level, a data point) not vague ("sentiment changes").
+- Make invalidation measurable (a price level, a data point) — not vague ("sentiment changes").
 
 ### Always Define "No Setup" Output
 
@@ -536,7 +535,7 @@ When helping users build strategies, follow these principles:
 
 ### Conviction Tiers
 
-The system produces four conviction levels. Strategies should specify how to act on each:
+The platform produces four conviction levels. Your strategy should specify how to act on each:
 
 - **High conviction:** Multiple strong signals aligned → full position
 - **Medium conviction:** Some alignment, minor conflicts → reduced position
@@ -561,20 +560,18 @@ The system produces four conviction levels. Strategies should specify how to act
 
 ---
 
-## Tips for Claude / ChatGPT
+## Strategy Design Tips
 
-When a user asks you to build a strategy:
+1. **Start with your edge.** "Buy low sell high" isn't a strategy. Define the specific signal or condition you're exploiting — that's what makes a strategy worth automating.
 
-1. **Ask what edge they're trying to capture.** "Buy low sell high" isn't a strategy. What specific signal or condition are they exploiting?
+2. **Pick 2–3 specialists, not all of them.** Map your idea to the specialists that provide the data you actually need. Using every specialist adds noise, not edge.
 
-2. **Map their idea to the available specialists.** Which 2-3 specialists provide the data they need? Don't use all of them — that's noise.
+3. **Define signals as conjunctions.** "X AND Y AND Z" — not "X or maybe Y." The more conditions must align, the fewer false signals.
 
-3. **Define the signal as a conjunction.** "X AND Y AND Z" — not "X or maybe Y." The more conditions must align, the fewer false signals.
+4. **Embed the schedule in your instructions.** Write "Every 2 hours:" at the top of the instructions, then describe what the agent does each run. This makes the strategy self-contained and readable.
 
-4. **Embed the schedule in the instructions.** Write "Every 2 hours:" at the top of the instructions, then describe what the agent does each run. This makes the strategy self-contained and readable.
+5. **Always include "no setup" instructions.** Most runs will produce no signal. Tell the agent what to output when nothing is actionable — this prevents it from manufacturing setups to fill empty runs.
 
-5. **Always include "what if there's no setup" instructions.** Most runs will produce no signal. Tell the agent what to output when nothing is actionable — this prevents it from manufacturing setups.
-
-6. **One strategy per agent.** If they want multiple strategies, create multiple agents. Each agent should have a single, clear purpose.
+6. **One strategy per agent.** If you want multiple strategies, create multiple agents. Each agent should have a single, clear purpose.
 
 7. **Enable memory for trading agents.** If the agent makes trade decisions repeatedly, turn on memory so it learns from outcomes. Monitoring-only agents that just alert don't need it.
