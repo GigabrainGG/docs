@@ -3,52 +3,79 @@ title: "Agent Setup Guide"
 description: "Step-by-step guide to creating and configuring your first Agent"
 ---
 
+Create, configure, and launch your first autonomous trading agent in minutes.
+
 ## Prerequisites
 
-- You have connected your exchange account to Gigabrain in [integrations](https://gigabrain.gg/profile?tab=integrations).
-- You have disabled unified account mode in hyperliquid settings. You can diable the unified account in hyperliquid settings, by clicking on "Disable Unified Account Mode".
-- You have funded your account and have api credits available.
-- For getting notifications you need to connect your telegram account to Gigabrain in [integrations](https://gigabrain.gg/profile?tab=integrations).
+Before creating an agent, ensure the following:
 
-## Getting Started
+- **Exchange connected** — Link your Hyperliquid account in [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations). See the [Integrations guide](/guides/integrations) for setup instructions.
+- **API credits available** — Your account must have sufficient API credits to run agent analysis cycles.
+- **Telegram connected** — To receive real-time notifications, connect Telegram in [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations).
 
+## Create an agent
 
 <Steps>
-
-<Step title="Navigate to Agents">
-- Visit [Agents page](https://gigabrain.gg/agents)
-
-- Click **Create New Agent** to begin
-</Step>
-  <Step title="Define strategy">
-    Write your agent's strategy in natural language in the input box. Be specific about:
-    - Entry conditions (e.g., confidence thresholds, market state requirements)
-    - Exit strategy (e.g., invalidation points, confidence drops)
-    - Risk management rules (e.g., position sizing, stop losses)
-    
-    **Example:**
-    ```
-    Analyze the 4H BTC chart, microstructure data, and whale positioning
-    every 4 hours. Place a trade with 10% of account margin when:
-    - Confidence exceeds 75%
-    - Market State is Risk-On
-    - Funding rate is neutral or favorable
-    
-    Re-analyze open positions every 30 minutes. Close position if:
-    - Invalidation point is hit
-    - Confidence drops below 50%
-    - Macro Analyst flags high-impact geopolitical event
-    ```
+  <Step title="Navigate to Agents">
+    - Go to the [Agents page](https://gigabrain.gg/agents).
+    - Click **Create New Agent**.
   </Step>
 
-  <Step title="Confirm your strategy">
-    Review the generated strategy details:
-    - **Analysis Frequency**: How often your agent will analyze market conditions (Real-time, Hourly, or Daily)
-    - **Position Sizing**: Fixed amount or percentage of portfolio
-    - **Leverage**: Leverage multiplier for trades
-    - **Confidence Threshold**: Minimum confidence required to execute
-    - **Specialists**: Which analysts will be consulted
-    
-    Make any necessary adjustments and click **Confirm** to proceed.
+  <Step title="Configure agent settings">
+    - **Name** — Give your agent a descriptive name (e.g., "BTC Momentum Scanner"). 
+    - **Analysis frequency** — Select how often the agent evaluates the market: Real-time, Hourly, or Daily.
+    - **Alpha triggers** *(optional)* — Enable to have your agent react to breaking news and market events. Alpha-based agents support filtering by event type (protocol hacks, macro shocks, geopolitical events, etc.).
+    - **Memory** *(optional)* — Enable to let the agent learn from past trades and market conditions, improving its decision-making over time. See [Memory & Learning](/guides/agents-building#memory-%26-learning) for details.
+    - **Trading** *(optional)* — Enable to allow the agent to execute trades. A dedicated trading wallet is deployed per agent. Leave disabled for notification only agents.
+
+    <Frame caption="Agent configuration page">
+      <img src="/images/agent-setup.png" alt="New agent configuration — name, triggers, memory, and trading options" />
+    </Frame>
+
+  </Step>
+
+  <Step title="Define your strategy">
+    - **Set a goal** — Describe your agent's primary objective. This guides the agent's analysis and decision-making.
+    - **Write instructions** — Define the strategy logic your agent should follow. Structure your instructions with clear sections:
+       - **Entry conditions** — When the agent should open a position
+       - **Position sizing** — How much capital to allocate per trade
+       - **Exit rules** — Take-profit, stop-loss, and time-based exits
+       - **Risk management** — Daily loss limits, maximum concurrent positions
+       - **Guardrails** — Conditions under which the agent must not trade
+
+    <Tip>
+    Use the **Enhance with AI** button to have Gigabrain refine and improve your strategy instructions automatically.
+    </Tip>
+
+    - Click **Launch Agent** to deploy.
+
+    <Frame caption="Strategy definition page">
+      <img src="/images/agent-confirmation.png" alt="Define your strategy — goal, instructions, and launch" />
+    </Frame>
+
+  </Step>
+
+  <Step title="Fund and monitor">
+    - **Fund your agent wallet** — Transfer USDC to your agent's wallet from Hyperliquid. You can find the wallet address on the agent's detail page.
+    - **Monitor performance** — Track your agent's trades, P&L, and reasoning in the **Portfolio** tab on the agent page.
   </Step>
 </Steps>
+
+<Warning>
+  **Export your wallet keys before deleting an agent.** Each agent has a dedicated wallet. Go to the agent's **Settings** to export your private keys. Deleting an agent without exporting its keys results in permanent, irrecoverable loss of any remaining funds.
+</Warning>
+
+## What's next?
+
+<CardGroup cols={2}>
+  <Card
+    title="Agent Builder Reference"
+    icon="book"
+    href="/guides/agents-building"
+  >
+    Deep dive into strategy design, specialists, and advanced configuration.
+  </Card>
+  <Card title="Agents Overview" icon="robot" href="/core-features/agents">
+    Understand how agents work, execution cycles, and monitoring.
+  </Card>
+</CardGroup>
