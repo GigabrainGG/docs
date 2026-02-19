@@ -1,0 +1,227 @@
+---
+title: "Agents API Overview"
+description: "Build and deploy autonomous trading bots on Hyperliquid"
+icon: "robot"
+---
+
+Create trading agents, give them a wallet, define a strategy, and let them run. Each agent gets its own dedicated Hyperliquid wallet.
+
+<Note>
+Trading agents require a wallet to be generated, funded, and **activated** before they can execute trades. An agent without an activated wallet will fail to enable.
+</Note>
+
+## Launch a Trading Bot
+
+Create an agent, generate its wallet, and enable it. The full lifecycle in one flow.
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    import requests
+
+    API_KEY = "gb_sk_..."
+    BASE = "https://api.gigabrain.gg"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+
+    # 1. Create the agent
+    agent = requests.post(f"{BASE}/v1/agents", headers=headers, json={
+        "name": "ETH Momentum Bot",
+        "goal": "Go long ETH when RSI drops below 30 and funding is negative",
+        "instructions": "Use 4H timeframe. Position size: 10% of wallet. Stop loss: 3% below entry. Take profit at 2:1 R:R.",
+        "triggers": [{"type": "scheduled", "cron": "*/15 * * * *"}],
+        "trading_enabled": True,
+        "memory_enabled": True
+    }).json()
+
+    agent_id = agent["id"]
+    print(f"Created agent: {agent_id}")
+
+    # 2. Generate a wallet
+    wallet = requests.post(f"{BASE}/v1/agents/{agent_id}/wallet", headers=headers).json()
+    print(f"Fund this address: {wallet['address']}")
+
+    # 3. After funding, activate and enable
+    requests.post(f"{BASE}/v1/agents/{agent_id}/wallet/activate", headers=headers)
+    requests.post(f"{BASE}/v1/agents/{agent_id}/enable", headers=headers)
+    print("Agent is live")
+    ```
+  </Tab>
+
+  <Tab title="JavaScript">
+    ```javascript
+    const API_KEY = "gb_sk_...";
+    const BASE = "https://api.gigabrain.gg";
+    const headers = {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    };
+
+    // 1. Create the agent
+    const agent = await fetch(`${BASE}/v1/agents`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "ETH Momentum Bot",
+        goal: "Go long ETH when RSI drops below 30 and funding is negative",
+        instructions: "Use 4H timeframe. Position size: 10% of wallet. Stop loss: 3% below entry. Take profit at 2:1 R:R.",
+        triggers: [{ type: "scheduled", cron: "*/15 * * * *" }],
+        trading_enabled: true,
+        memory_enabled: true,
+      }),
+    }).then((r) => r.json());
+
+    console.log(`Created agent: ${agent.id}`);
+
+    // 2. Generate a wallet
+    const wallet = await fetch(`${BASE}/v1/agents/${agent.id}/wallet`, {
+      method: "POST",
+      headers,
+    }).then((r) => r.json());
+
+    console.log(`Fund this address: ${wallet.address}`);
+
+    // 3. After funding, activate and enable
+    await fetch(`${BASE}/v1/agents/${agent.id}/wallet/activate`, { method: "POST", headers });
+    await fetch(`${BASE}/v1/agents/${agent.id}/enable`, { method: "POST", headers });
+    console.log("Agent is live");
+    ```
+  </Tab>
+</Tabs>
+
+## React to Alpha Signals
+
+Instead of running on a schedule, trigger your agent when high-impact signals come in.
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    agent = requests.post(f"{BASE}/v1/agents", headers=headers, json={
+        "name": "BTC Alpha Catcher",
+        "goal": "React to high-impact BTC signals and take momentum trades",
+        "instructions": "Only act on signals rated 4+. Max 2 trades per day. Position size: 5% of wallet. Always set stop loss.",
+        "triggers": [{
+            "type": "alpha",
+            "match": "BTC momentum breakouts and trend reversals",
+            "min_impact_rating": 4
+        }],
+        "trading_enabled": True,
+        "memory_enabled": True
+    }).json()
+    ```
+  </Tab>
+
+  <Tab title="JavaScript">
+    ```javascript
+    const agent = await fetch(`${BASE}/v1/agents`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "BTC Alpha Catcher",
+        goal: "React to high-impact BTC signals and take momentum trades",
+        instructions: "Only act on signals rated 4+. Max 2 trades per day. Position size: 5% of wallet. Always set stop loss.",
+        triggers: [{
+          type: "alpha",
+          match: "BTC momentum breakouts and trend reversals",
+          min_impact_rating: 4,
+        }],
+        trading_enabled: true,
+        memory_enabled: true,
+      }),
+    }).then((r) => r.json());
+    ```
+  </Tab>
+</Tabs>
+
+## Monitor Your Agents
+
+Check what your agents have been doing.
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    # Get runs for a specific agent
+    runs = requests.get(f"{BASE}/v1/agents/{agent_id}/runs", headers=headers).json()
+
+    for run in runs["runs"]:
+        print(f"{run['trigger_type']} | {run['status']} | {run['created_at']}")
+        print(f"  {run['output'][:100]}...")
+
+    # Chat with a specific agent
+    response = requests.post(f"{BASE}/v1/agents/{agent_id}/chat", headers=headers, json={
+        "message": "What positions are you monitoring and what's your current P&L?"
+    }).json()
+
+    print(response["content"])
+    ```
+  </Tab>
+
+  <Tab title="JavaScript">
+    ```javascript
+    // Get runs for a specific agent
+    const runs = await fetch(`${BASE}/v1/agents/${agentId}/runs`, { headers }).then((r) => r.json());
+
+    runs.runs.forEach((run) => {
+      console.log(`${run.trigger_type} | ${run.status} | ${run.created_at}`);
+      console.log(`  ${run.output.slice(0, 100)}...`);
+    });
+
+    // Chat with a specific agent
+    const response = await fetch(`${BASE}/v1/agents/${agentId}/chat`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        message: "What positions are you monitoring and what's your current P&L?",
+      }),
+    }).then((r) => r.json());
+
+    console.log(response.content);
+    ```
+  </Tab>
+</Tabs>
+
+## Safe Shutdown
+
+Always export keys and withdraw funds before deleting an agent. Deletion is permanent and funds left in the wallet are gone.
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    # 1. Disable
+    requests.post(f"{BASE}/v1/agents/{agent_id}/disable", headers=headers)
+
+    # 2. Export private key from the Gigabrain UI (Profile → Agents → Export Key)
+
+    # 3. Withdraw funds
+    requests.post(f"{BASE}/v1/agents/{agent_id}/wallet/send", headers=headers, json={
+        "destination": "0xYourWalletAddress",
+        "amount": 100.0
+    })
+
+    # 4. Delete
+    requests.delete(f"{BASE}/v1/agents/{agent_id}", headers=headers)
+    ```
+  </Tab>
+
+  <Tab title="JavaScript">
+    ```javascript
+    // 1. Disable
+    await fetch(`${BASE}/v1/agents/${agentId}/disable`, { method: "POST", headers });
+
+    // 2. Export private key from the Gigabrain UI (Profile → Agents → Export Key)
+
+    // 3. Withdraw funds
+    await fetch(`${BASE}/v1/agents/${agentId}/wallet/send`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ destination: "0xYourWalletAddress", amount: 100.0 }),
+    });
+
+    // 4. Delete
+    await fetch(`${BASE}/v1/agents/${agentId}`, { method: "DELETE", headers });
+    ```
+  </Tab>
+</Tabs>
+
+<Warning>
+Autonomous trading agents execute real trades with real funds. Implement proper risk management and monitor your agents regularly. See the [Risk Disclosure](/support/risk-disclosure).
+</Warning>

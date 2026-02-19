@@ -3,45 +3,49 @@ title: What is Gigabrain?
 description: Your AI trading desk for crypto markets
 ---
 
-Gigabrain is an advanced reasoning engine designed for real-time market analysis. It emulates the structured thinking of a professional trader by integrating data from multiple sources, including live prices, onchain metrics, news, and sentiment. Users can query Gigabrain via natural language prompts to obtain synthesized insights eliminating the need for manual data aggregation across liquidations, microstructure, fundamentals, technical analysis, and external events. This enables faster, more informed decision making while adhering to best practices for market analysis.
+Gigabrain is your AI trading desk for crypto. It has two core products: **Gigabrain Intel** for market intelligence and **Gigabrain Agents** for autonomous trading.
 
-## The Intelligence Collective
+## Gigabrain Intel
 
-Gigabrain operates through a team of domain specific agents, each equipped with tailored tools and expertise. These agents work in parallel under a central coordinator to gather, analyze, and reconcile data, providing comprehensive market intelligence that turns raw inputs into alpha-generating insights.
+Intel is the research side. Ask any question about crypto markets and get a real-time answer backed by live data. No more flipping between ten tabs. Just ask and get the analysis a professional trader would spend hours putting together.
+
+Behind every query is **The Brain**, a coordinator that routes your question to the right specialists, pulls live data, and synthesizes everything into one coherent answer. You don't need to know which specialist to ask. The Brain figures it out.
 
 <CardGroup cols={2}>
-  <Card title="Macro Analyst" icon="globe">
-    Global economic regimes DXY, VIX, Treasury yields (2Y, 10Y), Fed Funds rate, S&P 500/Nasdaq, gold, risk regime classification, and crypto-macro correlations.
+  <Card title="Macro" icon="globe">
+    DXY, VIX, Treasury yields, Fed Funds rate, S&P 500, gold, risk regime classification, and how it all maps to crypto.
   </Card>
 
-  <Card title="Microstructure Analyst" icon="chart-mixed">
-    Perpetual futures dynamics open interest, funding rates, liquidation data, long/short ratios, whale positioning, taker flow imbalance, and CVD.
+  <Card title="Microstructure" icon="chart-mixed">
+    Funding rates, open interest, liquidations, long/short ratios, whale positioning, taker flow, and CVD.
   </Card>
 
-  <Card title="Fundamentals Analyst" icon="magnifying-glass-chart">
-    Protocol health TVL, revenue, fees, chain deployments, utilization rates, active users, governance data, and token metrics (price, market cap, PE ratio).
+  <Card title="Fundamentals" icon="magnifying-glass-chart">
+    TVL, protocol revenue, fees, active users, governance data, and token metrics. Deep dives on any protocol.
   </Card>
 
-  <Card title="Market State Analyst" icon="gauge-high">
-    Overall sentiment Fear & Greed Index, BTC dominance, Altcoin Season Index, total market cap, volume data, narrative tracking, and regime classification.
+  <Card title="Market State" icon="gauge-high">
+    Fear & Greed, BTC dominance, Altcoin Season Index, narrative tracking, and regime shifts.
   </Card>
 
-  <Card title="Price Movement Analyst" icon="chart-line">
-    Technical analysis EMAs (20, 50, 200), RSI, MACD, ADX, Supertrend, support/resistance levels, volume analysis, and trade setups with entry/exit.
+  <Card title="Price Movement" icon="chart-line">
+    EMAs, RSI, MACD, ADX, Supertrend, support/resistance, volume analysis, and trade setups with entries, exits, and stops.
   </Card>
 
-  <Card title="Trenches Analyst" icon="fire">
-    Micro-cap tokens (under $100M market cap) social momentum, KOL/influencer mentions, narrative analysis, volume spikes, and risk assessment.
+  <Card title="Trenches" icon="fire">
+    Micro-cap tokens under $100M. Social momentum, KOL mentions, narrative plays, volume spikes, and risk flags.
   </Card>
 
-  <Card title="Polymarket Analyst" icon="scale-balanced">
-    Prediction markets trending markets, odds (yes/no), volume, resolution dates, and cross-referencing with macro and crypto data.
+  <Card title="Polymarket" icon="scale-balanced">
+    Prediction market odds, trending markets, volume, resolution dates, and how they line up with macro and crypto data.
   </Card>
 </CardGroup>
 
-## Beyond the Agents
+Intel also powers the [Alpha Feed](/core-features/alpha), which monitors news, onchain activity, social signals, and market microstructure 24/7 to surface actionable insights before they reach mainstream awareness.
 
-In addition to the specialized agents, Gigabrain provides access to a wide range of market data:
+### What You Can Query
+
+Beyond the specialists, The Brain gives you access to 30+ data categories:
 
 | Category | Examples |
 | --- | --- |
@@ -52,6 +56,28 @@ In addition to the specialized agents, Gigabrain provides access to a wide range
 | **Research** | Yield opportunities, token unlocks, L2 metrics, NFT collections, relative strength |
 | **Sentiment** | Fear & Greed, narrative tracking, Polymarket predictions, portfolio analysis |
 
-All data types support **structured JSON responses** when explicitly requested, making Gigabrain ideal for building trading bots, dashboards, and data pipelines. See the [Brain API Overview](/guides/brain-api-overview) for details.
+All data types support **structured JSON responses** when you ask for it. Add "Respond as JSON" to your query. See the [Brain API Overview](/developers/brain-api-overview) for the full reference.
 
-Gigabrain is your personal market intelligence engine thinking with you, to provide professional grade, real-time edge comparable to top quant funds. It transforms data overload into decisive insights, all from a simple prompt.
+## Gigabrain Agents
+
+Agents are the execution side. They are autonomous trading programs that use The Brain to analyze markets and execute trades on your behalf, 24/7.
+
+Each agent gets its own dedicated **Hyperliquid wallet**. You define the strategy (when to enter, how much to risk, when to exit), fund the wallet, and the agent handles the rest. It monitors markets on a schedule you set, consults The Brain's specialists for analysis, and trades when your criteria are met.
+
+<CardGroup cols={2}>
+  <Card title="Chat" icon="message-bot" href="/core-features/chat">
+    Ask questions, get real-time analysis, execute trades manually
+  </Card>
+
+  <Card title="Alpha Feed" icon="bolt" href="/core-features/alpha">
+    Automated intelligence feed that surfaces market-moving events
+  </Card>
+
+  <Card title="Agents" icon="robot" href="/core-features/agents">
+    Autonomous trading with dedicated wallets on Hyperliquid
+  </Card>
+
+  <Card title="Agent Setup Guide" icon="rocket" href="/guides/agents-setup">
+    Step-by-step guide to creating your first agent
+  </Card>
+</CardGroup>

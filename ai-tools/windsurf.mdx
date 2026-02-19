@@ -4,7 +4,7 @@ description: "Build trading dashboards with Gigabrain API using Windsurf Cascade
 icon: "water"
 ---
 
-Use Windsurf's Cascade AI assistant to build trading dashboards and analysis tools powered by Gigabrain's Intelligence Collective. This guide shows you how to integrate the Gigabrain API into your Windsurf workflow.
+Use Windsurf's Cascade AI assistant to build trading dashboards and analysis tools powered by The Brain. This guide shows you how to integrate the Gigabrain API into your Windsurf workflow.
 
 ## Prerequisites
 
@@ -55,21 +55,20 @@ Use Windsurf's Cascade AI assistant to build trading dashboards and analysis too
     - **Timeout**: Minimum 600 seconds
 
     ## Rate Limits
-    - 30 requests per minute
-    - 1,000 requests per day
+    - 60 requests per minute
     - Check `X-RateLimit-Remaining-Minute` header
     - Implement exponential backoff on 429 errors
 
-    ## Intelligence Collective
-    The API routes queries to 7 specialized agents:
+    ## The Brain - Specialists
+    The API routes queries to 7 specialists:
 
-    1. **Macro Analyst**: DXY, VIX, yields, Fed Funds, S&P 500, risk regime
-    2. **Microstructure Analyst**: Funding rates, OI, liquidations, long/short ratios, CVD
-    3. **Fundamentals Analyst**: TVL, protocol revenue, fees, active users, token metrics
-    4. **Market State Analyst**: Fear & Greed, narratives, sentiment, regime classification
-    5. **Price Movement Analyst**: EMAs, RSI, MACD, support/resistance, trade setups
-    6. **Trenches Analyst**: Micro-cap tokens, social momentum, KOL mentions
-    7. **Polymarket Analyst**: Prediction markets, odds, volume, resolution dates
+    1. **Macro**: DXY, VIX, yields, Fed Funds, S&P 500, risk regime
+    2. **Microstructure**: Funding rates, OI, liquidations, long/short ratios, CVD
+    3. **Fundamentals**: TVL, protocol revenue, fees, active users, token metrics
+    4. **Market State**: Fear & Greed, narratives, sentiment, regime classification
+    5. **Price Movement**: EMAs, RSI, MACD, support/resistance, trade setups
+    6. **Trenches**: Micro-cap tokens, social momentum, KOL mentions
+    7. **Polymarket**: Prediction markets, odds, volume, resolution dates
 
     ## Query Patterns
     For structured data, always specify exact JSON fields:
@@ -547,7 +546,7 @@ Monitor and respect rate limits:
 
 ```python
 def check_rate_limits(response):
-    remaining = int(response.headers.get("X-RateLimit-Remaining-Minute", 30))
+    remaining = int(response.headers.get("X-RateLimit-Remaining-Minute", 60))
 
     if remaining < 5:
         print(f"⚠️  Only {remaining} requests remaining this minute")
@@ -581,7 +580,7 @@ def query_with_retry(message, max_retries=3):
 
 <CardGroup cols={2}>
   <Card title="Brain API Overview" icon="brain" href="/developers/brain-api-overview">
-    Complete reference for all Intelligence Collective agents
+    Complete reference for all specialists and data types
   </Card>
 
 <Card title="REST API Docs" icon="terminal" href="/developers/introduction">

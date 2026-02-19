@@ -16,7 +16,7 @@ Gigabrain is an autonomous crypto trading agent platform. You create agents that
 3. Produce analysis and optionally execute trades on Hyperliquid
 
 Each agent has: a goal, instructions, constraints, and triggers.
-The AI engine provides the analytical backbone — domain specialists
+The AI engine provides the analytical backbone: domain specialists
 that the agent can query in parallel to form a thesis.
 
 ---
@@ -30,8 +30,8 @@ An agent is defined by:
 | `name`           | Short name (e.g., "BTC Squeeze Hunter")                                |
 | `description`    | What this agent does in one sentence                                   |
 | `goal`           | The agent's primary objective                                          |
-| `instructions`   | Detailed strategy logic — what to analyze, when to act, how to respond |
-| `constraints`    | Guardrails — what the agent must NOT do                                |
+| `instructions`   | Detailed strategy logic: what to analyze, when to act, how to respond |
+| `constraints`    | Guardrails: what the agent must NOT do                                |
 | `triggers`       | When the agent runs (schedule or news events)                          |
 | `memory_enabled` | Whether the agent learns and improves across runs (true/false)         |
 
@@ -39,33 +39,33 @@ An agent is defined by:
 
 Agents support multiple triggers simultaneously:
 
-**Scheduled triggers** — run on a recurring basis:
+**Scheduled triggers** - run on a recurring basis:
 
-- `"every 4 hours"` — checks markets every 4 hours
-- `"every 30 minutes"` — high-frequency monitoring
-- `"every 1.5 hours"` — fractional hours supported
-- `"daily at 9am"` — once daily at a specific time
+- `"every 4 hours"` - checks markets every 4 hours
+- `"every 30 minutes"` - high-frequency monitoring
+- `"every 1.5 hours"` - fractional hours supported
+- `"daily at 9am"` - once daily at a specific time
 
-**Alpha triggers** — fire when matching market news/intel arrives:
+**Alpha triggers** - fire when matching market news/intel arrives:
 
 - Uses semantic matching to compare incoming news against the agent's focus area
 - Configurable `similarity_threshold` (0.0–1.0): how closely the news must match
 - Configurable `min_confidence` (0.0–1.0): minimum news quality to trigger on
 - Lower threshold = more triggers, higher threshold = only highly relevant news
 
-**Manual triggers** — you explicitly run the agent on demand.
+**Manual triggers** - you explicitly run the agent on demand.
 
 ### Memory & Learning
 
 Agents can be configured with memory enabled, allowing them to learn and improve over time:
 
-- **Memory stores learnings, not logs.** The agent saves insights that should change its future decisions — patterns discovered from outcomes, not raw data or position history.
+- **Memory stores learnings, not logs.** The agent saves insights that should change its future decisions, such as patterns discovered from outcomes, not raw data or position history.
 - **Each run builds on previous runs.** The agent sees its last 3 runs for recent context, plus can recall any relevant insight from its full memory.
 - **Insights are curated, not accumulated.** The agent updates insights when its understanding evolves, deletes insights that are proven wrong or no longer apply, and periodically reviews its full memory to clean house.
 
 **What gets saved as a learning:**
 
-- "Tight stops on ETH get stopped out in high-volatility regimes — use wider stops when ATR is above X"
+- "Tight stops on ETH get stopped out in high-volatility regimes. Use wider stops when ATR is above X"
 - "Funding extremes on SOL tend to resolve within 4-8 hours, faster than BTC"
 - "Pre-FOMC squeezes on BTC tend to fade within 2 hours if no follow-through volume"
 
@@ -78,8 +78,8 @@ Agents can be configured with memory enabled, allowing them to learn and improve
 **How it works in practice:**
 
 - Run 1: Agent spots a squeeze setup, takes a trade
-- Run 2: Trade hit stop loss — agent checks why, notes "the structural level was too far from entry"
-- Run 3: Similar setup appears — agent recalls the learning, requires tighter structural alignment before signaling
+- Run 2: Trade hit stop loss, agent checks why, notes "the structural level was too far from entry"
+- Run 3: Similar setup appears, agent recalls the learning, requires tighter structural alignment before signaling
 - Over time: The agent builds a personalized knowledge base of what works for its specific strategy
 
 Enable memory for agents that:
@@ -108,7 +108,7 @@ Your agents can query these domain specialists:
 
 ### Positioning Specialist
 
-- **Domain:** Perpetual futures positioning — open interest, funding rates, liquidation levels, whale flows
+- **Domain:** Perpetual futures positioning: open interest, funding rates, liquidation levels, whale flows
 - **Provides:** Bullish/bearish positioning signals, crowding metrics, long/short ratios, taker flow, liquidation clusters
 - **Best for:** Squeeze detection, positioning extreme reversion, understanding who is trapped
 - **Time relevance:** Hours to days
@@ -116,14 +116,14 @@ Your agents can query these domain specialists:
 
 ### Fundamentals Specialist
 
-- **Domain:** Protocol and chain health — TVL, revenue, fees, growth metrics
+- **Domain:** Protocol and chain health: TVL, revenue, fees, growth metrics
 - **Provides:** Chain TVL trends, protocol revenue, sustainability metrics, sector positioning
 - **Best for:** Mid-cap protocol analysis, fundamental screening, narrative validation
-- **Note:** Understands protocol types — won't mention TVL for AI protocols where it's irrelevant
+- **Note:** Understands protocol types and won't mention TVL for AI protocols where it's irrelevant
 
 ### Technical / Price Structure Specialist
 
-- **Domain:** Technical analysis and price structure — multi-timeframe
+- **Domain:** Technical analysis and price structure, multi-timeframe
 - **Provides:** Support/resistance levels, trend direction, momentum indicators, signal confluence, volatility
 - **Key feature:** Multi-timeframe analysis with confluence and conflict detection across 15m/1h/4h/1d
 - **Best for:** Entry/exit levels, invalidation prices, trend identification
@@ -140,11 +140,11 @@ Your agents can query these domain specialists:
 - **Domain:** Micro-cap social intelligence (tokens ranked 500+, market cap < $100M)
 - **Provides:** Twitter/X sentiment, KOL activity, narrative identification, community health, red flags
 - **Best for:** Meme coins, AI agent tokens, new launches, narrative momentum
-- **Note:** For tokens without institutional data — social signal IS the market
+- **Note:** For tokens without institutional data, social signal IS the market
 
 ### Prediction Market Specialist
 
-- **Domain:** Prediction markets (Polymarket) — odds, volume, resolution rules
+- **Domain:** Prediction markets (Polymarket): odds, volume, resolution rules
 - **Provides:** Current odds for all outcomes, price movements, liquidity, resolution timing
 - **Best for:** Event-driven strategies, political/economic predictions, contrarian bets
 - **Discovery:** Can find trending markets, high-volume markets, markets ending soon
@@ -183,7 +183,7 @@ Beyond specialist analysis, agents have access to:
 
 ## Strategy Archetypes
 
-These are proven strategy patterns that play to the platform's strengths. Use them as templates — combine and adapt to your goals.
+These are proven strategy patterns that play to the platform's strengths. Use them as templates. Combine and adapt to your goals.
 
 ### 1. Positioning Squeeze / Extreme Reversion
 
@@ -238,7 +238,7 @@ constraints: |
   - Never take both long and short signals simultaneously
   - Require at least 2 of 3: extreme funding, crowded long/short ratio,
     nearby liquidation cluster
-  - Do not invent data — if data is unavailable, say so
+  - Do not invent data. If data is unavailable, say so
 
 triggers:
   - type: cron
@@ -259,7 +259,7 @@ memory_enabled: true
 | **Edge**         | Adjust crypto exposure based on macro regime shifts                                                                       |
 | **Specialists**  | Macro + Market Regime                                                                                                     |
 | **Signal**       | Risk-on (dovish Fed, falling DXY, stable yields) vs risk-off (hawkish pivot, rising yields)                               |
-| **Logic**        | Risk-on → long high-beta alts. Risk-off → reduce to BTC-only or flat. Regime shifts are slow — you have days to position. |
+| **Logic**        | Risk-on: long high-beta alts. Risk-off: reduce to BTC-only or flat. Regime shifts are slow, so you have days to position. |
 | **Time horizon** | Days to weeks                                                                                                             |
 
 <details>
@@ -285,9 +285,9 @@ instructions: |
   - "Regime unchanged. Next check in 6 hours."
 
 constraints: |
-  - Do not provide specific entry/exit levels — this is a regime monitor,
+  - Do not provide specific entry/exit levels. This is a regime monitor,
     not a trade signal
-  - Do not overreact to single data points — regime shifts require
+  - Do not overreact to single data points. Regime shifts require
     multiple confirming signals
 
 triggers:
@@ -325,16 +325,16 @@ instructions: |
         - The asymmetry is AGAINST the crowd
         - Alert: "Market crowded [long/short] ahead of [event].
           Asymmetry favors [direction]."
-     c. If positioning is neutral, no edge — skip
+     c. If positioning is neutral, no edge. Skip
   3. If no major event within 24 hours:
      - "No imminent catalyst. Checking again next run."
 
   Also trigger on alpha/news about upcoming events.
 
 constraints: |
-  - Never predict the event outcome — only trade the positioning asymmetry
+  - Never predict the event outcome. Only trade the positioning asymmetry
   - If positioning is not clearly one-sided, there is no asymmetry to trade
-  - Do not alert on minor events — only major catalysts that move markets
+  - Do not alert on minor events. Only major catalysts that move markets
 
 triggers:
   - type: cron
@@ -374,18 +374,18 @@ instructions: |
 
   Signal classification:
   - Social rising + fundamentals improving + price trending
-    = "Narrative confirmed — [token] showing strength across all three"
+    = "Narrative confirmed: [token] showing strength across all three"
   - Social rising + fundamentals flat + price pumping
-    = "Likely pump without fundamental support — caution"
+    = "Likely pump without fundamental support. Caution"
   - Social quiet + fundamentals improving
-    = "Early signal — add to watchlist, narrative hasn't caught on yet"
+    = "Early signal, add to watchlist, narrative hasn't caught on yet"
   - All quiet
     = "No momentum. Checking again next run."
 
   Also trigger on relevant alpha/news about AI protocols.
 
 constraints: |
-  - Never signal on social hype alone — require at least one other
+  - Never signal on social hype alone. Require at least one other
     confirming dimension
   - Be specific about which tokens and what metrics are moving
   - Flag red flags: anonymous teams, no audit, concentrated holdings
@@ -435,10 +435,10 @@ instructions: |
      - "All markets look fairly priced. Checking again next run."
 
 constraints: |
-  - Only flag markets with sufficient liquidity — illiquid markets
+  - Only flag markets with sufficient liquidity. Illiquid markets
     can't be traded
   - State the resolution rules for every flagged market
-  - Be honest about uncertainty — if it's a genuine coin flip, say so
+  - Be honest about uncertainty. If it's a genuine coin flip, say so
 
 triggers:
   - type: cron
@@ -452,7 +452,7 @@ triggers:
 
 |                  |                                                                                |
 | ---------------- | ------------------------------------------------------------------------------ |
-| **Edge**         | Detect when correlated assets diverge — one will revert                        |
+| **Edge**         | Detect when correlated assets diverge, as one will revert                        |
 | **Specialists**  | Technical/Price Structure + Positioning                                        |
 | **Signal**       | Two normally-correlated assets (e.g., ETH/SOL, BTC/Gold) diverge significantly |
 | **Time horizon** | Hours to days                                                                  |
@@ -477,7 +477,7 @@ instructions: |
           Positioning suggests [reason].
           Play: long [laggard] / short [leader]."
      d. If the divergence is fundamental (ecosystem-specific news):
-        - "Divergence is fundamental — [reason]. Not a reversion trade."
+        - "Divergence is fundamental: [reason]. Not a reversion trade."
   4. If no significant divergence:
      - "ETH and SOL tracking normally. Checking again next hour."
 
@@ -485,7 +485,7 @@ constraints: |
   - Only signal reversion when the divergence is positioning-driven,
     not fundamental
   - If both assets are falling, a smaller decline isn't "divergence"
-    — it's correlation
+    , it's correlation
   - Require at least 3% divergence before flagging
 
 triggers:
@@ -513,7 +513,7 @@ Keep these principles in mind when building your strategies:
 
 ### Monitoring Frequency vs. Signal Frequency
 
-- An agent that monitors every hour may only signal a few times per week — that's correct.
+- An agent that monitors every hour may only signal a few times per week, and that's correct.
 - Frequent monitoring catches setups as they form. Infrequent signaling means high conviction.
 - Match monitoring frequency to how fast the setup can appear:
   - Squeeze setups: monitor every 1-2h (can form in hours)
@@ -524,7 +524,7 @@ Keep these principles in mind when building your strategies:
 ### Always Define Invalidation
 
 - Every strategy should specify: "This thesis breaks if [specific condition]."
-- Make invalidation measurable (a price level, a data point) — not vague ("sentiment changes").
+- Make invalidation measurable (a price level, a data point), not vague ("sentiment changes").
 
 ### Always Define "No Setup" Output
 
@@ -546,31 +546,31 @@ The platform produces four conviction levels. Your strategy should specify how t
 
 ## Common Mistakes to Avoid
 
-1. **Overloading an agent** — An agent that tries to do squeeze detection AND macro regime AND narrative momentum will be mediocre at all three. One strategy per agent.
+1. **Overloading an agent** - An agent that tries to do squeeze detection AND macro regime AND narrative momentum will be mediocre at all three. One strategy per agent.
 
-2. **No clear exit conditions** — "Buy when funding is extreme" without "close when funding normalizes" means positions drift. Always define entry AND exit.
+2. **No clear exit conditions** - "Buy when funding is extreme" without "close when funding normalizes" means positions drift. Always define entry AND exit.
 
-3. **Ignoring market regime** — A squeeze strategy that fires during a crash will get steamrolled. Add a regime filter: "Only look for squeezes when the market is risk-on or neutral."
+3. **Ignoring market regime** - A squeeze strategy that fires during a crash will get steamrolled. Add a regime filter: "Only look for squeezes when the market is risk-on or neutral."
 
-4. **Single-source strategies** — "Alert me when funding is extreme" misses structural context. Pair it with price structure: "Alert when funding is extreme AND price is at a key level."
+4. **Single-source strategies** - "Alert me when funding is extreme" misses structural context. Pair it with price structure: "Alert when funding is extreme AND price is at a key level."
 
-5. **Vague instructions** — "Find good trades" tells the agent nothing. Be specific: what data to check, what conditions must align, what the output should look like.
+5. **Vague instructions** - "Find good trades" tells the agent nothing. Be specific: what data to check, what conditions must align, what the output should look like.
 
-6. **No "no setup" output** — If the agent doesn't know what to say when there's no trade, it will invent one. Always define the idle output.
+6. **No "no setup" output** - If the agent doesn't know what to say when there's no trade, it will invent one. Always define the idle output.
 
 ---
 
 ## Strategy Design Tips
 
-1. **Start with your edge.** "Buy low sell high" isn't a strategy. Define the specific signal or condition you're exploiting — that's what makes a strategy worth automating.
+1. **Start with your edge.** "Buy low sell high" isn't a strategy. Define the specific signal or condition you're exploiting. That's what makes a strategy worth automating.
 
 2. **Pick 2–3 specialists, not all of them.** Map your idea to the specialists that provide the data you actually need. Using every specialist adds noise, not edge.
 
-3. **Define signals as conjunctions.** "X AND Y AND Z" — not "X or maybe Y." The more conditions must align, the fewer false signals.
+3. **Define signals as conjunctions.** "X AND Y AND Z", not "X or maybe Y." The more conditions must align, the fewer false signals.
 
 4. **Embed the schedule in your instructions.** Write "Every 2 hours:" at the top of the instructions, then describe what the agent does each run. This makes the strategy self-contained and readable.
 
-5. **Always include "no setup" instructions.** Most runs will produce no signal. Tell the agent what to output when nothing is actionable — this prevents it from manufacturing setups to fill empty runs.
+5. **Always include "no setup" instructions.** Most runs will produce no signal. Tell the agent what to output when nothing is actionable. This prevents it from manufacturing setups to fill empty runs.
 
 6. **One strategy per agent.** If you want multiple strategies, create multiple agents. Each agent should have a single, clear purpose.
 

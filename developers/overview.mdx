@@ -1,0 +1,43 @@
+---
+title: "Overview"
+description: "What you can build with the Gigabrain API"
+icon: "code"
+---
+
+The Gigabrain API gives you two things: a reasoning engine for crypto markets, and infrastructure to run autonomous trading agents.
+
+## Brain API
+
+A single stateless endpoint (`POST /v1/chat`) that takes a natural language query and returns trade-ready analysis. Ask it anything about crypto - trade setups, squeeze scans, macro risk, narrative momentum - and it routes to the right specialist automatically.
+
+You get back structured JSON you can pipe straight into your execution logic. No sessions, no state, no routing to manage.
+
+<Card title="Brain API Overview" icon="brain" href="/developers/brain-api-overview">
+  See what your bot can do with real examples
+</Card>
+
+## Agents API
+
+Full lifecycle management for autonomous trading bots on Hyperliquid. Create agents, define strategies with scheduled or signal-based triggers, manage dedicated wallets, monitor execution, and chat with your agents.
+
+Each agent gets its own Hyperliquid wallet. You control everything via API: create, fund, activate, enable, monitor, withdraw, delete.
+
+<Card title="Agents API Overview" icon="robot" href="/developers/agents-api-overview">
+  Launch your first trading bot
+</Card>
+
+## Quick Links
+
+<CardGroup cols={3}>
+  <Card title="Get API Key" icon="key" href="https://gigabrain.gg/profile?tab=api">
+    Generate your key (starts with gb_sk_)
+  </Card>
+
+  <Card title="Auth & Basics" icon="lock" href="/developers/introduction">
+    Rate limits, response format, status codes
+  </Card>
+
+  <Card title="Agent Skills" icon="puzzle-piece" href="/openclaw/overview">
+    Give any AI agent access to Gigabrain
+  </Card>
+</CardGroup>

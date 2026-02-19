@@ -1,0 +1,1190 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Gigabrain API",
+    "description": "Programmatic access to The Brain and Gigabrain Agents.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.gigabrain.gg"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Brain",
+      "description": "Query The Brain for real-time crypto market intelligence"
+    },
+    {
+      "name": "Agents",
+      "description": "Create and manage autonomous trading agents"
+    },
+    {
+      "name": "Wallet",
+      "description": "Manage agent trading wallets on Hyperliquid"
+    },
+    {
+      "name": "Agent Chat & Monitoring",
+      "description": "Chat with agents and monitor execution history"
+    }
+  ],
+  "paths": {
+    "/v1/chat": {
+      "post": {
+        "tags": ["Brain"],
+        "summary": "Chat with The Brain",
+        "description": "Send a natural language query to The Brain. It routes to the right specialist(s) automatically. Add \"Respond as JSON with:\" to your message and specify fields to get structured JSON back.",
+        "operationId": "chat",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              },
+              "examples": {
+                "trade_setup": {
+                  "summary": "Get a trade setup",
+                  "value": {
+                    "message": "Should I long or short ETH right now? Check technicals, funding, and macro. Respond as JSON with: direction, entry_price, stop_loss, take_profit_1, take_profit_2, risk_reward_ratio, confidence, reasoning"
+                  }
+                },
+                "squeeze_scan": {
+                  "summary": "Find squeeze setups",
+                  "value": {
+                    "message": "Find tokens with extreme funding rates and crowded positioning that could squeeze. Respond as JSON array with: symbol, funding_rate, open_interest, long_short_ratio, squeeze_direction, liquidation_risk"
+                  }
+                },
+                "macro_check": {
+                  "summary": "Macro risk screen",
+                  "value": {
+                    "message": "What's the current macro risk regime for crypto? Factor in DXY, yields, VIX, and equities. Respond as JSON with: risk_regime, dxy_trend, vix_level, recommended_exposure, reasoning"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Analysis complete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "504": {
+            "description": "Query timeout. Break into smaller, more specific requests."
+          }
+        }
+      }
+    },
+    "/v1/agents": {
+      "post": {
+        "tags": ["Agents"],
+        "summary": "Create agent",
+        "description": "Create a new trading agent. Costs $0.20 in credits. The agent is created disabled by default.",
+        "operationId": "createAgent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentCreate"
+              },
+              "examples": {
+                "momentum_bot": {
+                  "summary": "ETH momentum bot",
+                  "value": {
+                    "name": "ETH Momentum Bot",
+                    "goal": "Monitor ETH/USDT and go long when RSI drops below 30 on the 4H chart",
+                    "instructions": "Use 4H timeframe. Enter long when RSI < 30 and funding is negative. Position size: 10% of wallet. Stop loss: 3% below entry. Take profit: 2:1 R:R minimum.",
+                    "triggers": [
+                      {
+                        "type": "scheduled",
+                        "cron": "*/15 * * * *"
+                      }
+                    ],
+                    "memory_enabled": true,
+                    "trading_enabled": true,
+                    "enabled": false
+                  }
+                },
+                "alpha_bot": {
+                  "summary": "Signal-based bot",
+                  "value": {
+                    "name": "BTC Alpha Catcher",
+                    "goal": "React to high-impact BTC signals and take momentum trades",
+                    "instructions": "Only act on signals with impact rating 4+. Max 2 trades per day. Position size: 5% of wallet. Always set stop loss.",
+                    "triggers": [
+                      {
+                        "type": "alpha",
+                        "match": "BTC momentum breakouts and trend reversals",
+                        "min_impact_rating": 4
+                      }
+                    ],
+                    "memory_enabled": true,
+                    "trading_enabled": true,
+                    "enabled": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Agent created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAgentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Agents"],
+        "summary": "List agents",
+        "description": "List all agents owned by the authenticated user.",
+        "operationId": "listAgents",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of agents to return",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}": {
+      "get": {
+        "tags": ["Agents"],
+        "summary": "Get agent",
+        "description": "Get details of a specific agent including configuration, triggers, stats, and status.",
+        "operationId": "getAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDetailResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Agents"],
+        "summary": "Update agent",
+        "description": "Update an agent's configuration. Only provided fields are updated.",
+        "operationId": "updateAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentDetailResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Agents"],
+        "summary": "Delete agent",
+        "description": "Permanently delete an agent and all its data. **Export wallet keys and withdraw funds BEFORE deleting. This is irreversible.**",
+        "operationId": "deleteAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/enable": {
+      "post": {
+        "tags": ["Agents"],
+        "summary": "Enable agent",
+        "description": "Start the agent. It will begin executing on its configured triggers. Trading agents require a wallet to be generated and activated first.",
+        "operationId": "enableAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent enabled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/disable": {
+      "post": {
+        "tags": ["Agents"],
+        "summary": "Disable agent",
+        "description": "Stop the agent. All trigger-based execution pauses. Configuration and history are preserved.",
+        "operationId": "disableAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent disabled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessMessage"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/wallet": {
+      "post": {
+        "tags": ["Wallet"],
+        "summary": "Generate wallet",
+        "description": "Generate a Hyperliquid trading wallet for the agent. Returns the existing wallet if one has already been generated. Required before enabling a trading agent.",
+        "operationId": "generateWallet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Wallet generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Wallet"],
+        "summary": "Get wallet",
+        "description": "Get wallet details including address, chain, exchange, and status.",
+        "operationId": "getWallet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wallet details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/wallet/activate": {
+      "post": {
+        "tags": ["Wallet"],
+        "summary": "Activate wallet",
+        "description": "Activate the wallet for live trading. The wallet must be funded first. Returns an error with the deposit address if balance is insufficient.",
+        "operationId": "activateWallet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wallet activated (status will be \"active\" and agent_address will be populated)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Insufficient balance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Insufficient balance"
+                    },
+                    "deposit_address": {
+                      "type": "string",
+                      "example": "0x1234...abcd"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/wallet/send": {
+      "post": {
+        "tags": ["Wallet"],
+        "summary": "Send funds",
+        "description": "Send funds from the agent's wallet to a destination address.",
+        "operationId": "sendFunds",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WalletSend"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Funds sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendUsdResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/chat": {
+      "post": {
+        "tags": ["Agent Chat & Monitoring"],
+        "summary": "Chat with agent",
+        "description": "Send a message to an agent and get a response. Requires credits. With `stream: false` (default), returns a JSON object. With `stream: true`, returns an SSE stream of events.",
+        "operationId": "chatWithAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentChatRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent response (non-streaming)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentChatResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/{agent_id}/runs": {
+      "get": {
+        "tags": ["Agent Chat & Monitoring"],
+        "summary": "Get agent runs",
+        "description": "Get execution history for a specific agent, including trigger type, status, output, and credits charged.",
+        "operationId": "getAgentRuns",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AgentId"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of runs to return",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentRunResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/agents/suggest": {
+      "post": {
+        "tags": ["Agent Chat & Monitoring"],
+        "summary": "Suggest strategy",
+        "description": "Get AI-generated trading strategy suggestions. Pass any market context, preferences, or constraints in the optional `context` object. Rate limited to 10 requests per hour.",
+        "operationId": "suggestStrategy",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StrategySuggestRequest"
+              },
+              "examples": {
+                "with_context": {
+                  "summary": "With market context",
+                  "value": {
+                    "context": {
+                      "asset": "ETH",
+                      "style": "momentum",
+                      "risk_tolerance": "moderate",
+                      "max_position_size": "10%",
+                      "timeframe": "4H"
+                    }
+                  }
+                },
+                "minimal": {
+                  "summary": "No context (general suggestion)",
+                  "value": {}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Strategy suggestions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuggestStrategyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Your Gigabrain API key. Get one at https://gigabrain.gg/profile?tab=api. Format: `gb_sk_...`"
+      }
+    },
+    "parameters": {
+      "AgentId": {
+        "name": "agent_id",
+        "in": "path",
+        "required": true,
+        "description": "The agent's unique identifier",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Invalid or revoked API key",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "statusCode": 401,
+              "message": "Invalid or revoked API key"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "statusCode": 404,
+              "message": "Agent not found"
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded (60 requests per minute)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "statusCode": {
+                  "type": "integer",
+                  "example": 429
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Rate limit exceeded"
+                },
+                "retryAfter": {
+                  "type": "integer",
+                  "description": "Seconds to wait before retrying",
+                  "example": 45
+                },
+                "resetAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "description": "Seconds to wait before retrying",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ChatRequest": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Your query to The Brain. Add \"Respond as JSON with:\" and list fields for structured output."
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable streaming response"
+          }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "content": {
+            "type": "string",
+            "description": "The response. Contains markdown by default, or parseable JSON if you requested it."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AgentCreate": {
+        "type": "object",
+        "required": ["name", "goal", "instructions"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name for the agent"
+          },
+          "goal": {
+            "type": "string",
+            "description": "Trading goal, e.g. \"Monitor ETH/USDT and go long when RSI drops below 30\""
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Detailed strategy, behavior, and risk parameters"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trigger"
+            }
+          },
+          "memory_enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "trading_enabled": {
+            "type": "boolean",
+            "default": false
+          },
+          "model": {
+            "type": "string",
+            "default": "default"
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "AgentUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAgentResponse": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "goal": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "wallet": {
+            "nullable": true,
+            "$ref": "#/components/schemas/WalletResponse"
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AgentResponse": {
+        "type": "object",
+        "description": "Agent summary returned in list endpoints",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "goal": {
+            "type": "string",
+            "nullable": true
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "stats": {
+            "type": "object",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AgentDetailResponse": {
+        "type": "object",
+        "description": "Full agent details returned by get/update endpoints",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "chat_session_id": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "description": "Full agent definition including goal, instructions, and configuration"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "stats": {
+            "type": "object",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Trigger": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["scheduled", "alpha"],
+            "description": "`scheduled` for cron-based, `alpha` for signal-based"
+          },
+          "cron": {
+            "type": "string",
+            "description": "Cron expression (scheduled triggers only). Minimum 5 minutes. Supported: `*/5 * * * *`, `*/15 * * * *`, `0 * * * *`, `0 */4 * * *`, `0 0 * * *`"
+          },
+          "match": {
+            "type": "string",
+            "description": "Vector-matched against incoming alpha signals (alpha triggers only)"
+          },
+          "min_impact_rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 3,
+            "description": "Minimum impact rating to trigger (alpha triggers only). 1-2 = low, 3 = moderate, 4 = high, 5 = critical"
+          }
+        }
+      },
+      "WalletResponse": {
+        "type": "object",
+        "properties": {
+          "wallet_id": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "description": "Wallet address"
+          },
+          "agent_address": {
+            "type": "string",
+            "nullable": true,
+            "description": "Populated after wallet activation"
+          },
+          "exchange": {
+            "type": "string",
+            "default": "hyperliquid"
+          },
+          "chain_type": {
+            "type": "string",
+            "default": "ethereum"
+          },
+          "status": {
+            "type": "string",
+            "description": "Wallet status (e.g. pending, active)"
+          }
+        }
+      },
+      "WalletSend": {
+        "type": "object",
+        "required": ["destination", "amount"],
+        "properties": {
+          "destination": {
+            "type": "string",
+            "description": "Destination wallet address"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount in USDC to send"
+          }
+        }
+      },
+      "SendUsdResponse": {
+        "type": "object",
+        "properties": {
+          "wallet_address": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "remaining_balance": {
+            "type": "number"
+          }
+        }
+      },
+      "AgentChatRequest": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message to send to the agent",
+            "example": "What positions are you currently monitoring?"
+          },
+          "session_id": {
+            "type": "string",
+            "description": "Omit to start a new session"
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false,
+            "description": "Set to true for SSE streaming response"
+          }
+        }
+      },
+      "AgentChatResponse": {
+        "type": "object",
+        "description": "Non-streaming response. For streaming, set stream: true to receive SSE events.",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string"
+          }
+        }
+      },
+      "AgentRunResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "trigger_type": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["scheduled", "alpha", "manual"]
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "reasoning": {
+            "type": "string",
+            "nullable": true
+          },
+          "action_taken": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Whether the agent executed a trade during this run"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "started_at": {
+            "type": "string",
+            "nullable": true
+          },
+          "finished_at": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "StrategySuggestRequest": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Free-form JSON object. Pass in any market context, preferences, or constraints you want. Gets sent to the AI strategy engine alongside your account."
+          }
+        }
+      },
+      "SuggestStrategyResponse": {
+        "type": "object",
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StrategySuggestion"
+            }
+          }
+        }
+      },
+      "StrategySuggestion": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

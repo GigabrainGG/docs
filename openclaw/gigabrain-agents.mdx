@@ -1,0 +1,247 @@
+---
+title: "gigabrain-agents"
+description: "Agent Skill for managing Gigabrain autonomous trading agents - create, configure, monitor, and control trading bots via API"
+icon: "robot"
+---
+
+The `gigabrain-agents` skill gives any [Agent Skills](https://agentskills.io/)-compatible agent full lifecycle management of Gigabrain's autonomous trading agents. It covers 16 endpoints: creating agents, configuring strategies and triggers, managing wallets, enabling/disabling execution, monitoring runs, and chatting with agents.
+
+## SKILL.md
+
+````markdown
+---
+name: gigabrain-agents
+description: Create, manage, and control Gigabrain autonomous trading agents on Hyperliquid. Use when the user wants to create trading bots, manage agent wallets, configure trading strategies, enable/disable agents, check agent execution history, or get strategy suggestions. Full lifecycle from strategy design to wallet management and execution monitoring.
+license: MIT
+compatibility: Requires GIGABRAIN_API_KEY environment variable. Get one at https://gigabrain.gg/profile?tab=api
+metadata:
+  author: gigabrain
+  version: "1.0"
+---
+
+# Gigabrain Agents API
+
+Create, manage, and control autonomous trading agents on Hyperliquid.
+
+## Authentication
+
+- Header: `Authorization: Bearer <GIGABRAIN_API_KEY>`
+- Key format: `gb_sk_...`
+- Get your key: https://gigabrain.gg/profile?tab=api
+
+## Base URL
+
+https://api.gigabrain.gg
+
+## Endpoints
+
+### Agent CRUD
+
+#### POST /v1/agents - Create Agent
+Create a new trading agent. Costs $0.20 in credits. Agent is created disabled by default.
+
+```json
+{
+  "name": "string (required) - display name",
+  "goal": "string (required) - trading goal, e.g. 'Monitor ETH/USDT and go long when RSI drops below 30'",
+  "instructions": "string (required) - detailed strategy, behavior, and risk parameters",
+  "triggers": [
+    {
+      "type": "scheduled",
+      "cron": "*/15 * * * *"
+    },
+    {
+      "type": "alpha",
+      "match": "ETH momentum breakouts and trend reversals",
+      "min_impact_rating": 3
+    }
+  ],
+  "memory_enabled": true,
+  "trading_enabled": false,
+  "model": "default",
+  "enabled": false
+}
+```
+
+**Trigger types:**
+- `scheduled` - cron-based. Supported: `*/5 * * * *` (5min), `*/15 * * * *` (15min), `0 * * * *` (hourly), `0 */4 * * *` (4h), `0 0 * * *` (daily). Minimum 5 minutes.
+- `alpha` - signal-based. The `match` string is vector-matched against incoming alpha signals. `min_impact_rating` (1-5, default 3): 1-2 = low impact, 3 = moderate, 4 = high, 5 = critical.
+
+#### GET /v1/agents - List Agents
+List all agents owned by the authenticated user.
+Query params: `limit` (integer, default 50)
+
+#### GET /v1/agents/{agent_id} - Get Agent
+Get details of a specific agent including configuration, triggers, stats, and status.
+
+#### PATCH /v1/agents/{agent_id} - Update Agent
+Update an agent's name, description, goal, or instructions. Only provided fields are updated.
+
+```json
+{
+  "name": "optional new name",
+  "description": "optional new description",
+  "goal": "optional new goal",
+  "instructions": "optional new instructions"
+}
+```
+
+#### DELETE /v1/agents/{agent_id} - Delete Agent
+Permanently delete an agent and all its data.
+**WARNING: Export wallet keys and withdraw funds BEFORE deleting. This is irreversible.**
+
+### Agent Lifecycle
+
+#### POST /v1/agents/{agent_id}/enable - Enable Agent
+Start the agent. It will begin executing on its configured triggers. Trading agents require a wallet to be generated and activated first.
+
+#### POST /v1/agents/{agent_id}/disable - Disable Agent
+Stop the agent. All trigger-based execution pauses. Configuration and history are preserved.
+
+### Wallet Management
+
+#### POST /v1/agents/{agent_id}/wallet - Generate Wallet
+Generate a new trading wallet for the agent. Required before enabling a trading agent.
+
+#### GET /v1/agents/{agent_id}/wallet - Get Wallet
+Get wallet details including address, chain type, exchange, and status.
+
+#### POST /v1/agents/{agent_id}/wallet/activate - Activate Wallet
+Activate the wallet for live trading. The wallet must be funded first. Returns an error with deposit address if balance is insufficient.
+
+#### POST /v1/agents/{agent_id}/wallet/send - Send Funds
+Send funds from the agent's wallet to a destination address.
+
+```json
+{
+  "destination": "0x... wallet address",
+  "amount": 100.0
+}
+```
+
+### Chat
+
+#### POST /v1/agents/{agent_id}/chat - Chat with Agent
+Send a message to an agent and get a response. Requires credits.
+
+```json
+{
+  "message": "What positions are you currently monitoring?",
+  "session_id": "optional - omit to start new session",
+  "stream": false
+}
+```
+
+### Monitoring
+
+#### GET /v1/agents/{agent_id}/runs - Agent Runs
+Get execution history for a specific agent, including trigger type, status, output, and credits charged.
+Query params: `limit` (integer, default 50)
+
+#### GET /v1/agents/runs - Recent Runs (All Agents)
+Get recent execution history across all agents.
+Query params: `limit` (integer, default 20)
+
+### Strategy Suggestions
+
+#### POST /v1/agents/suggest - Suggest Strategy
+Get AI-generated trading strategy suggestions based on market context. Rate limited to 10 requests per hour.
+
+```json
+{
+  "context": {
+    "asset": "ETH",
+    "style": "momentum",
+    "risk_tolerance": "moderate"
+  }
+}
+```
+
+## Rate Limits
+
+- 60 requests per minute
+- Strategy suggestions: 10 per hour
+- Monitor `X-RateLimit-Remaining-Minute` header
+- On 429 response: wait `Retry-After` seconds before retrying
+
+## Agent Lifecycle Flow
+
+The typical flow for creating and launching a trading agent:
+
+1. **Create** - `POST /v1/agents` with name, goal, instructions, triggers
+2. **Generate wallet** - `POST /v1/agents/{id}/wallet`
+3. **Fund wallet** - Send USDC to the wallet address from `GET /v1/agents/{id}/wallet`
+4. **Activate wallet** - `POST /v1/agents/{id}/wallet/activate`
+5. **Enable agent** - `POST /v1/agents/{id}/enable`
+6. **Monitor** - `GET /v1/agents/{id}/runs` to check execution history
+
+To safely shut down:
+1. **Disable** - `POST /v1/agents/{id}/disable`
+2. **Export keys** - Export private key from the Gigabrain UI (Profile → Agents → Export Key)
+3. **Withdraw funds** - `POST /v1/agents/{id}/wallet/send`
+4. **Delete** - `DELETE /v1/agents/{id}`
+
+## Error Handling
+
+- 401: Invalid or revoked API key - verify at https://gigabrain.gg/profile?tab=api
+- 404: Agent not found - check the agent_id
+- 429: Rate limit exceeded - wait `Retry-After` seconds
+- 500/503: Server error - retry with exponential backoff
+
+## Important Notes
+
+- Agents are created disabled by default - call enable after wallet setup
+- Trading agents MUST have a generated and activated wallet before enabling
+- ALWAYS export wallet keys and withdraw funds before deleting an agent. Deletion is permanent and funds are irrecoverable
+- Each agent gets its own dedicated Hyperliquid wallet
+- Agent creation costs $0.20 in credits; chat and runs also consume credits
+````
+
+## Example Workflows
+
+### Create and Launch a Trading Agent
+
+```
+Create a Gigabrain trading agent called "ETH Momentum Bot" that monitors
+ETH/USDT and goes long when RSI drops below 30 on the 4H chart. Use a
+scheduled trigger every 15 minutes. Enable trading and set up the wallet.
+```
+
+The agent will handle the full lifecycle: create the agent, generate a wallet, tell you the address to fund, then activate and enable once funded.
+
+### Safe Agent Shutdown
+
+```
+Safely shut down my agent "ETH Momentum Bot". Disable it, export the
+wallet keys, withdraw all funds to 0xYourAddress, then delete it.
+```
+
+<Warning>
+  **Always export wallet keys and withdraw funds before deleting an agent.** Deletion is permanent and any funds remaining in the agent's wallet will be irrecoverable.
+</Warning>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="gigabrain-intel" icon="brain" href="/openclaw/gigabrain-intel">
+    Add market intelligence queries
+  </Card>
+
+  <Card title="Agent Setup Guide" icon="book" href="/guides/agents-setup">
+    Step-by-step agent setup walkthrough
+  </Card>
+
+  <Card title="Agent Builder Reference" icon="hammer" href="/guides/agents-building">
+    Strategy archetypes and design patterns
+  </Card>
+
+  <Card title="REST API Docs" icon="terminal" href="/developers/introduction">
+    Authentication, endpoints, and error handling
+  </Card>
+</CardGroup>
+
+<Warning>
+  Gigabrain provides market intelligence tools, not financial advice. Autonomous trading
+  agents execute real trades with real funds. Implement proper risk management and
+  monitor your agents regularly. See the [Risk Disclosure](/support/risk-disclosure).
+</Warning>

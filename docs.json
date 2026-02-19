@@ -65,21 +65,69 @@
         ]
       },
       {
-        "tab": "Developers",
+        "tab": "API Reference",
+        "openapi": "openapi.json",
         "groups": [
           {
             "group": "Getting Started",
             "pages": [
-              "developers/brain-api-overview",
+              "developers/overview",
               "developers/introduction"
             ]
           },
           {
-            "group": "AI Tools",
+            "group": "Brain",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "developers/brain-api-overview",
+              "POST /v1/chat"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
+              "developers/agents-api-overview",
+              "POST /v1/agents",
+              "GET /v1/agents",
+              "GET /v1/agents/{agent_id}",
+              "PATCH /v1/agents/{agent_id}",
+              "DELETE /v1/agents/{agent_id}",
+              "POST /v1/agents/{agent_id}/enable",
+              "POST /v1/agents/{agent_id}/disable"
+            ]
+          },
+          {
+            "group": "Wallet",
+            "pages": [
+              "POST /v1/agents/{agent_id}/wallet",
+              "GET /v1/agents/{agent_id}/wallet",
+              "POST /v1/agents/{agent_id}/wallet/activate",
+              "POST /v1/agents/{agent_id}/wallet/send"
+            ]
+          },
+          {
+            "group": "Agent Chat & Monitoring",
+            "pages": [
+              "POST /v1/agents/{agent_id}/chat",
+              "GET /v1/agents/{agent_id}/runs",
+              "POST /v1/agents/suggest"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Agent Skills",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "openclaw/overview"
+            ]
+          },
+          {
+            "group": "Skills",
+            "pages": [
+              "openclaw/gigabrain-intel",
+              "openclaw/gigabrain-agents"
             ]
           }
         ]

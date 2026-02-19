@@ -1,0 +1,158 @@
+---
+title: "gigabrain-intel"
+description: "Agent Skill for querying Gigabrain's Brain: 7 AI analysts for real-time crypto market intelligence"
+icon: "brain"
+---
+
+The `gigabrain-intel` skill gives any [Agent Skills](https://agentskills.io/)-compatible agent access to Gigabrain's Brain API, a single endpoint (`POST /v1/chat`) that routes natural language queries to 7 specialized market analysts covering macro, microstructure, fundamentals, sentiment, technicals, micro-caps, and prediction markets.
+
+## SKILL.md
+
+````markdown
+---
+name: gigabrain-intel
+description: Query Gigabrain's Brain for real-time crypto market intelligence. Use when the user asks about crypto prices, market conditions, funding rates, technical analysis, sentiment, macro indicators, DeFi metrics, or any market data. Covers 7 specialists and 30+ data categories.
+license: MIT
+compatibility: Requires GIGABRAIN_API_KEY environment variable. Get one at https://gigabrain.gg/profile?tab=api
+metadata:
+  author: gigabrain
+  version: "1.0"
+---
+
+# Gigabrain - The Brain
+
+Query real-time crypto market data from 7 specialists.
+
+## Authentication
+
+- Header: `Authorization: Bearer <GIGABRAIN_API_KEY>`
+- Key format: `gb_sk_...`
+- Get your key: https://gigabrain.gg/profile?tab=api
+
+## Base URL
+
+https://api.gigabrain.gg
+
+## Endpoint
+
+### POST /v1/chat
+
+Send a natural language query to the Brain. The query is automatically routed to the most relevant analyst(s).
+
+**Request:**
+```json
+{
+  "message": "your query here"
+}
+```
+
+**Headers:**
+- `Authorization: Bearer <GIGABRAIN_API_KEY>`
+- `Content-Type: application/json`
+
+**Response:**
+```json
+{
+  "session_id": "uuid",
+  "content": "response text or JSON string",
+  "timestamp": "2026-01-07T12:00:00Z"
+}
+```
+
+**IMPORTANT:**
+- The response field is `content`, NOT `message`
+- Set HTTP timeout to at least 600 seconds. Complex queries can take up to 10 minutes
+- For structured data, append "Respond as JSON with: field1, field2, ..." to your query
+
+## Rate Limits
+
+- 60 requests per minute
+- Monitor `X-RateLimit-Remaining-Minute` header
+- On 429 response: wait the number of seconds in the `Retry-After` header, then retry
+
+## Available Analysts
+
+1. **Macro** - DXY, VIX, Treasury yields (2Y, 10Y), Fed Funds rate, S&P 500/Nasdaq, gold, risk regime classification, crypto-macro correlations
+2. **Microstructure** - Funding rates, open interest, liquidations, long/short ratios, whale positioning, taker flow imbalance, CVD
+3. **Fundamentals** - TVL, protocol revenue, fees, chain deployments, active users, governance data, token metrics (price, market cap, PE ratio)
+4. **Market State** - Fear & Greed Index, BTC dominance, Altcoin Season Index, total market cap, volume, narrative tracking, regime classification
+5. **Price Movement** - EMAs (20, 50, 200), RSI, MACD, ADX, Supertrend, support/resistance levels, volume analysis, trade setups with entry/exit/stop-loss
+6. **Trenches** - Micro-cap tokens (under $100M mcap), social momentum, KOL/influencer mentions, narrative analysis, volume spikes, risk assessment
+7. **Polymarket** - Prediction markets, trending markets, odds (yes/no), volume, resolution dates, cross-referencing with macro and crypto data
+
+## Query Patterns
+
+**Simple query:**
+```
+What is the current price of ETH?
+```
+
+**Structured JSON query (recommended for automation):**
+```
+Get funding rates for top 10 perps. Respond as JSON array with: symbol, funding_rate, open_interest, long_short_ratio
+```
+
+**Multi-analyst query:**
+```
+Analyze ETH with technical and microstructure analysis on the 4H timeframe
+```
+
+**Macro overview:**
+```
+Get current macro indicators. Respond as JSON with: dxy (value, change_24h), vix (value, change_24h), us_10y_yield, fed_funds_rate, sp500_change_24h, risk_regime
+```
+
+## Error Handling
+
+- 401: Invalid or revoked API key - verify at https://gigabrain.gg/profile?tab=api
+- 429: Rate limit exceeded - wait `Retry-After` seconds before retrying
+- 500/503: Server error - retry with exponential backoff
+- 504: Query timeout - break into smaller, more specific queries
+- Always log `session_id` from responses for debugging
+````
+
+## Example Queries
+
+Once the skill is added, your agent can handle queries like:
+
+| Query | Analyst |
+|-------|---------|
+| "What's the current macro risk regime?" | Macro |
+| "Are longs crowded on ETH? Check funding rates and OI" | Microstructure |
+| "Get top DeFi protocols by TVL as JSON" | Fundamentals |
+| "What's the market sentiment right now?" | Market State |
+| "Give me a technical analysis of SOL on the 4H chart" | Price Movement |
+| "Find micro-cap tokens with unusual social momentum" | Trenches |
+| "What are the top Polymarket predictions for crypto?" | Polymarket |
+
+For automation, always use the structured JSON query pattern:
+
+```
+Get [data you need]. Respond as JSON with: field1, field2, field3
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="gigabrain-agents" icon="robot" href="/openclaw/gigabrain-agents">
+    Manage autonomous trading agents
+  </Card>
+
+  <Card title="Brain API Overview" icon="book" href="/developers/brain-api-overview">
+    Full reference for all analysts and data types
+  </Card>
+
+  <Card title="REST API Docs" icon="terminal" href="/developers/introduction">
+    Authentication, endpoints, and error handling
+  </Card>
+
+  <Card title="Agent Builder Reference" icon="hammer" href="/guides/agents-building">
+    Strategy archetypes and design patterns
+  </Card>
+</CardGroup>
+
+<Warning>
+  Gigabrain provides market intelligence tools, not financial advice. Implement
+  proper risk management in all trading applications. See the [Risk
+  Disclosure](/support/risk-disclosure).
+</Warning>

@@ -1,0 +1,55 @@
+---
+title: "Agent Skills"
+description: "Give any AI agent real-time crypto market intelligence and autonomous trading capabilities"
+icon: "puzzle-piece"
+---
+
+[Agent Skills](https://agentskills.io/) is an open standard for teaching AI agents new capabilities via `SKILL.md` files. Gigabrain provides two official skills that give any compatible agent access to real-time crypto market intelligence and autonomous trading agent management.
+
+## Compatible Platforms
+
+Agent Skills are supported by 25+ AI agent platforms including Claude Code, Cursor, Gemini CLI, OpenAI Codex, VS Code, GitHub Copilot, OpenClaw, Roo Code, Windsurf, and [many more](https://agentskills.io/home).
+
+## Available Skills
+
+<CardGroup cols={2}>
+  <Card title="gigabrain-intel" icon="brain" href="/openclaw/gigabrain-intel">
+    Query 7 specialized market analysts for real-time crypto intelligence: macro, microstructure, fundamentals, technicals, sentiment, micro-caps, and prediction markets.
+  </Card>
+
+  <Card title="gigabrain-agents" icon="robot" href="/openclaw/gigabrain-agents">
+    Create, configure, and manage autonomous trading agents on Hyperliquid. Full lifecycle from strategy design to wallet management and monitoring.
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+1. **Get your API key** - Generate one at [gigabrain.gg/profile](https://gigabrain.gg/profile?tab=api). It will start with `gb_sk_`.
+2. **Set the environment variable** - `export GIGABRAIN_API_KEY=gb_sk_your_key_here`
+3. **Add a skill** - Copy the `SKILL.md` from either skill page below into your agent's skills directory. Your agent already knows how to discover and use it.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="gigabrain-intel" icon="brain" href="/openclaw/gigabrain-intel">
+    Market intelligence skill
+  </Card>
+
+  <Card title="gigabrain-agents" icon="robot" href="/openclaw/gigabrain-agents">
+    Trading agents skill
+  </Card>
+
+  <Card title="Brain API Overview" icon="book" href="/developers/brain-api-overview">
+    Full reference for all analysts and data types
+  </Card>
+
+  <Card title="REST API Docs" icon="terminal" href="/developers/introduction">
+    Authentication, endpoints, and error handling
+  </Card>
+</CardGroup>
+
+<Warning>
+  Gigabrain provides market intelligence tools, not financial advice. Implement
+  proper risk management in all trading applications. See the [Risk
+  Disclosure](/support/risk-disclosure).
+</Warning>
