@@ -929,9 +929,6 @@
             "type": "string",
             "nullable": true
           },
-          "chat_session_id": {
-            "type": "string"
-          },
           "data": {
             "type": "object",
             "description": "Full agent definition including goal, instructions, and configuration"

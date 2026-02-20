@@ -4,7 +4,7 @@ description: "Agent Skill for managing Gigabrain autonomous trading agents - cre
 icon: "robot"
 ---
 
-The `gigabrain-agents` skill gives any [Agent Skills](https://agentskills.io/)-compatible agent full lifecycle management of Gigabrain's autonomous trading agents. It covers 16 endpoints: creating agents, configuring strategies and triggers, managing wallets, enabling/disabling execution, monitoring runs, and chatting with agents.
+The `gigabrain-agents` skill gives any [Agent Skills](https://agentskills.io/)-compatible agent full lifecycle management of Gigabrain's autonomous trading agents. It covers 14 endpoints: creating agents, configuring strategies and triggers, managing wallets, enabling/disabling execution, monitoring runs, and chatting with agents.
 
 ## SKILL.md
 
@@ -101,7 +101,7 @@ Stop the agent. All trigger-based execution pauses. Configuration and history ar
 ### Wallet Management
 
 #### POST /v1/agents/{agent_id}/wallet - Generate Wallet
-Generate a new trading wallet for the agent. Required before enabling a trading agent.
+Generate a trading wallet for the agent. Returns the existing wallet if one has already been generated. Required before enabling a trading agent.
 
 #### GET /v1/agents/{agent_id}/wallet - Get Wallet
 Get wallet details including address, chain type, exchange, and status.
@@ -135,12 +135,8 @@ Send a message to an agent and get a response. Requires credits.
 ### Monitoring
 
 #### GET /v1/agents/{agent_id}/runs - Agent Runs
-Get execution history for a specific agent, including trigger type, status, output, and credits charged.
+Get execution history for a specific agent, including trigger type, status, summary, reasoning, and whether an action was taken.
 Query params: `limit` (integer, default 50)
-
-#### GET /v1/agents/runs - Recent Runs (All Agents)
-Get recent execution history across all agents.
-Query params: `limit` (integer, default 20)
 
 ### Strategy Suggestions
 
@@ -152,10 +148,13 @@ Get AI-generated trading strategy suggestions based on market context. Rate limi
   "context": {
     "asset": "ETH",
     "style": "momentum",
-    "risk_tolerance": "moderate"
+    "risk_tolerance": "moderate",
+    "timeframe": "4H"
   }
 }
 ```
+
+The `context` field is a free-form JSON object. Pass any key-value pairs for market context, preferences, or constraints. The body is optional.
 
 ## Rate Limits
 
