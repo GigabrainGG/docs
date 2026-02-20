@@ -775,7 +775,7 @@
       },
       "AgentCreate": {
         "type": "object",
-        "required": ["name", "goal", "instructions"],
+        "required": ["name", "goal", "instructions", "triggers"],
         "properties": {
           "name": {
             "type": "string",
