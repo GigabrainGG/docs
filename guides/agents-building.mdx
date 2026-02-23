@@ -11,13 +11,12 @@ Everything you need to design, configure, and refine your autonomous trading age
 
 Gigabrain is an autonomous crypto trading agent platform. You create agents that:
 
-1. Monitor markets using AI-powered specialist analysis
+1. Monitor markets using AI-powered analysis
 2. Fire on triggers (scheduled or news-driven)
 3. Produce analysis and optionally execute trades on Hyperliquid
 
 Each agent has: a goal, instructions, constraints, and triggers.
-The AI engine provides the analytical backbone: domain specialists
-that the agent can query in parallel to form a thesis.
+The Brain provides the analytical backbone — pulling data across macro, positioning, fundamentals, technicals, and sentiment to form a thesis.
 
 ---
 
@@ -95,56 +94,56 @@ Memory is less useful for:
 
 ---
 
-## Available Specialists
+## Analysis Domains
 
-Your agents can query these domain specialists:
+Your agents can pull data across these domains:
 
-### Macro Specialist
+### Macro
 
-- **Domain:** Macroeconomic regime, Fed policy, yields, DXY, risk environment
+- **Covers:** Macroeconomic regime, Fed policy, yields, DXY, risk environment
 - **Provides:** Risk-on/off classification, upcoming catalysts (FOMC, CPI, NFP), gold/silver prices, macro indicators
 - **Best for:** Regime-based strategies, pre-catalyst positioning, understanding macro backdrop
 - **Time relevance:** Days to weeks
 
-### Positioning Specialist
+### Positioning
 
-- **Domain:** Perpetual futures positioning: open interest, funding rates, liquidation levels, whale flows
+- **Covers:** Perpetual futures positioning: open interest, funding rates, liquidation levels, whale flows
 - **Provides:** Bullish/bearish positioning signals, crowding metrics, long/short ratios, taker flow, liquidation clusters
 - **Best for:** Squeeze detection, positioning extreme reversion, understanding who is trapped
 - **Time relevance:** Hours to days
 - **Supports timeframes:** 1h, 4h, 1d, 7d
 
-### Fundamentals Specialist
+### Fundamentals
 
-- **Domain:** Protocol and chain health: TVL, revenue, fees, growth metrics
+- **Covers:** Protocol and chain health: TVL, revenue, fees, growth metrics
 - **Provides:** Chain TVL trends, protocol revenue, sustainability metrics, sector positioning
 - **Best for:** Mid-cap protocol analysis, fundamental screening, narrative validation
 - **Note:** Understands protocol types and won't mention TVL for AI protocols where it's irrelevant
 
-### Technical / Price Structure Specialist
+### Technical / Price Structure
 
-- **Domain:** Technical analysis and price structure, multi-timeframe
+- **Covers:** Technical analysis and price structure, multi-timeframe
 - **Provides:** Support/resistance levels, trend direction, momentum indicators, signal confluence, volatility
 - **Key feature:** Multi-timeframe analysis with confluence and conflict detection across 15m/1h/4h/1d
 - **Best for:** Entry/exit levels, invalidation prices, trend identification
 - **Time relevance:** Minutes to weeks depending on timeframe
 
-### Market Regime Specialist
+### Market Regime
 
-- **Domain:** Overall market regime and risk sentiment
+- **Covers:** Overall market regime and risk sentiment
 - **Provides:** Risk-on/risk-off/neutral classification, macro drivers, aggregated crypto market structure
 - **Best for:** Portfolio-level decisions, regime shifts, risk allocation
 
-### Social Intelligence Specialist
+### Social Intelligence
 
-- **Domain:** Micro-cap social intelligence (tokens ranked 500+, market cap < $100M)
+- **Covers:** Micro-cap social intelligence (tokens ranked 500+, market cap < $100M)
 - **Provides:** Twitter/X sentiment, KOL activity, narrative identification, community health, red flags
 - **Best for:** Meme coins, AI agent tokens, new launches, narrative momentum
 - **Note:** For tokens without institutional data, social signal IS the market
 
-### Prediction Market Specialist
+### Prediction Markets
 
-- **Domain:** Prediction markets (Polymarket): odds, volume, resolution rules
+- **Covers:** Prediction markets (Polymarket): odds, volume, resolution rules
 - **Provides:** Current odds for all outcomes, price movements, liquidity, resolution timing
 - **Best for:** Event-driven strategies, political/economic predictions, contrarian bets
 - **Discovery:** Can find trending markets, high-volume markets, markets ending soon
@@ -153,7 +152,7 @@ Your agents can query these domain specialists:
 
 ## Platform Capabilities
 
-Beyond specialist analysis, agents have access to:
+Agents also have access to:
 
 ### Real-Time Data
 
@@ -190,7 +189,7 @@ These are proven strategy patterns that play to the platform's strengths. Use th
 |                  |                                                                                                                                             |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Edge**         | Fade crowded positioning at structural levels                                                                                               |
-| **Specialists**  | Positioning + Technical/Price Structure                                                                                                     |
+| **Analysis**     | Positioning + Technical/Price Structure                                                                                                     |
 | **Signal**       | Extreme funding + crowded long/short ratio + price at key support/resistance                                                                |
 | **Logic**        | When the crowd is max-levered in one direction and price hits a structural level, cascading liquidations create the move. Trade the unwind. |
 | **Time horizon** | Hours to 1-2 days                                                                                                                           |
@@ -257,7 +256,7 @@ memory_enabled: true
 |                  |                                                                                                                           |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | **Edge**         | Adjust crypto exposure based on macro regime shifts                                                                       |
-| **Specialists**  | Macro + Market Regime                                                                                                     |
+| **Analysis**     | Macro + Market Regime                                                                                                     |
 | **Signal**       | Risk-on (dovish Fed, falling DXY, stable yields) vs risk-off (hawkish pivot, rising yields)                               |
 | **Logic**        | Risk-on: long high-beta alts. Risk-off: reduce to BTC-only or flat. Regime shifts are slow, so you have days to position. |
 | **Time horizon** | Days to weeks                                                                                                             |
@@ -303,7 +302,7 @@ triggers:
 |                  |                                                                                                                                                        |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Edge**         | Position before known events based on how the market is already positioned                                                                             |
-| **Specialists**  | Macro + Positioning + Market Intelligence                                                                                                              |
+| **Analysis**     | Macro + Positioning + Market Intelligence                                                                                                              |
 | **Signal**       | Known event approaching + current positioning reveals the crowded side                                                                                 |
 | **Logic**        | If everyone is hedged for hawkish Fed (crowded shorts, negative funding), asymmetry is to the upside on anything non-hawkish. Position for the unwind. |
 | **Time horizon** | Hours to days                                                                                                                                          |
@@ -353,7 +352,7 @@ triggers:
 |                  |                                                                                               |
 | ---------------- | --------------------------------------------------------------------------------------------- |
 | **Edge**         | Catch narratives mid-development where social signal is rising AND fundamentals confirm       |
-| **Specialists**  | Social Intelligence + Fundamentals + Technical/Price Structure                                |
+| **Analysis**     | Social Intelligence + Fundamentals + Technical/Price Structure                                |
 | **Signal**       | Rising social signal + improving on-chain metrics + price trending with volume                |
 | **Logic**        | Social alone is noise (pumps and dumps). Fundamentals alone is slow. Require BOTH to confirm. |
 | **Time horizon** | Days to weeks                                                                                 |
@@ -407,7 +406,7 @@ triggers:
 |                  |                                                                   |
 | ---------------- | ----------------------------------------------------------------- |
 | **Edge**         | When domain analysis disagrees with prediction market odds        |
-| **Specialists**  | Prediction Market + relevant domain specialist                    |
+| **Analysis**     | Prediction Market + relevant domain specialist                    |
 | **Signal**       | Your analysis gives different probability than Polymarket pricing |
 | **Time horizon** | Event-driven                                                      |
 
@@ -453,7 +452,7 @@ triggers:
 |                  |                                                                                |
 | ---------------- | ------------------------------------------------------------------------------ |
 | **Edge**         | Detect when correlated assets diverge, as one will revert                        |
-| **Specialists**  | Technical/Price Structure + Positioning                                        |
+| **Analysis**     | Technical/Price Structure + Positioning                                        |
 | **Signal**       | Two normally-correlated assets (e.g., ETH/SOL, BTC/Gold) diverge significantly |
 | **Time horizon** | Hours to days                                                                  |
 
@@ -564,7 +563,7 @@ The platform produces four conviction levels. Your strategy should specify how t
 
 1. **Start with your edge.** "Buy low sell high" isn't a strategy. Define the specific signal or condition you're exploiting. That's what makes a strategy worth automating.
 
-2. **Pick 2–3 specialists, not all of them.** Map your idea to the specialists that provide the data you actually need. Using every specialist adds noise, not edge.
+2. **Focus on 2–3 analysis domains.** Map your idea to the data you actually need (e.g., positioning + technicals for squeeze detection). Pulling every domain adds noise, not edge.
 
 3. **Define signals as conjunctions.** "X AND Y AND Z", not "X or maybe Y." The more conditions must align, the fewer false signals.
 

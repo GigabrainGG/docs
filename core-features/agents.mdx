@@ -36,7 +36,7 @@ Every time your agent's trigger fires, it follows this sequence:
 
 1. **Query current state**: Retrieve wallet balance, open positions, and recent performance
 2. **Consult memory**: Review past trades under similar conditions from the Learnings database
-3. **Analyze market conditions**: Delegate to relevant specialists (Macro, Microstructure, Price Movement, etc.)
+3. **Analyze market conditions**: Pull macro, microstructure, price action, fundamentals, and sentiment data as needed
 4. **Evaluate instructions**: Determine whether entry, exit, or risk management criteria are satisfied, informed by both current analysis and historical outcomes
 5. **Execute actions**: Place orders, modify positions, or do nothing based on evaluation
 6. **Record outcome**: Log the reasoning, actions taken, and market state to the Learnings database for future reference
@@ -142,7 +142,7 @@ Alpha triggers use vector matching against incoming Alpha signals. The more spec
   <Tab title="Reasoning">
     Each agent run generates a trace showing:
     - Current wallet state (balance, open positions, P&L)
-    - Market analysis from consulted specialists
+    - Market analysis across relevant domains
     - Evaluation of entry/exit criteria
     - Actions taken or reasons for inaction
 
@@ -173,7 +173,7 @@ Alpha triggers use vector matching against incoming Alpha signals. The more spec
     **Objective**: Identify and ride explosive moves across any asset.
 
     - **Trigger**: Every 15 minutes
-    - **Specialists**: Market State, Trenches, Price Movement
+    - **Analysis**: Market State, Trenches, Price Movement
     - **Entry**: High-conviction Alpha signal (>75% confidence)
     - **Position sizing**: 5% of wallet per trade, 5x leverage
     - **Exit**: Trailing stop at 2% below peak, manual review after 24h
@@ -184,7 +184,7 @@ Alpha triggers use vector matching against incoming Alpha signals. The more spec
     **Objective**: Take directional positions when technical and macro factors align.
 
     - **Trigger**: Every 4 hours
-    - **Specialists**: Macro, Market State, Price Movement
+    - **Analysis**: Macro, Market State, Price Movement
     - **Entry**: 4H chart setup + favorable risk regime + positive BTC correlation
     - **Position sizing**: 10% of wallet, 3x leverage
     - **Exit**: TP at +8%, SL at -4%
@@ -195,7 +195,7 @@ Alpha triggers use vector matching against incoming Alpha signals. The more spec
     **Objective**: Trade based on on-chain metrics and protocol health.
 
     - **Trigger**: Daily at 00:00 UTC
-    - **Specialists**: Fundamentals, Market State
+    - **Analysis**: Fundamentals, Market State
     - **Entry**: Daily protocol fees >$3M, TVL increasing week-over-week
     - **Position sizing**: 10% of wallet, 2x leverage
     - **Exit**: Hold until fundamentals deteriorate or -10% SL
@@ -247,7 +247,7 @@ Alpha triggers use vector matching against incoming Alpha signals. The more spec
     **Possible causes**:
     1. Instructions are ambiguous (refine phrasing and test again)
     2. Market conditions changed rapidly between trigger intervals
-    3. Specialist data was stale or delayed
+    3. Market data was stale or delayed
     4. Edge case not covered in your instructions
 
     Review the reasoning trace for the specific run to understand what triggered the trade.
@@ -276,7 +276,7 @@ Alpha triggers use vector matching against incoming Alpha signals. The more spec
   </Accordion>
 
   <Accordion title="Model limitations">
-    The language model may misinterpret ambiguous phrasing, cannot execute logic requiring external data not available through specialists, and has a knowledge cutoff. Review reasoning traces to verify correct interpretation.
+    The language model may misinterpret ambiguous phrasing, cannot execute logic requiring external data not available through its tools, and has a knowledge cutoff. Review reasoning traces to verify correct interpretation.
   </Accordion>
 </AccordionGroup>
 
