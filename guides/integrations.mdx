@@ -1,6 +1,6 @@
 ---
 title: "Integrations"
-description: "Connect exchanges and messaging platforms to Gigabrain"
+description: "Connect exchanges, AI model providers, and messaging platforms to Gigabrain"
 ---
 
 Gigabrain integrates with third-party platforms for trade execution and real-time notifications. All integrations are managed from your [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations) page.
@@ -49,6 +49,62 @@ Connect Telegram to receive real-time alerts from your Agents, including trade e
   </Step>
 
 </Steps>
+
+## AI Models (Bring Your Own Key)
+
+Connect your own LLM provider API key to use any model from OpenAI, Anthropic, xAI, or OpenRouter with Gigabrain Chat and Agents. When using your own key, only the base platform fee is charged — no token markup.
+
+### Supported providers
+
+| Provider | Models | How to get a key |
+| --- | --- | --- |
+| **OpenRouter** | 400+ models from all providers with one key | [openrouter.ai/keys](https://openrouter.ai/keys) |
+| **OpenAI** | GPT and reasoning models | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
+| **Anthropic** | Claude family of models | [console.anthropic.com](https://console.anthropic.com/) |
+| **xAI** | Grok family of models | [console.x.ai](https://console.x.ai/) |
+| **Venice** | Privacy-focused AI inference | [venice.ai](https://venice.ai/) |
+
+### Setup
+
+<Steps>
+  <Step title="Add your API key">
+    1. Go to [Profile → Integrations](https://gigabrain.gg/profile?tab=integrations).
+    2. Select **AI Models**.
+    3. Choose a provider and paste your API key.
+  </Step>
+  <Step title="Select a model">
+    In Chat, click the model selector (bottom of the input box) to browse available models from your connected providers.
+  </Step>
+</Steps>
+
+### Using custom models via API
+
+Pass `model` and `model_provider` in your `/v1/chat` request to use a specific model:
+
+```json
+{
+  "message": "Analyze ETH technicals on the 4H chart",
+  "model": "claude-sonnet-4-20250514",
+  "model_provider": "anthropic"
+}
+```
+
+For OpenRouter models, use the full OpenRouter model ID and set provider to `openrouter`:
+
+```json
+{
+  "message": "What's the macro risk regime?",
+  "model": "anthropic/claude-sonnet-4",
+  "model_provider": "openrouter"
+}
+```
+
+### Key considerations
+
+- **API keys are encrypted at rest** using AES-256-GCM. They are never stored in plain text.
+- **One key per provider.** Adding a new key for the same provider replaces the existing one.
+- **Fallback to default.** If no custom model is selected, Gigabrain uses its default model.
+- **OpenRouter is the easiest way to start.** One key gives you access to models from OpenAI, Anthropic, Google, Meta, and more.
 
 ## Managing Integrations
 

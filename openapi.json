@@ -753,6 +753,15 @@
             "type": "boolean",
             "default": false,
             "description": "Enable streaming response"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model ID from the provider's API. Use the exact ID the provider uses — e.g. \"gpt-4o\" for OpenAI, \"claude-sonnet-4-20250514\" for Anthropic, \"anthropic/claude-sonnet-4\" for OpenRouter. Requires a connected API key for the chosen provider."
+          },
+          "model_provider": {
+            "type": "string",
+            "enum": ["openai", "anthropic", "xai", "openrouter", "venice"],
+            "description": "Provider of the custom model. Must match the provider you connected your API key for."
           }
         }
       },
@@ -805,7 +814,13 @@
           },
           "model": {
             "type": "string",
-            "default": "default"
+            "default": "default",
+            "description": "Model ID from the provider's API, or \"default\" for Gigabrain's default model. Use the exact ID the provider uses — e.g. \"gpt-4o\" for OpenAI, \"claude-sonnet-4-20250514\" for Anthropic, \"anthropic/claude-sonnet-4\" for OpenRouter. Requires a connected API key for the chosen provider."
+          },
+          "model_provider": {
+            "type": "string",
+            "enum": ["openai", "anthropic", "xai", "openrouter", "venice"],
+            "description": "Provider of the custom model. Required when using a custom model ID."
           },
           "enabled": {
             "type": "boolean",
