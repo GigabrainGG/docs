@@ -1,0 +1,164 @@
+---
+title: SuperAgents
+description: Your own AI trader - a dedicated computer that thinks, learns, and trades autonomously
+---
+
+A SuperAgent is your own AI trader running on a dedicated cloud computer. It's not a bot following a script - it's an intelligent agent that reads markets, forms opinions, remembers what works, and adapts over time. You talk to it over Telegram like a colleague, and it trades on your behalf 24/7.
+
+## What makes a SuperAgent
+
+<CardGroup cols={2}>
+  <Card title="Its own computer" icon="server">
+    Each agent runs in an isolated cloud machine with persistent storage. It's always on, always thinking - not a cron job that wakes up and goes back to sleep.
+  </Card>
+  <Card title="Soul" icon="fingerprint">
+    A natural language identity file (soul.md) that shapes how your agent thinks, what it cares about, and what lines it won't cross. Not a config file - a personality.
+  </Card>
+  <Card title="Memory" icon="brain">
+    The agent writes and maintains its own long-term memory. It remembers trades, market regimes, what worked, what didn't. It learns.
+  </Card>
+  <Card title="Skills" icon="puzzle-piece">
+    Compatible with the Agent Skills open standard used by Claude Code, OpenClaw, Cursor, and 26+ platforms. Install community skills or write your own in minutes.
+  </Card>
+  <Card title="Telegram" icon="message">
+    Chat with your agent in real-time through a private Telegram bot. Discuss markets, ask it to trade, review its thinking - like texting a trader on your team.
+  </Card>
+  <Card title="Wallets" icon="wallet">
+    Dedicated EVM and Solana wallets provisioned automatically. Your agent manages its own capital across chains.
+  </Card>
+</CardGroup>
+
+## How it works
+
+### A computer, not a script
+
+Each SuperAgent runs in its own isolated cloud computer with persistent storage. When you create one, the platform:
+
+1. Provisions a dedicated machine with its own compute and storage
+2. Creates a private Telegram bot only you can talk to
+3. Provisions EVM and Solana wallets
+4. Loads your soul.md and skills
+5. Starts the agent - live, listening, and thinking
+
+This isn't a function that gets invoked on a schedule. Your agent is a persistent process that maintains state, watches markets, and acts when it sees opportunity.
+
+### Soul - who your agent is
+
+Your agent's identity is defined by **soul.md**, a natural language file that shapes how it thinks and behaves. Not a config - a personality. Tell it what kind of trader it should be, what it should care about, and where its limits are.
+
+```markdown
+# Who you are
+You're an aggressive perp trader on HyperLiquid. You live for squeezes
+and liquidation cascades. You think in terms of positioning, not just price.
+
+# How you think
+Read the market like a poker game. What are other traders positioned for?
+Where are the liquidations clustered? Where will the market go to inflict
+maximum pain?
+
+# Risk
+- Never risk more than 5% on a single trade
+- Cut losses fast. If your thesis breaks, you're out.
+- No trading during FOMC or CPI - the market is drunk, not you.
+```
+
+Edit soul.md anytime from the dashboard. Changes take effect in seconds.
+
+### Memory - how your agent learns
+
+SuperAgents maintain their own persistent memory file. The agent decides what to remember - trade outcomes, market observations, lessons, your preferences.
+
+This creates a genuine learning loop. Your agent doesn't just execute - it reflects on what happened, updates its mental model, and gets sharper over time.
+
+### Skills - what your agent can do
+
+SuperAgents support the [Agent Skills](https://agentskills.io) open standard - the same skill format used by Claude Code, OpenClaw, Cursor, GitHub Copilot, Windsurf, Gemini CLI, and 26+ other platforms. Any skill built for these platforms works on a SuperAgent, and vice versa.
+
+A skill is just a folder with a `SKILL.md` file and optional scripts. No SDK, no API integration - just markdown instructions that teach your agent a new capability. Write one in 10 minutes, or install from the thousands of community skills already available on [ClawHub](https://clawhub.ai) and [GitHub](https://github.com/GigabrainGG/skills).
+
+**Built-in skills** cover the core trading stack: HyperLiquid perps and spot trading, Polymarket prediction markets, Solana and EVM wallets, portfolio tracking, and market research via the Gigabrain Brain API.
+
+Enable or disable skills per-agent from the Skills tab. See the [Skills documentation](/core-features/skills) for details.
+
+### Telegram - how you talk to it
+
+Every SuperAgent gets its own Telegram bot via [@BotFather](https://t.me/BotFather). The bot is exclusively yours.
+
+Talk to it like a trader on your team:
+- "What do you think about ETH here?"
+- "Open a 2x long on BTC, stop at 62k"
+- "Check my portfolio every morning at 9am and tell me what changed"
+- "What have you learned this week?"
+
+### Scheduler - autonomous routines
+
+Tell your agent to do things on a schedule and it handles the rest:
+
+- "Check BTC funding rates every 4 hours and alert me if they spike"
+- "Rebalance check every morning at 8am UTC"
+- "Scan Polymarket for new high-volume markets every 6 hours"
+
+The agent creates, manages, and executes these autonomously.
+
+## Use cases
+
+SuperAgents are general-purpose - they're as flexible as the soul.md you write. Here's what people are building:
+
+<CardGroup cols={2}>
+  <Card title="Perp Trader" icon="chart-line">
+    An always-on trader on HyperLiquid that reads market structure, identifies setups, manages positions, and learns from every trade. Not a grid bot - a trader that thinks.
+  </Card>
+  <Card title="Prediction Market Analyst" icon="scale-balanced">
+    A Polymarket specialist that researches events, identifies mispriced odds, sizes bets, and manages a portfolio of positions. It reads news, updates probabilities, and acts on edge.
+  </Card>
+  <Card title="Portfolio Manager" icon="briefcase">
+    Manages capital across chains and protocols. Monitors allocations, rebalances when drift exceeds thresholds, and reports to you daily via Telegram.
+  </Card>
+  <Card title="Market Analyst" icon="magnifying-glass">
+    Your personal research desk. Tracks funding rates, open interest, whale movements, and narrative shifts. Briefs you on what matters and flags what's changing.
+  </Card>
+</CardGroup>
+
+Or combine all of the above. A single SuperAgent can trade, research, manage a portfolio, and brief you - all shaped by one soul.md.
+
+## Monitoring
+
+From the agent detail page:
+
+- **Chat**: Telegram conversation feed
+- **Feed**: Activity log of actions taken
+- **Wallet**: Balances and positions across chains
+- **Skills**: Enable/disable capabilities
+- **About**: Edit soul.md, configure settings, manage lifecycle
+
+## Best practices
+
+<CardGroup cols={2}>
+  <Card title="Give it a clear identity" icon="fingerprint">
+    The best agents have a strong point of view. "You're an aggressive squeeze trader" beats "trade crypto." Personality drives better decisions.
+  </Card>
+  <Card title="Set boundaries, not scripts" icon="list-check">
+    Define risk limits and lines it can't cross, but let the agent think. Overly prescriptive instructions turn a smart agent into a dumb bot.
+  </Card>
+  <Card title="Review its memory" icon="database">
+    Check what your agent is learning. If it's drawing the wrong conclusions, adjust soul.md to course-correct. The memory is transparent - read it.
+  </Card>
+  <Card title="Let it build routines" icon="calendar-check">
+    Set up scheduled check-ins, market scans, and portfolio reviews via Telegram. Your agent works best when it has consistent habits, not just ad-hoc commands.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Create a SuperAgent" icon="rocket" href="/guides/superagents-setup">
+    Step-by-step guide to launching your first SuperAgent
+  </Card>
+  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/skills">
+    Browse available skills and capabilities
+  </Card>
+</CardGroup>
+
+<Warning>
+SuperAgents are autonomous traders managing real capital. You shape their behavior through soul.md, but they make their own decisions within those bounds. Set appropriate risk limits, fund only what you're willing to risk, and monitor regularly. See the [Risk Disclosure](/support/risk-disclosure).
+</Warning>

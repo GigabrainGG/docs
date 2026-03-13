@@ -58,11 +58,11 @@ The Brain gives you access to 30+ data categories:
 
 All data types support **structured JSON responses** when you ask for it. Add "Respond as JSON" to your query. See the [Brain API Overview](/developers/brain-api-overview) for the full reference.
 
-## Gigabrain Agents
+## Gigabrain SuperAgents
 
-Agents are the execution side. They are autonomous trading programs that use The Brain to analyze markets and execute trades on your behalf, 24/7.
+SuperAgents are always-on AI agents that run 24/7 in their own cloud container. Each agent has a persistent identity (soul.md), long-term memory, installable skills, and its own Telegram bot for real-time interaction.
 
-Each agent gets its own dedicated **Hyperliquid wallet**. You define the strategy (when to enter, how much to risk, when to exit), fund the wallet, and the agent handles the rest. It monitors markets on a schedule you set, analyzes conditions using The Brain, and trades when your criteria are met.
+SuperAgents trade across multiple chains — HyperLiquid, Solana, EVM chains, and Polymarket — through modular skill packs you can enable or disable on the fly. They remember everything across sessions and learn from every interaction.
 
 <CardGroup cols={2}>
   <Card title="Chat" icon="message-bot" href="/core-features/chat">
@@ -73,11 +73,16 @@ Each agent gets its own dedicated **Hyperliquid wallet**. You define the strateg
     Automated intelligence feed that surfaces market-moving events
   </Card>
 
-  <Card title="Agents" icon="robot" href="/core-features/agents">
-    Autonomous trading with dedicated wallets on Hyperliquid
+  <Card title="SuperAgents" icon="bolt" href="/core-features/superagents">
+    Always-on agents with skills, memory, and Telegram chat
   </Card>
 
-  <Card title="Agent Setup Guide" icon="rocket" href="/guides/agents-setup">
-    Step-by-step guide to creating your first agent
+  <Card title="SuperAgent Setup" icon="rocket" href="/guides/superagents-setup">
+    Launch your first SuperAgent in minutes
   </Card>
+
+  <Card title="Skills" icon="puzzle-piece" href="/core-features/skills">
+    Browse available skill packs for your agents
+  </Card>
+
 </CardGroup>

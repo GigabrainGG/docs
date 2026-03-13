@@ -1,0 +1,112 @@
+---
+title: Migrate to SuperAgents
+description: Transitioning from scheduled agents to always-on SuperAgents
+---
+
+Scheduled (V1) agents are being sunset. SuperAgents are the next generation - always-on agents with persistent memory, Telegram integration, installable skills, and multi-chain wallets.
+
+This guide covers what's changing, what happens to your existing agents, and how to get started with SuperAgents.
+
+## What's changing
+
+| | Scheduled Agents (V1) | SuperAgents |
+|---|---|---|
+| **Execution** | Runs on a cron schedule or alpha trigger, then stops | Always-on - runs 24/7 in its own cloud computer |
+| **Interface** | Dashboard only | Telegram bot + dashboard |
+| **Configuration** | Goal + instructions fields | soul.md - natural language identity file |
+| **Memory** | System-managed | Agent-managed persistent memory |
+| **Capabilities** | Fixed trading toolset | Installable skills ecosystem |
+| **Wallets** | Single HyperLiquid wallet | EVM + Solana wallets |
+
+## What happens to my scheduled agents
+
+Your scheduled agents continue to work for now, but new scheduled agent creation is disabled. We recommend migrating to SuperAgents at your convenience.
+
+**Nothing is deleted automatically.** Your agents, wallets, and funds remain accessible on the [legacy agents page](https://gigabrain.gg/agents-legacy).
+
+## How to migrate
+
+Migration is manual - create a new SuperAgent and transfer your strategy and funds.
+
+<Steps>
+  <Step title="Review your V1 agent">
+    Go to your [legacy agents page](https://gigabrain.gg/agents-legacy) and open the agent you want to migrate. Note down:
+    - The agent's **goal** and **instructions** (Settings tab)
+    - Your **wallet address** and **balances** (Portfolio tab)
+  </Step>
+
+  <Step title="Withdraw funds from V1 wallet">
+    Before creating your SuperAgent, withdraw funds from your V1 agent's wallet to your personal wallet. You'll fund the new SuperAgent's wallet separately.
+
+    <Warning>
+    Always withdraw funds before disabling a V1 agent. While the wallet remains accessible, it's best to move funds to a wallet you fully control.
+    </Warning>
+  </Step>
+
+  <Step title="Create a SuperAgent">
+    Follow the [SuperAgent setup guide](/guides/superagents-setup) to create your new agent. When writing your soul.md, use your V1 agent's goal and instructions as a starting point - expand them into the natural language format that soul.md uses.
+
+    For example, if your V1 goal was:
+    ```
+    Trade ETH squeeze setups by going long when positioning extremes align with key support levels
+    ```
+
+    Your soul.md might include:
+    ```markdown
+    # Trading Style
+    You are a perpetual futures trader focused on squeeze setups.
+    Look for positioning extremes (funding rate spikes, OI divergences)
+    that align with key structural support levels on ETH.
+
+    # Risk Rules
+    - Maximum position size: 10% of portfolio
+    - Always set a stop loss
+    - No trades during major macro events
+    ```
+  </Step>
+
+  <Step title="Fund your SuperAgent">
+    Once your SuperAgent is live, fund its wallet from the Wallet tab on the dashboard. Send USDC to the displayed address.
+  </Step>
+
+  <Step title="Disable V1 agent">
+    After confirming your SuperAgent is running and funded, go back to your V1 agent and disable it.
+  </Step>
+</Steps>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can I keep using my scheduled agent?">
+    Yes, existing scheduled agents continue to run. However, new creation is disabled and scheduled agents will eventually be fully retired. We recommend migrating soon.
+  </Accordion>
+
+  <Accordion title="Is my V1 wallet transferred?">
+    No. SuperAgents get new wallets provisioned automatically. Withdraw funds from your V1 wallet and send them to your new SuperAgent's wallet.
+  </Accordion>
+
+  <Accordion title="Do I lose my agent's memory and learnings?">
+    V1 agent learnings don't carry over. SuperAgents have a different memory system that the agent manages itself. Your new agent will start building its own memory from day one.
+  </Accordion>
+
+  <Accordion title="What if I have multiple V1 agents?">
+    Migrate them one at a time. Each V1 agent becomes a separate SuperAgent with its own Telegram bot, wallet, and soul.md.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="SuperAgent Setup" icon="rocket" href="/guides/superagents-setup">
+    Step-by-step guide to creating your first SuperAgent
+  </Card>
+  <Card title="SuperAgents Overview" icon="bolt" href="/core-features/superagents">
+    Architecture, soul.md, memory, skills, and more
+  </Card>
+  <Card title="Skills" icon="puzzle-piece" href="/core-features/skills">
+    Browse available skill packs
+  </Card>
+  <Card title="Legacy Agents" icon="clock" href="https://gigabrain.gg/agents-legacy">
+    Access your existing scheduled agents
+  </Card>
+</CardGroup>

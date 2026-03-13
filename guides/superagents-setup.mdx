@@ -1,0 +1,97 @@
+---
+title: SuperAgent Setup
+description: Create and launch your first SuperAgent
+---
+
+This guide walks you through creating a SuperAgent from the Gigabrain dashboard.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+1. A [Gigabrain account](https://gigabrain.gg/login)
+2. A Telegram account
+3. USDC for funding the agent's wallets (optional, you can set up the agent first and fund later)
+
+## Create your SuperAgent
+
+<Steps>
+  <Step title="Create a Telegram bot">
+    Your SuperAgent needs its own Telegram bot to communicate with you.
+
+    1. Open Telegram and search for [@BotFather](https://t.me/BotFather)
+    2. Send `/newbot` and follow the prompts to name your bot
+    3. Copy the **bot token** BotFather gives you (looks like `7123456789:AAH...`)
+
+    <Tip>
+    Name your bot something memorable like `MyHLTrader_bot`. You'll be chatting with it daily.
+    </Tip>
+  </Step>
+
+  <Step title="Configure your agent">
+    Go to the [SuperAgents page](https://gigabrain.gg/agents) and click **Launch Agent**.
+
+    1. **Name**: Give your agent a name (or keep the random one)
+    2. **Telegram bot token**: Paste the token from Step 1
+    3. **Soul.md**: Write your agent's identity - who it is, how it thinks, what rules it follows. This is the most important part. See [soul.md examples](/core-features/superagents#soul---who-your-agent-is) for inspiration.
+    4. **Model**: Choose the LLM model your agent will use
+
+    <Note>
+    You can change all of these settings later from the agent's About tab.
+    </Note>
+  </Step>
+
+  <Step title="Launch">
+    Click **Create** and your agent will begin provisioning. This takes about 30 seconds. Once the status shows **Live**, your agent is running and ready.
+
+    Open Telegram, find your bot, and send it a message to start chatting.
+  </Step>
+</Steps>
+
+## Fund your agent
+
+SuperAgents get dedicated wallets provisioned automatically. To fund them:
+
+1. Go to your agent's **Wallet** tab on the dashboard
+2. Copy the wallet address for the chain you want to fund (EVM or Solana)
+3. Send USDC (or SOL/ETH for gas) to that address from your personal wallet
+
+<Warning>
+Only send funds you're willing to risk. Agent wallets are managed by the platform. Always keep your own backups of any significant holdings elsewhere.
+</Warning>
+
+## Managing your agent
+
+### Pause and resume
+
+From the agent detail page sidebar, you can:
+- **Pause**: Stops the computer. No compute costs, but the agent won't respond until resumed.
+- **Resume**: Restarts the computer. Memory and configuration are preserved.
+- **Restart**: Force a fresh restart if the agent is misbehaving.
+
+### Edit soul.md
+
+Go to the **About** tab and edit the soul.md directly. Changes are picked up automatically within seconds, no restart needed.
+
+### Enable or disable skills
+
+Go to the **Skills** tab to toggle capabilities on or off. Disabling a skill prevents the agent from using it. The agent restarts automatically when skills change.
+
+### Destroy
+
+Permanently deletes the agent and its computer. Memory and configuration are not recoverable.
+
+<Warning>
+Before destroying an agent, withdraw any remaining funds from its wallets. Destruction is permanent.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="SuperAgents Overview" icon="bolt" href="/core-features/superagents">
+    Learn about soul.md, memory, skills, and architecture
+  </Card>
+  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/skills">
+    Browse all available skills
+  </Card>
+</CardGroup>

@@ -1,0 +1,152 @@
+---
+title: Skills
+description: Teach your SuperAgent new capabilities with the Agent Skills open standard
+---
+
+Skills are how your SuperAgent learns new capabilities. Want it to trade perps on HyperLiquid? Install the hyperliquid skill. Want it to research Polymarket? Install polymarket. Want it to do something no one's built yet? Write your own in 10 minutes.
+
+<Tip>
+SuperAgents use the [Agent Skills](https://agentskills.io) open standard - the same skill format supported by Claude Code, OpenClaw, Cursor, GitHub Copilot, Windsurf, Gemini CLI, and 26+ other platforms. Any skill built for those platforms works on a SuperAgent, and any skill you write for your SuperAgent works on those platforms.
+</Tip>
+
+## How skills work
+
+A skill is just a folder with a `SKILL.md` file and optional scripts. The SKILL.md contains markdown instructions that teach the agent what the skill does and how to use it. No SDK, no API wrapper, no boilerplate - just plain language instructions and the tools to back them up.
+
+```
+my-skill/
+  SKILL.md          # Instructions (required)
+  scripts/          # Executable code (optional)
+  references/       # Extra docs loaded on demand (optional)
+```
+
+When your agent encounters a task that matches a skill's description, it loads the instructions and follows them. Skills are loaded efficiently - metadata first, full instructions only when needed.
+
+## Official skills
+
+These ship with every SuperAgent and cover the core trading stack:
+
+| Skill | What it does |
+|-------|-------------|
+| **hyperliquid** | Trade perpetual futures and spot on HyperLiquid. Market, limit, bracket, and TWAP orders. Position management, account analytics. |
+| **polymarket** | Discover, research, and trade prediction markets. Odds analysis, event tracking, portfolio management. |
+| **gigabrain-intel** | Market research via the Gigabrain Brain API. Web search, news, sentiment analysis, on-chain insights. |
+| **portfolio-tracker** | Portfolio overview, P&L tracking, position monitoring across chains. |
+| **evm-wallet** | EVM wallet operations - transfers, balance checks, transaction history. |
+| **solana-wallet** | Solana wallet operations - transfers, balance checks, token management. |
+| **solana-swap** | Token swaps on Solana via Jupiter. |
+
+<Card title="Browse all official skills" icon="github" href="https://github.com/GigabrainGG/skills">
+  Full source code and documentation for every official skill.
+</Card>
+
+## Installing skills
+
+To install a community skill, paste the GitHub link to the skill on the agent's **Skills** tab. The platform pulls the skill and syncs it to your agent automatically.
+
+Browse skills from any of these registries:
+
+<CardGroup cols={3}>
+  <Card title="skills.sh" icon="terminal" href="https://skills.sh">
+    Vercel's open directory with 110,000+ skills. The largest Agent Skills registry.
+  </Card>
+  <Card title="ClawHub" icon="puzzle-piece" href="https://clawhub.ai">
+    OpenClaw's registry with 2,800+ curated skills.
+  </Card>
+  <Card title="GitHub" icon="github" href="https://github.com/GigabrainGG/skills">
+    Official Gigabrain skills, open source.
+  </Card>
+</CardGroup>
+
+Any skill built for Claude Code, OpenClaw, Cursor, or any Agent Skills-compatible platform works on a SuperAgent. Just paste the link.
+
+## Writing your own skills
+
+You don't need to be a developer. A skill is just a markdown file that teaches your agent something new. If you can describe it clearly, your agent can learn it.
+
+### Example: a simple research skill
+
+A skill that gives your agent access to a custom data source. The SKILL.md describes what it does and how to call the script:
+
+````markdown
+---
+name: fear-greed
+description: Check the Crypto Fear & Greed Index. Use when the user asks
+  about market sentiment, fear/greed levels, or overall market mood.
+license: MIT
+metadata:
+  author: you
+  version: "1.0"
+---
+
+# Fear & Greed Index
+
+Check current crypto market sentiment.
+
+## Usage
+
+```bash
+uv run ${CLAUDE_SKILL_DIR}/scripts/fear_greed.py
+```
+
+Returns the current index value (0-100), classification
+(Extreme Fear / Fear / Neutral / Greed / Extreme Greed),
+and the previous day's value for comparison.
+
+## Interpretation
+
+- 0-25: Extreme Fear - historically a buying opportunity
+- 25-45: Fear - market is cautious
+- 45-55: Neutral
+- 55-75: Greed - market is confident
+- 75-100: Extreme Greed - consider taking profits
+````
+
+The `scripts/fear_greed.py` file fetches the API and prints the result. Scripts declare their own dependencies via [PEP 723](https://peps.python.org/pep-0723/) inline metadata and run in isolation via `uv run` - no dependency conflicts between skills.
+
+That's it. Your agent now knows when to check market sentiment, how to call the script, and how to interpret the results.
+
+### SKILL.md format
+
+The frontmatter defines metadata:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Lowercase, hyphens only, max 64 chars |
+| `description` | Yes | What it does and when to use it, max 1024 chars |
+| `license` | No | License identifier (e.g. "MIT") |
+| `compatibility` | No | Environment requirements |
+| `metadata` | No | Key-value pairs (author, version, etc.) |
+
+The body is markdown instructions. Keep it under 500 lines - use a `references/` directory for detailed documentation that loads on demand.
+
+## Managing skills
+
+### Enable or disable
+
+From the agent's **Skills** tab on the dashboard, toggle any skill on or off. The agent restarts automatically when skills change. Disabled skills are completely invisible to the agent.
+
+### Skill tiers
+
+| Tier | Source | How it works |
+|------|--------|-------------|
+| **Official** | [GigabrainGG/skills](https://github.com/GigabrainGG/skills) | Maintained by Gigabrain. Auto-synced to every agent. |
+| **Third Party** | Skills manifest | Community skills synced from Git repos. |
+| **Custom** | User-installed | Skills you write and install directly. |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="SuperAgents" icon="bolt" href="/core-features/superagents">
+    Learn about the SuperAgent architecture
+  </Card>
+  <Card title="Agent Skills Specification" icon="book" href="https://agentskills.io/specification">
+    The full open standard specification
+  </Card>
+  <Card title="Official Skills" icon="github" href="https://github.com/GigabrainGG/skills">
+    Browse source code and documentation
+  </Card>
+  <Card title="ClawHub" icon="puzzle-piece" href="https://clawhub.ai">
+    Discover community-built skills
+  </Card>
+</CardGroup>
