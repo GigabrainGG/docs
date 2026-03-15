@@ -31,12 +31,38 @@
     {
       "name": "Agent Chat & Monitoring",
       "description": "Chat with agents and monitor execution history"
+    },
+    {
+      "name": "SuperAgents",
+      "description": "Launch, list, get, and destroy SuperAgents"
+    },
+    {
+      "name": "SuperAgent Lifecycle",
+      "description": "Pause, resume, and restart SuperAgents"
+    },
+    {
+      "name": "SuperAgent Chat",
+      "description": "Chat with SuperAgents"
+    },
+    {
+      "name": "SuperAgent Monitoring",
+      "description": "Health checks, files, and skills"
+    },
+    {
+      "name": "SuperAgent Config",
+      "description": "Update soul, model, profile, and skills configuration"
+    },
+    {
+      "name": "SuperAgent Wallet",
+      "description": "View SuperAgent wallet details"
     }
   ],
   "paths": {
     "/v1/chat": {
       "post": {
-        "tags": ["Brain"],
+        "tags": [
+          "Brain"
+        ],
         "summary": "Chat with The Brain",
         "description": "Send a natural language query to The Brain. It routes to the right specialist(s) automatically. Add \"Respond as JSON with:\" to your message and specify fields to get structured JSON back.",
         "operationId": "chat",
@@ -95,7 +121,9 @@
     },
     "/v1/agents": {
       "post": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "Create agent",
         "description": "Create a new trading agent. Costs $0.20 in credits. The agent is created disabled by default.",
         "operationId": "createAgent",
@@ -166,7 +194,9 @@
         }
       },
       "get": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "List agents",
         "description": "List all agents owned by the authenticated user.",
         "operationId": "listAgents",
@@ -203,7 +233,9 @@
     },
     "/v1/agents/{agent_id}": {
       "get": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "Get agent",
         "description": "Get details of a specific agent including configuration, triggers, stats, and status.",
         "operationId": "getAgent",
@@ -232,7 +264,9 @@
         }
       },
       "patch": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "Update agent",
         "description": "Update an agent's configuration. Only provided fields are updated.",
         "operationId": "updateAgent",
@@ -271,7 +305,9 @@
         }
       },
       "delete": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "Delete agent",
         "description": "Permanently delete an agent and all its data. **Export wallet keys and withdraw funds BEFORE deleting. This is irreversible.**",
         "operationId": "deleteAgent",
@@ -302,7 +338,9 @@
     },
     "/v1/agents/{agent_id}/enable": {
       "post": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "Enable agent",
         "description": "Start the agent. It will begin executing on its configured triggers. Trading agents require a wallet to be generated and activated first.",
         "operationId": "enableAgent",
@@ -333,7 +371,9 @@
     },
     "/v1/agents/{agent_id}/disable": {
       "post": {
-        "tags": ["Agents"],
+        "tags": [
+          "Agents"
+        ],
         "summary": "Disable agent",
         "description": "Stop the agent. All trigger-based execution pauses. Configuration and history are preserved.",
         "operationId": "disableAgent",
@@ -364,7 +404,9 @@
     },
     "/v1/agents/{agent_id}/wallet": {
       "post": {
-        "tags": ["Wallet"],
+        "tags": [
+          "Wallet"
+        ],
         "summary": "Generate wallet",
         "description": "Generate a Hyperliquid trading wallet for the agent. Returns the existing wallet if one has already been generated. Required before enabling a trading agent.",
         "operationId": "generateWallet",
@@ -393,7 +435,9 @@
         }
       },
       "get": {
-        "tags": ["Wallet"],
+        "tags": [
+          "Wallet"
+        ],
         "summary": "Get wallet",
         "description": "Get wallet details including address, chain, exchange, and status.",
         "operationId": "getWallet",
@@ -424,7 +468,9 @@
     },
     "/v1/agents/{agent_id}/wallet/activate": {
       "post": {
-        "tags": ["Wallet"],
+        "tags": [
+          "Wallet"
+        ],
         "summary": "Activate wallet",
         "description": "Activate the wallet for live trading. The wallet must be funded first. Returns an error with the deposit address if balance is insufficient.",
         "operationId": "activateWallet",
@@ -475,7 +521,9 @@
     },
     "/v1/agents/{agent_id}/wallet/send": {
       "post": {
-        "tags": ["Wallet"],
+        "tags": [
+          "Wallet"
+        ],
         "summary": "Send funds",
         "description": "Send funds from the agent's wallet to a destination address.",
         "operationId": "sendFunds",
@@ -516,7 +564,9 @@
     },
     "/v1/agents/{agent_id}/chat": {
       "post": {
-        "tags": ["Agent Chat & Monitoring"],
+        "tags": [
+          "Agent Chat & Monitoring"
+        ],
         "summary": "Chat with agent",
         "description": "Send a message to an agent and get a response. Requires credits. With `stream: false` (default), returns a JSON object. With `stream: true`, returns an SSE stream of events.",
         "operationId": "chatWithAgent",
@@ -557,7 +607,9 @@
     },
     "/v1/agents/{agent_id}/runs": {
       "get": {
-        "tags": ["Agent Chat & Monitoring"],
+        "tags": [
+          "Agent Chat & Monitoring"
+        ],
         "summary": "Get agent runs",
         "description": "Get execution history for a specific agent, including trigger type, status, output, and credits charged.",
         "operationId": "getAgentRuns",
@@ -600,7 +652,9 @@
     },
     "/v1/agents/suggest": {
       "post": {
-        "tags": ["Agent Chat & Monitoring"],
+        "tags": [
+          "Agent Chat & Monitoring"
+        ],
         "summary": "Suggest strategy",
         "description": "Get AI-generated trading strategy suggestions. Pass any market context, preferences, or constraints in the optional `context` object. Rate limited to 10 requests per hour.",
         "operationId": "suggestStrategy",
@@ -651,6 +705,854 @@
           }
         }
       }
+    },
+    "/v1/superagents": {
+      "post": {
+        "tags": [
+          "SuperAgents"
+        ],
+        "summary": "Launch SuperAgent",
+        "description": "Launch a new always-on SuperAgent. Each agent runs in its own cloud container with persistent memory and optional Telegram bot.",
+        "operationId": "launchSuperagent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LaunchSuperagentRequest"
+              },
+              "examples": {
+                "minimal": {
+                  "summary": "Minimal launch",
+                  "value": {
+                    "name": "My Trading Agent",
+                    "model": "gpt-4o",
+                    "model_provider": "openai"
+                  }
+                },
+                "with_soul": {
+                  "summary": "With custom soul",
+                  "value": {
+                    "name": "ETH Scalper",
+                    "model": "gpt-4o",
+                    "model_provider": "openai",
+                    "soul_md": "You are an aggressive ETH scalper. Focus on 1m and 5m timeframes.",
+                    "description": "Short-term ETH momentum trades"
+                  }
+                },
+                "with_openrouter": {
+                  "summary": "With OpenRouter",
+                  "value": {
+                    "name": "Degen Trader",
+                    "model": "anthropic/claude-sonnet-4",
+                    "model_provider": "openrouter",
+                    "description": "High-risk momentum plays"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent launched",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LaunchSuperagentResponse"
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "name": "ETH Scalper",
+                  "bot_username": null,
+                  "wallet_address": "0x1234...abcd",
+                  "status": "running"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error (e.g. name is required)"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SuperAgents"
+        ],
+        "summary": "List SuperAgents",
+        "description": "List all SuperAgents owned by the authenticated user.",
+        "operationId": "listSuperagents",
+        "responses": {
+          "200": {
+            "description": "Agent list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "agents": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SuperAgentSummary"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "agents": [
+                    {
+                      "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                      "name": "ETH Scalper",
+                      "description": "Short-term ETH momentum trades",
+                      "status": "running",
+                      "model": "gpt-4o",
+                      "created_at": "2026-03-15T10:00:00Z"
+                    },
+                    {
+                      "agent_id": "b2c3d4e5-6789-01ab-cdef-2345678901bc",
+                      "name": "Degen Trader",
+                      "description": "High-risk momentum plays",
+                      "status": "paused",
+                      "model": null,
+                      "created_at": "2026-03-14T08:30:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}": {
+      "get": {
+        "tags": [
+          "SuperAgents"
+        ],
+        "summary": "Get SuperAgent",
+        "description": "Get full details of a specific SuperAgent.",
+        "operationId": "getSuperagent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAgentSummary"
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "name": "ETH Scalper",
+                  "description": "Short-term ETH momentum trades",
+                  "status": "running",
+                  "model": "gpt-4o",
+                  "created_at": "2026-03-15T10:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Access denied — you don't own this agent"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SuperAgents"
+        ],
+        "summary": "Destroy SuperAgent",
+        "description": "Permanently destroy a SuperAgent and its container. **This is irreversible. Withdraw wallet funds first.**",
+        "operationId": "destroySuperagent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent destroyed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAgentStatus"
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "destroyed"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/pause": {
+      "post": {
+        "tags": [
+          "SuperAgent Lifecycle"
+        ],
+        "summary": "Pause SuperAgent",
+        "description": "Pause a running SuperAgent. The container stays alive but the agent stops processing.",
+        "operationId": "pauseSuperagent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent paused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAgentStatus"
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "paused"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/resume": {
+      "post": {
+        "tags": [
+          "SuperAgent Lifecycle"
+        ],
+        "summary": "Resume SuperAgent",
+        "description": "Resume a paused SuperAgent.",
+        "operationId": "resumeSuperagent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent resumed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAgentStatus"
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "running"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/restart": {
+      "post": {
+        "tags": [
+          "SuperAgent Lifecycle"
+        ],
+        "summary": "Restart SuperAgent",
+        "description": "Restart a SuperAgent's container. Useful after updating soul or model.",
+        "operationId": "restartSuperagent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent restarted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAgentStatus"
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "running"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/chat": {
+      "post": {
+        "tags": [
+          "SuperAgent Chat"
+        ],
+        "summary": "Chat with SuperAgent",
+        "description": "Send a message to a SuperAgent. Supports streaming via SSE. Each chat session is identified by a `session_id`.",
+        "operationId": "chatWithSuperagent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentChatRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent response (non-streaming)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentChatResponse"
+                },
+                "example": {
+                  "content": "I'm currently monitoring ETH/USDT on the 5m chart. Funding is slightly negative which favors longs. Waiting for RSI to dip below 35 for entry.",
+                  "session_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/health": {
+      "get": {
+        "tags": [
+          "SuperAgent Monitoring"
+        ],
+        "summary": "Health check",
+        "description": "Check if a SuperAgent's container is healthy and responding.",
+        "operationId": "superagentHealth",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "agent_id": {
+                      "type": "string"
+                    },
+                    "healthy": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "healthy": true
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/files": {
+      "get": {
+        "tags": [
+          "SuperAgent Monitoring"
+        ],
+        "summary": "Get agent files",
+        "description": "Retrieve the agent's soul.md (identity) and memory.md (learned context).",
+        "operationId": "superagentFiles",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "agent_id": {
+                      "type": "string"
+                    },
+                    "soul_md": {
+                      "type": "string",
+                      "description": "The agent's identity and instructions"
+                    },
+                    "memory_md": {
+                      "type": "string",
+                      "description": "The agent's learned context and notes"
+                    }
+                  }
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "soul_md": "You are an aggressive ETH scalper. Focus on 1m and 5m timeframes.",
+                  "memory_md": "## Trading Log\n- 2026-03-15: Entered long ETH at $3,450, targeting $3,520"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/skills": {
+      "get": {
+        "tags": [
+          "SuperAgent Monitoring"
+        ],
+        "summary": "List skills",
+        "description": "List all available skills for a SuperAgent, including enabled/disabled status.",
+        "operationId": "superagentSkills",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Skills list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "agent_id": {
+                      "type": "string"
+                    },
+                    "skills": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SuperAgentSkill"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "skills": [
+                    {
+                      "name": "hyperliquid",
+                      "description": "Trade perpetuals on HyperLiquid",
+                      "enabled": true
+                    },
+                    {
+                      "name": "polymarket",
+                      "description": "Bet on prediction markets",
+                      "enabled": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SuperAgent Config"
+        ],
+        "summary": "Update skills config",
+        "description": "Enable or disable specific skills. Pass a list of skill names to disable.",
+        "operationId": "updateSuperagentSkills",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "disabled"
+                ],
+                "properties": {
+                  "disabled": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of skill names to disable. Pass an empty array to enable all."
+                  }
+                }
+              },
+              "examples": {
+                "disable_one": {
+                  "summary": "Disable a skill",
+                  "value": {
+                    "disabled": [
+                      "polymarket"
+                    ]
+                  }
+                },
+                "enable_all": {
+                  "summary": "Enable all skills",
+                  "value": {
+                    "disabled": []
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Skills config updated",
+            "content": {
+              "application/json": {
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "updated"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/wallet": {
+      "get": {
+        "tags": [
+          "SuperAgent Wallet"
+        ],
+        "summary": "Get wallet",
+        "description": "Get the SuperAgent's wallet address and status. No private keys are exposed.",
+        "operationId": "getSuperagentWallet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wallet details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAgentWallet"
+                },
+                "example": {
+                  "evm_address": "0x1a2B3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0B",
+                  "solana_address": "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/soul": {
+      "put": {
+        "tags": [
+          "SuperAgent Config"
+        ],
+        "summary": "Update soul",
+        "description": "Replace the agent's soul.md — its core identity and instructions.",
+        "operationId": "updateSuperagentSoul",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "soul_md"
+                ],
+                "properties": {
+                  "soul_md": {
+                    "type": "string",
+                    "description": "The new soul.md content"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Soul updated",
+            "content": {
+              "application/json": {
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "updated"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/model": {
+      "put": {
+        "tags": [
+          "SuperAgent Config"
+        ],
+        "summary": "Update model",
+        "description": "Change the LLM model powering the agent.",
+        "operationId": "updateSuperagentModel",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "model",
+                  "model_provider"
+                ],
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "description": "Model ID from the selected provider"
+                  },
+                  "model_provider": {
+                    "type": "string",
+                    "enum": [
+                      "openai",
+                      "anthropic",
+                      "xai",
+                      "openrouter",
+                      "venice"
+                    ],
+                    "description": "Provider of the model"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Model updated",
+            "content": {
+              "application/json": {
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "updated"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/v1/superagents/{agent_id}/profile": {
+      "put": {
+        "tags": [
+          "SuperAgent Config"
+        ],
+        "summary": "Update profile",
+        "description": "Update the agent's display name and/or description.",
+        "operationId": "updateSuperagentProfile",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SuperAgentId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated",
+            "content": {
+              "application/json": {
+                "example": {
+                  "agent_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+                  "status": "updated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "At least one of name or description is required"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -667,6 +1569,16 @@
         "in": "path",
         "required": true,
         "description": "The agent's unique identifier",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "SuperAgentId": {
+        "name": "agent_id",
+        "in": "path",
+        "required": true,
+        "description": "The SuperAgent's unique identifier",
         "schema": {
           "type": "string",
           "format": "uuid"
@@ -743,7 +1655,9 @@
     "schemas": {
       "ChatRequest": {
         "type": "object",
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "properties": {
           "message": {
             "type": "string",
@@ -760,7 +1674,13 @@
           },
           "model_provider": {
             "type": "string",
-            "enum": ["openai", "anthropic", "xai", "openrouter", "venice"],
+            "enum": [
+              "openai",
+              "anthropic",
+              "xai",
+              "openrouter",
+              "venice"
+            ],
             "description": "Provider of the custom model. Must match the provider you connected your API key for."
           }
         }
@@ -784,7 +1704,12 @@
       },
       "AgentCreate": {
         "type": "object",
-        "required": ["name", "goal", "instructions", "triggers"],
+        "required": [
+          "name",
+          "goal",
+          "instructions",
+          "triggers"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -819,7 +1744,13 @@
           },
           "model_provider": {
             "type": "string",
-            "enum": ["openai", "anthropic", "xai", "openrouter", "venice"],
+            "enum": [
+              "openai",
+              "anthropic",
+              "xai",
+              "openrouter",
+              "venice"
+            ],
             "description": "Provider of the custom model. Required when using a custom model ID."
           },
           "enabled": {
@@ -973,11 +1904,16 @@
       },
       "Trigger": {
         "type": "object",
-        "required": ["type"],
+        "required": [
+          "type"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["scheduled", "alpha"],
+            "enum": [
+              "scheduled",
+              "alpha"
+            ],
             "description": "`scheduled` for cron-based, `alpha` for signal-based"
           },
           "cron": {
@@ -1028,7 +1964,10 @@
       },
       "WalletSend": {
         "type": "object",
-        "required": ["destination", "amount"],
+        "required": [
+          "destination",
+          "amount"
+        ],
         "properties": {
           "destination": {
             "type": "string",
@@ -1059,7 +1998,9 @@
       },
       "AgentChatRequest": {
         "type": "object",
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "properties": {
           "message": {
             "type": "string",
@@ -1101,7 +2042,11 @@
           "trigger_type": {
             "type": "string",
             "nullable": true,
-            "enum": ["scheduled", "alpha", "manual"]
+            "enum": [
+              "scheduled",
+              "alpha",
+              "manual"
+            ]
           },
           "status": {
             "type": "string"
@@ -1194,6 +2139,139 @@
           },
           "error": {
             "type": "string"
+          }
+        }
+      },
+      "LaunchSuperagentRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "model",
+          "model_provider"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name for the agent"
+          },
+          "soul_md": {
+            "type": "string",
+            "description": "Custom soul.md content — the agent's identity and instructions"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of what the agent does"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model ID from the selected provider"
+          },
+          "model_provider": {
+            "type": "string",
+            "enum": [
+              "openai",
+              "anthropic",
+              "xai",
+              "openrouter",
+              "venice"
+            ],
+            "description": "Provider for the model"
+          },
+          "telegram_bot_token": {
+            "type": "string",
+            "description": "Telegram bot token (from @BotFather) for Telegram interface"
+          }
+        }
+      },
+      "LaunchSuperagentResponse": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "bot_username": {
+            "type": "string",
+            "nullable": true,
+            "description": "Telegram bot username (if token was provided)"
+          },
+          "wallet_address": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "SuperAgentSummary": {
+        "type": "object",
+        "description": "SuperAgent details",
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "running, paused, stopped, etc."
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SuperAgentStatus": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "SuperAgentSkill": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SuperAgentWallet": {
+        "type": "object",
+        "description": "Agent wallet addresses — no private keys are exposed",
+        "properties": {
+          "evm_address": {
+            "type": "string",
+            "nullable": true,
+            "description": "EVM wallet address (Ethereum/HyperLiquid)"
+          },
+          "solana_address": {
+            "type": "string",
+            "nullable": true,
+            "description": "Solana wallet address"
           }
         }
       }

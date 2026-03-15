@@ -10,6 +10,10 @@ One endpoint. Stateless. Ask anything in plain English, get back trade-ready ana
 POST /v1/chat
 ```
 
+<Note>
+Rate limit: **60 requests per minute**. Set your HTTP client timeout to at least 600 seconds. See [Auth & Basics](/developers/introduction) for full details.
+</Note>
+
 ## Get a Trade Setup
 
 Ask The Brain for a trade and get back entry, stop-loss, and targets you can feed straight into your execution logic.
@@ -196,6 +200,10 @@ Find narratives gaining momentum before they go mainstream.
     ```
   </Tab>
 </Tabs>
+
+<Card title="SuperAgents API" icon="robot" href="/developers/superagents-api">
+  Want always-on agents instead? Launch, manage, and chat with autonomous trading agents programmatically.
+</Card>
 
 <Warning>
 Gigabrain provides market intelligence tools, not financial advice. Always do your own research before trading. See the [Risk Disclosure](/support/risk-disclosure).

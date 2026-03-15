@@ -28,7 +28,8 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart"
+              "quickstart",
+              "pricing"
             ]
           },
           {
@@ -81,6 +82,64 @@
             "pages": [
               "developers/brain-api-overview",
               "POST /v1/chat"
+            ]
+          },
+          {
+            "group": "SuperAgents",
+            "pages": [
+              "developers/superagents-api",
+              {
+                "group": "Agents",
+                "expanded": true,
+                "pages": [
+                  "POST /v1/superagents",
+                  "GET /v1/superagents",
+                  "GET /v1/superagents/{agent_id}",
+                  "DELETE /v1/superagents/{agent_id}"
+                ]
+              },
+              {
+                "group": "Lifecycle",
+                "expanded": true,
+                "pages": [
+                  "POST /v1/superagents/{agent_id}/pause",
+                  "POST /v1/superagents/{agent_id}/resume",
+                  "POST /v1/superagents/{agent_id}/restart"
+                ]
+              },
+              {
+                "group": "Chat",
+                "expanded": true,
+                "pages": [
+                  "POST /v1/superagents/{agent_id}/chat"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "expanded": true,
+                "pages": [
+                  "GET /v1/superagents/{agent_id}/health",
+                  "GET /v1/superagents/{agent_id}/files",
+                  "GET /v1/superagents/{agent_id}/skills"
+                ]
+              },
+              {
+                "group": "Config",
+                "expanded": true,
+                "pages": [
+                  "PUT /v1/superagents/{agent_id}/soul",
+                  "PUT /v1/superagents/{agent_id}/model",
+                  "PUT /v1/superagents/{agent_id}/profile",
+                  "PUT /v1/superagents/{agent_id}/skills"
+                ]
+              },
+              {
+                "group": "Wallet",
+                "expanded": true,
+                "pages": [
+                  "GET /v1/superagents/{agent_id}/wallet"
+                ]
+              }
             ]
           }
         ]

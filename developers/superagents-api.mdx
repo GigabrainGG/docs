@@ -1,0 +1,172 @@
+---
+title: "SuperAgents API"
+description: "Launch and manage always-on trading agents programmatically"
+icon: "robot"
+---
+
+The SuperAgents API gives you full lifecycle control over always-on AI agents. Each SuperAgent runs in its own cloud container with persistent memory, installable skills, and multi-chain trading.
+
+```
+Base URL: https://api.gigabrain.gg/v1/superagents
+```
+
+<Warning>
+- **Rate limit:** 60 requests per minute
+- **Minimum credits:** $100 to launch a SuperAgent through the API
+- **Max agents:** 10 SuperAgents per account
+</Warning>
+
+## Quick Start
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    import requests
+
+    KEY = "gb_sk_..."
+    BASE = "https://api.gigabrain.gg/v1/superagents"
+    headers = {"Authorization": f"Bearer {KEY}", "Content-Type": "application/json"}
+
+    # Launch an agent
+    agent = requests.post(BASE, headers=headers, json={
+        "name": "ETH Scalper",
+        "soul_md": "You are an aggressive ETH scalper. Focus on short timeframes."
+    }).json()
+
+    agent_id = agent["agent_id"]
+    print(f"Launched: {agent_id}")
+
+    # Chat with it
+    reply = requests.post(f"{BASE}/{agent_id}/chat", headers=headers, json={
+        "message": "What's your current view on ETH?"
+    }).json()
+
+    print(reply["content"])
+
+    # Check health
+    health = requests.get(f"{BASE}/{agent_id}/health", headers=headers).json()
+    print(f"Healthy: {health['healthy']}")
+    ```
+  </Tab>
+
+  <Tab title="JavaScript">
+    ```javascript
+    const KEY = "gb_sk_...";
+    const BASE = "https://api.gigabrain.gg/v1/superagents";
+    const headers = {
+      Authorization: `Bearer ${KEY}`,
+      "Content-Type": "application/json",
+    };
+
+    // Launch an agent
+    const agent = await fetch(BASE, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "ETH Scalper",
+        soul_md: "You are an aggressive ETH scalper. Focus on short timeframes.",
+      }),
+    }).then((r) => r.json());
+
+    console.log(`Launched: ${agent.agent_id}`);
+
+    // Chat with it
+    const reply = await fetch(`${BASE}/${agent.agent_id}/chat`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ message: "What's your current view on ETH?" }),
+    }).then((r) => r.json());
+
+    console.log(reply.content);
+    ```
+  </Tab>
+
+  <Tab title="cURL">
+    ```bash
+    KEY="gb_sk_..."
+    BASE="https://api.gigabrain.gg/v1/superagents"
+
+    # Launch
+    curl -X POST $BASE \
+      -H "Authorization: Bearer $KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"name": "ETH Scalper", "soul_md": "You are an aggressive ETH scalper."}'
+
+    # List
+    curl -H "Authorization: Bearer $KEY" $BASE
+
+    # Chat
+    curl -X POST "$BASE/<agent_id>/chat" \
+      -H "Authorization: Bearer $KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"message": "What positions are you monitoring?"}'
+    ```
+  </Tab>
+</Tabs>
+
+## Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/v1/superagents` | Launch a new SuperAgent |
+| `GET` | `/v1/superagents` | List your SuperAgents |
+| `GET` | `/v1/superagents/:id` | Get agent details |
+| `DELETE` | `/v1/superagents/:id` | Destroy agent |
+| `POST` | `/v1/superagents/:id/pause` | Pause agent |
+| `POST` | `/v1/superagents/:id/resume` | Resume agent |
+| `POST` | `/v1/superagents/:id/restart` | Restart agent |
+| `POST` | `/v1/superagents/:id/chat` | Chat with agent |
+| `GET` | `/v1/superagents/:id/health` | Health check |
+| `GET` | `/v1/superagents/:id/files` | Get soul.md and memory.md |
+| `GET` | `/v1/superagents/:id/skills` | List skills |
+| `PUT` | `/v1/superagents/:id/skills` | Update skills config |
+| `GET` | `/v1/superagents/:id/wallet` | Get wallet (public address only) |
+| `PUT` | `/v1/superagents/:id/soul` | Update soul.md |
+| `PUT` | `/v1/superagents/:id/model` | Change LLM model |
+| `PUT` | `/v1/superagents/:id/profile` | Update name/description |
+
+## Key Concepts
+
+### Soul.md
+
+The agent's identity file. Controls personality, trading style, risk parameters, and behavior. You can set it at launch or update it later via `PUT /:id/soul`.
+
+### Skills
+
+Modular capabilities your agent can use — trading on HyperLiquid, betting on Polymarket, etc. List available skills with `GET /:id/skills` and toggle them with `PUT /:id/skills`.
+
+### Wallet
+
+Each SuperAgent gets a dedicated trading wallet managed by Privy. The API only exposes public addresses — private keys are never returned. Use the dashboard to manage funds.
+
+## Error Handling
+
+All errors follow a consistent format:
+
+```json
+{
+  "statusCode": 400,
+  "message": "name is required",
+  "error": "Bad Request"
+}
+```
+
+Upstream errors from the agent runtime use:
+
+```json
+{
+  "error": {
+    "message": "Container not found",
+    "type": "upstream_error"
+  }
+}
+```
+
+| Status | Meaning |
+| --- | --- |
+| `400` | Validation error |
+| `401` | Invalid or missing API key |
+| `403` | You don't own this agent |
+| `404` | Agent or resource not found |
+| `429` | Rate limit exceeded |
+| `500` | Server error |

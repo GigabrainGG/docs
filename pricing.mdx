@@ -1,19 +1,19 @@
 ---
 title: Pricing
-description: Access plans for Gigabrain
+description: Access plans and pricing for Gigabrain
 ---
 
-Gigabrain offers two access models: **pay-as-you-go** starting at $5, or **token-gated access** for BRAIN holders.
+Gigabrain offers two access models: **pay-as-you-go** starting at \$5, or **token-gated access** for BRAIN holders.
 
 ## Pay-as-you-go
 
-Start using Gigabrain for as low as $5.
+Start using Gigabrain for as low as \$5.
 
 **What's included:**
 
 - Chat: Pay per query for market analysis and trade intelligence
 - API access: Programmatic queries with structured JSON responses
-- Agents: Deploy autonomous trading strategies
+- SuperAgents: Deploy autonomous trading agents
 - Alpha Feed: Real-time intelligence on market moving events
 
 **How it works:**
@@ -28,7 +28,7 @@ Hold 1M BRAIN tokens to unlock unlimited access.
 
 - Unlimited Chat: No per query fees, ask as many questions as you need
 - API access: Programmatic queries with structured JSON responses
-- Agents: Deploy autonomous trading strategies
+- SuperAgents: Deploy autonomous trading agents
 - Alpha Feed: Real-time intelligence on market moving events
 - Monthly API credits: Free API credits based on token holdings
 - Alpha Community: Private community access for BRAIN holders
@@ -37,17 +37,50 @@ Hold 1M BRAIN tokens to unlock unlimited access.
 
 Maintain 1M BRAIN tokens in your connected wallet to access all features without per-query fees. API credits scale with holdings. Larger positions receive more monthly credits.
 
+## SuperAgent pricing
+
+SuperAgents are persistent, containerized trading agents that run 24/7. Pricing has three components:
+
+### Compute
+
+Your agent runs in a dedicated container. This costs a flat **\$0.17/day (\~\$5/month)** regardless of activity. Compute is charged daily from your credit balance. If your balance reaches zero, your agent is automatically paused — no surprise bills.
+
+### Brain Intel
+
+Every time your agent calls the Gigabrain Brain API for market intelligence (price data, token analysis, on-chain signals), there is a flat **\$0.05 per call**. This applies to all agents regardless of whether you bring your own LLM key or use the platform LLM.
+
+### LLM tokens
+
+- **Bring your own key (BYOK):** Connect your own Anthropic, OpenAI, or other LLM provider key. You pay your provider directly — no markup from Gigabrain.
+- **Platform LLM:** Use Gigabrain's hosted LLM. Token costs are passed through with a **10% markup** and deducted from your credit balance.
+
+### Builder fee
+
+A **0.05% fee** is applied to all trades executed through HyperLiquid. This is built into the trade execution and requires no action from you.
+
+### Example costs
+
+| Activity level | Compute | Intel (~calls/day) | LLM (BYOK) | Builder fee | Total |
+| --- | --- | --- | --- | --- | --- |
+| **Light** (10 calls/day) | \$5/mo | \~\$15/mo | Your cost | On trades | \~\$20/mo |
+| **Moderate** (50 calls/day) | \$5/mo | \~\$75/mo | Your cost | On trades | \~\$80/mo |
+| **Heavy** (100+ calls/day) | \$5/mo | \~\$150/mo | Your cost | On trades | \~\$155/mo |
+
+<Note>
+These estimates exclude LLM token costs for BYOK users (paid directly to your provider) and builder fees (which vary with trading volume). Token-gated users receive monthly credits that offset intel costs.
+</Note>
+
 ## Feature comparison
 
 | Feature                 | Pay-as-you-go       | Token-gated (1M BRAIN)        |
 | ----------------------- | ------------------- | ----------------------------- |
 | **Chat access**         | Pay per query       | Unlimited                     |
 | **API access**          | ✓                   | ✓                             |
-| **Agents**              | ✓                   | ✓                             |
+| **SuperAgents**         | ✓                   | ✓                             |
 | **Alpha Feed**          | ✓                   | ✓                             |
 | **Monthly API credits** | Purchase separately | Included (scaled by holdings) |
 | **Alpha Community**     | ✗                   | ✓                             |
-| **Minimum cost**        | $5                  | 1M BRAIN tokens               |
+| **Minimum cost**        | \$5                  | 1M BRAIN tokens               |
 
 ## Getting started
 
@@ -55,7 +88,7 @@ Maintain 1M BRAIN tokens in your connected wallet to access all features without
 
 1. Head to [profile](https://gigabrain.gg/profile?tab=credits) and click on "Add Credits"
 2. Complete the payment process via coinbase commerce
-3. Start using Chat, Agents, or API immediately
+3. Start using Chat, SuperAgents, or API immediately
 
 ### Token-gated access
 
