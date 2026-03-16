@@ -1,0 +1,118 @@
+---
+title: What Can You Build?
+description: Real strategies people are running with SuperAgents
+---
+
+A SuperAgent is a full computer with wallets, memory, and real-time market intelligence. What it does is up to you.
+
+## Use case ideas
+
+<Columns cols={2}>
+  <Card title="Copy the whales" icon="binoculars">
+    Monitor whale wallets on HyperLiquid. When one opens a position, your agent evaluates the setup and decides whether to follow — with its own risk management.
+  </Card>
+  <Card title="Farm funding rates" icon="percent">
+    Scan all HL perps for extreme funding. Take the profitable side, hold until rates normalize. Intel checks if it's a real shift or a squeeze.
+  </Card>
+  <Card title="Harvest funding across venues" icon="arrows-rotate">
+    Funding diverges between HL, Binance, and other perp DEXes. Go long one, short the other, capture the spread delta-neutral.
+  </Card>
+  <Card title="Front-run liquidations" icon="bolt">
+    Monitor liquidation clusters on the HL heatmap. Position ahead of cascades — short the overleveraged longs, long the overleveraged shorts.
+  </Card>
+  <Card title="Run a HyperLiquid vault" icon="vault">
+    Your agent acts as vault leader executing a systematic strategy. Other users deposit. You earn 10% profit share on all depositor gains.
+  </Card>
+  <Card title="Scalp new perp listings" icon="sparkles">
+    When HL lists a new perp, the first hours are chaos — wide spreads, inefficient pricing. Your agent deploys during the price discovery window.
+  </Card>
+  <Card title="Basis trade" icon="scale-balanced">
+    Long spot, short perp — delta-neutral carry using HL portfolio margin. Your agent rotates across all assets, always chasing the widest basis.
+  </Card>
+  <Card title="TWAP into positions" icon="clock">
+    Split large orders across time intervals. Monitor slippage. Adjust pace based on volume. Build size without moving the market.
+  </Card>
+  <Card title="Snipe expiring predictions" icon="crosshairs">
+    Scan Polymarket for markets resolving within 48 hours. Cross-reference odds against news and data. Snipe the mispriced contracts.
+  </Card>
+  <Card title="Scalp 5-min crypto markets" icon="timer">
+    Polymarket's 5-minute binary contracts do $60M+ daily. Your agent monitors the Chainlink feed with a 2-15 second edge before odds adjust.
+  </Card>
+  <Card title="Make markets on Polymarket" icon="landmark">
+    Provide two-sided liquidity across markets and earn the spread. One operator documented 200-800 USD/day starting with 10K.
+  </Card>
+  <Card title="Arbitrage correlated predictions" icon="code-compare">
+    Hundreds of related Polymarket events must be logically consistent. When they're not, your agent locks in risk-free profit.
+  </Card>
+  <Card title="Trade news before repricing" icon="newspaper">
+    When a major event breaks, prediction market odds take time to adjust. Your agent monitors news and reacts before the crowd reprices.
+  </Card>
+  <Card title="Polymarket → perp trades" icon="arrow-right-arrow-left">
+    Use prediction market moves as trading signals. FOMC probability shifts on Polymarket? Instantly execute the corresponding BTC trade on HL.
+  </Card>
+  <Card title="Deep research thesis" icon="microscope">
+    For longer-dated markets, your agent runs multi-source research — news, data, historical patterns — and builds a probability estimate before entering.
+  </Card>
+  <Card title="Trade macro regimes" icon="globe">
+    Your agent classifies risk-on/risk-off using DXY, VIX, yields. Risk-on? Long high-beta perps. Risk-off? Defensive. Uncertainty? Trade Polymarket.
+  </Card>
+  <Card title="Catch narratives early" icon="fire">
+    Monitor CT social momentum, KOL mentions, and narrative shifts before they show up in price. Find the trade on HL or Solana.
+  </Card>
+  <Card title="Snipe memecoins" icon="rocket">
+    Intel Trenches tracks micro-caps — social momentum, volume spikes, narrative fit. Your agent executes via Jupiter before mainstream attention.
+  </Card>
+  <Card title="Detect exploits early" icon="shield-halved">
+    Monitor for anomalous on-chain patterns — flash loans, oracle manipulation — and auto-exit your DeFi positions before the exploit completes.
+  </Card>
+  <Card title="Arbitrage stablecoin depegs" icon="coins">
+    USDT depegs first in every crisis. Your agent detects depeg risk from social sentiment and trades the spread before charts reflect it.
+  </Card>
+  <Card title="Farm airdrops" icon="parachute-box">
+    Manage genuine protocol interactions across pre-TGE protocols. 20-50% of token supply goes to early users. Your agent maximizes points.
+  </Card>
+  <Card title="Risk sentinel" icon="eye">
+    An agent that doesn't trade — it watches. Monitors all positions, alerts on drawdowns, enforces stop-losses, flags concentration risk.
+  </Card>
+  <Card title="Daily P&L report" icon="chart-pie">
+    Structured daily report — P&L by position, best/worst performers, market conditions, upcoming events. Delivered to Telegram on schedule.
+  </Card>
+  <Card title="Auto-rebalance" icon="rotate">
+    Set a target allocation. When positions drift beyond your threshold, the agent rebalances across chains automatically.
+  </Card>
+  <Card title="Smart LP management" icon="droplet">
+    Manage Uniswap V3/V4 concentrated liquidity positions. Your agent monitors price ranges, rebalances when out of range, and optimizes fee tiers based on volatility.
+  </Card>
+  <Card title="Smarter DCA" icon="arrow-trend-up">
+    DCA that thinks. Instead of buying blindly on a schedule, your agent uses Intel to size up or down based on macro regime, sentiment, and technical levels.
+  </Card>
+  <Card title="Monitor DeFi yields" icon="seedling">
+    When yields spike on a new pool or incentive program, your agent alerts you or moves capital automatically.
+  </Card>
+  <Card title="Build your own" icon="wand-magic-sparkles" color="#22c55e">
+    If you can describe a strategy in plain English, your agent can execute it. Full computer, shell access, any code.
+  </Card>
+</Columns>
+
+---
+
+These are starting points. If you can describe a strategy in plain English, your agent can execute it.
+
+<CardGroup cols={2}>
+  <Card title="Create a SuperAgent" icon="rocket" href="/guides/superagents-setup">
+    Launch your first agent
+  </Card>
+  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/skills">
+    Browse available skills
+  </Card>
+  <Card title="SuperAgents Overview" icon="server" href="/core-features/superagents">
+    How SuperAgents work
+  </Card>
+  <Card title="API Reference" icon="code" href="/developers/superagents-api">
+    Launch agents programmatically
+  </Card>
+</CardGroup>
+
+<Warning>
+All strategies involve risk. SuperAgents trade real capital autonomously. Set appropriate risk limits in your soul.md, fund only what you're willing to lose, and monitor regularly. Past performance of any strategy does not guarantee future results. See the [Risk Disclosure](/support/risk-disclosure).
+</Warning>

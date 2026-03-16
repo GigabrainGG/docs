@@ -45,6 +45,7 @@
             "group": "Guides",
             "pages": [
               "guides/superagents-setup",
+              "guides/superagents-use-cases",
               "guides/migrate-to-superagents",
               "guides/integrations"
             ]
