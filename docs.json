@@ -33,20 +33,25 @@
             ]
           },
           {
-            "group": "Core Features",
+            "group": "Intelligence",
             "pages": [
               "core-features/chat",
-              "core-features/alpha",
-              "core-features/superagents",
-              "core-features/skills"
+              "core-features/alpha"
             ]
           },
           {
-            "group": "Guides",
+            "group": "SuperAgents",
             "pages": [
+              "core-features/superagents",
               "guides/superagents-setup",
+              "core-features/skills",
               "guides/superagents-use-cases",
-              "guides/migrate-to-superagents",
+              "guides/migrate-to-superagents"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
               "guides/integrations"
             ]
           },
