@@ -22,6 +22,8 @@ my-skill/
 
 When your agent encounters a task that matches a skill's description, it loads the instructions and follows them. Skills are loaded efficiently - metadata first, full instructions only when needed.
 
+Inside skill examples, `SKILL_DIR` means "the directory containing the `SKILL.md` file being used." SuperAgents should resolve that path from the opened skill file instead of relying on a pre-injected `CLAUDE_SKILL_DIR` environment variable.
+
 ## Official skills
 
 These ship with every SuperAgent and cover the core trading stack:
@@ -86,7 +88,7 @@ Check current crypto market sentiment.
 ## Usage
 
 ```bash
-uv run ${CLAUDE_SKILL_DIR}/scripts/fear_greed.py
+uv run "$SKILL_DIR/scripts/fear_greed.py"
 ```
 
 Returns the current index value (0-100), classification
