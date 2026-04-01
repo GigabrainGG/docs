@@ -1,0 +1,245 @@
+---
+title: "Playbooks"
+description: "Launch pre-built agent strategies or create your own"
+---
+
+A playbook is a complete agent product — soul.md, interactive onboarding, and skill dependencies bundled into a GitHub repo. Instead of writing everything from scratch, pick a playbook and launch. The agent onboards itself through an interactive conversation.
+
+## How playbooks work
+
+When you launch a SuperAgent with a playbook, the agent:
+
+1. Loads the **soul.md** as its identity
+2. Runs the **bootstrap.md** — an interactive setup conversation
+3. Installs the required **skills**
+4. Stores your configuration in memory and goes live
+
+You answer a few questions (risk limits, preferences, wallets to track), and the agent configures itself. The bootstrap runs once — after that, the agent operates from its soul.md and memory.
+
+<Tip>
+Playbooks compose [skills](/core-features/skills) — they don't replace them. A playbook is a finished product. Skills are the building blocks it uses. You can always add or remove skills after launch.
+</Tip>
+
+## Official playbooks
+
+Gigabrain ships a curated set of playbooks covering trading, research, risk monitoring, and more. Browse them from the [dashboard](https://gigabrain.gg/playbooks) or the GitHub repo — the catalog is always growing.
+
+<Card title="Browse official playbooks" icon="github" href="https://github.com/GigabrainGG/playbooks">
+  Full source code, soul.md files, and bootstrap scripts for every official playbook.
+</Card>
+
+## Using a playbook
+
+### From the dashboard
+
+1. Go to the [Playbooks page](https://gigabrain.gg/playbooks) and browse the catalog
+2. Click a playbook to see its README, required skills, and soul.md
+3. Click **Use this Playbook** to launch a SuperAgent with it
+4. The agent boots up and walks you through setup via chat
+
+### Custom playbook from GitHub
+
+1. Click **Import Custom Playbook** on the playbooks page
+2. Paste the GitHub URL (supports branches, tags, and subpaths)
+3. Review the playbook details and launch
+
+## Launch modes
+
+| Mode | Input | What happens |
+|------|-------|-------------|
+| **Playbook** | Pick from the catalog or paste a GitHub URL | Agent gets soul.md + bootstrap.md, runs interactive onboarding |
+| **Custom soul.md** | Write your own | No bootstrap — you drive the agent |
+| **Blank** | Nothing | Empty agent, full control |
+
+## Creating a custom playbook
+
+Anyone can create a playbook. It's a GitHub repo (or folder) with four files:
+
+```
+my-playbook/
+  playbook.yaml    # Metadata and skill dependencies (required)
+  soul.md          # Agent identity and personality (required)
+  bootstrap.md     # Interactive onboarding conversation (required)
+  README.md        # What the agent does and prerequisites (required)
+  icon.png         # Custom icon shown in the dashboard (optional)
+  scripts/         # Playbook-specific scripts (optional)
+```
+
+### playbook.yaml
+
+The manifest defines metadata and which skills the agent needs:
+
+```yaml
+name: my-strategy
+description: What the agent does, in one line
+category: trading
+icon: "🎯"
+author: your-name
+version: "1.0"
+
+skills:
+  - hyperliquid                                          # official skill (from GigabrainGG/skills)
+  - gigabrain-intel                                      # official skill
+  - https://github.com/Virtual-Protocol/dgclaw-skill     # custom skill (cloned from GitHub)
+```
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Lowercase identifier for the playbook |
+| `description` | Yes | One-line description |
+| `category` | Yes | One of: `trading`, `research`, `portfolio`, `polymarket`, `accumulation`, `risk`, `virtuals` |
+| `icon` | Yes | Emoji icon |
+| `author` | Yes | Creator name |
+| `version` | Yes | Version string |
+| `skills` | Yes | List of skill dependencies |
+
+Skills are resolved at boot:
+- **Plain names** like `hyperliquid` are loaded from [GigabrainGG/skills](https://github.com/GigabrainGG/skills)
+- **GitHub URLs** like `https://github.com/Virtual-Protocol/dgclaw-skill` are cloned directly
+
+### soul.md
+
+The agent's identity — who it is, how it thinks, what rules it follows. Same format as any SuperAgent soul.md. See [writing effective soul.md](/developers/superagents-runtime#writing-effective-soulmd) for guidance.
+
+### bootstrap.md
+
+The interactive onboarding script the agent runs on first boot. Write it as a sequence of steps — the agent asks questions, waits for answers, and configures itself.
+
+```markdown
+# My Strategy — Bootstrap
+
+Run these steps in order on first boot. Ask each question,
+wait for the user's answer, then proceed.
+
+## Step 1: Risk Configuration
+
+Ask the user:
+> What's your max position size per trade? (in USD)
+
+> What's your daily max drawdown before stopping? (in USD or %)
+
+Store the answers in memory.md under ## Configuration.
+
+## Step 2: Asset Selection
+
+> Which assets should I focus on? (e.g., BTC, ETH, or "all")
+
+## Step 3: Set Up Schedules
+
+Set up a recurring market scan every 4 hours
+and a daily P&L summary at 8pm UTC.
+
+## Step 4: Go Live
+
+Write all configuration to memory.md and notify the user:
+> Strategy is live. Monitoring [assets]. I'll alert you
+> when I find setups that match your criteria.
+```
+
+Tips for writing good bootstrap scripts:
+
+- **Ask one thing at a time** — don't overwhelm the user with 5 questions at once
+- **Offer sensible defaults** — "I'd recommend $500 max position size. Want to go with that or set your own?"
+- **Verify wallet funding** — check the balance before going live
+- **Store everything in memory.md** — the agent reads this after bootstrap to remember its config
+- **End with a clear confirmation** — tell the user what's running and what to expect
+
+### README.md
+
+Describe what the playbook does, example output, prerequisites (e.g., "needs a funded HyperLiquid account"), and any gotchas. This is shown on the playbook detail page in the dashboard.
+
+## Example: building a custom playbook
+
+Here's a complete example — a funding rate arbitrage playbook:
+
+**playbook.yaml**
+```yaml
+name: funding-arb
+description: Captures funding rate spreads on HyperLiquid perpetuals
+category: trading
+icon: "📊"
+author: your-name
+version: "1.0"
+
+skills:
+  - hyperliquid
+  - gigabrain-intel
+```
+
+**soul.md**
+```markdown
+# Identity
+You're a funding rate arbitrage specialist on HyperLiquid. You find
+assets with extreme funding rates and capture the spread by taking
+the profitable side.
+
+# Strategy
+- Scan all HL perps for funding rate extremes (>0.03% or <-0.03%)
+- Verify the rate is likely to mean-revert (check OI trends, not
+  just the current rate)
+- Enter the profitable side with limit orders
+- Exit when funding normalizes or hits your take-profit
+
+# Risk
+- Max position: {max_position} per trade
+- Max concurrent positions: {max_positions}
+- Stop if funding flips against you for 3 consecutive periods
+- Daily loss limit: {daily_loss_limit}
+```
+
+**bootstrap.md**
+```markdown
+# Funding Arb — Bootstrap
+
+## Step 1: Position Sizing
+
+> What's the max position size per trade? (in USD, e.g., $1000)
+
+> How many concurrent positions max? (e.g., 3)
+
+## Step 2: Risk Limits
+
+> What's your daily max loss before stopping? (in USD or %)
+
+## Step 3: Scanning Preferences
+
+> How often should I scan for funding opportunities?
+> 1. Every hour (aggressive)
+> 2. Every 4 hours (standard)
+> 3. Every 8 hours (conservative)
+
+## Step 4: Go Live
+
+Store all config in memory.md. Set up the recurring funding scan.
+Notify the user with a summary of the configuration.
+```
+
+Push this to GitHub, paste the URL in the dashboard, and launch.
+
+## Forking and customizing
+
+The fastest way to create a custom playbook:
+
+1. Fork an [official playbook](https://github.com/GigabrainGG/playbooks)
+2. Edit the soul.md, bootstrap.md, and skills to match your strategy
+3. Push to your repo
+4. Paste the URL when launching
+
+Version-pin with a branch, tag, or commit hash for reproducibility.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/skills">
+    The building blocks that playbooks compose
+  </Card>
+  <Card title="Official Playbooks" icon="github" href="https://github.com/GigabrainGG/playbooks">
+    Browse and fork official playbooks
+  </Card>
+  <Card title="SuperAgents Runtime" icon="microchip" href="/developers/superagents-runtime">
+    Deep dive into soul.md, memory, scheduling, and models
+  </Card>
+  <Card title="Setup Guide" icon="rocket" href="/guides/superagents-setup">
+    Create and launch your first SuperAgent
+  </Card>
+</CardGroup>
