@@ -44,7 +44,9 @@
             "pages": [
               "core-features/superagents",
               "guides/superagents-setup",
+              "developers/superagents-runtime",
               "core-features/skills",
+              "core-features/playbooks",
               "guides/superagents-use-cases",
               "guides/migrate-to-superagents"
             ]

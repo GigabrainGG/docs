@@ -1,0 +1,325 @@
+---
+title: "SuperAgents Runtime"
+description: "What your SuperAgent can do and how to get the most out of it"
+---
+
+Your SuperAgent is a persistent computer with shell access, memory, scheduling, and skills. It runs 24/7, keeps its state across restarts, and talks to you on Telegram or the web. This page covers what's available to you and how to build effectively for it.
+
+## Runtime environment
+
+Every SuperAgent has a full computing environment at its disposal.
+
+| Capability | Details |
+|-----------|---------|
+| **Shell** | Full bash access — run any command, pipe data, automate workflows |
+| **Python 3** | Pre-installed with `pip`. Install any package. Scripts run via `uv run` for dependency isolation |
+| **Node.js** | Pre-installed with `npm`. Build webhooks, data processors, anything |
+| **Background processes** | PM2 process manager for long-running scripts — data collectors, websocket listeners, webhooks |
+| **Persistent filesystem** | Files survive restarts, pauses, and updates. Your data stays |
+| **Internet access** | Full outbound access — call APIs, fetch data feeds, post webhooks |
+
+<Tip>
+Your agent can install packages, write scripts, and run them — all autonomously. If you can describe what you want in plain English, it can build and run it.
+</Tip>
+
+## Writing effective soul.md
+
+Soul.md is the single most important thing you'll write. It shapes every decision your agent makes. Here's how to write a good one.
+
+### Be specific, not generic
+
+Vague instructions produce vague behavior. Give your agent a clear identity.
+
+```markdown
+# Bad
+You are a crypto trader. Trade well and make money.
+
+# Good
+You're an aggressive perp trader on HyperLiquid. You specialize in
+squeeze setups — you read open interest, funding rates, and liquidation
+clusters to find overleveraged crowds, then trade against them.
+```
+
+### Define risk boundaries clearly
+
+Risk rules should be unambiguous. The agent will interpret them literally.
+
+```markdown
+# Risk rules
+- Max position size: 10% of account equity
+- Max total exposure: 30% of account equity
+- Stop-loss on every trade — no exceptions. 2% max loss per trade.
+- No trading during FOMC, CPI, or NFP releases
+- If daily P&L hits -5%, stop trading until tomorrow
+```
+
+### Give a decision framework, not a script
+
+Tell it how to think, not what to do. A framework adapts to changing markets — a script breaks.
+
+```markdown
+# Decision framework
+Before any trade, answer these questions:
+1. What is the market positioned for? (check funding + OI)
+2. Where are the liquidation clusters?
+3. What's the catalyst that moves price to those clusters?
+4. What invalidates this thesis? (your stop)
+
+Only trade when you have clear answers to all four.
+```
+
+### Example: Perp scalper
+
+```markdown
+# Identity
+You're a high-frequency perp scalper on HyperLiquid. You trade BTC and
+ETH exclusively. You think in terms of order flow, not narratives.
+
+# Strategy
+- Trade funding rate mean-reversion: when funding is extreme, fade it
+- Trade liquidation cascades: position ahead of clustered liquidations
+- Use TWAP for entries above $50k notional
+- Hold times: minutes to hours, never overnight
+
+# Risk
+- Max position: 5% of equity
+- Hard stop: 1% loss per trade, no exceptions
+- Daily loss limit: 3% — shut down and review if hit
+- No leverage above 10x
+
+# Personality
+You're calm, analytical, and decisive. You don't chase. If you miss
+a setup, there's always another one. You'd rather miss a trade than
+take a bad one.
+```
+
+### Example: Risk sentinel
+
+```markdown
+# Identity
+You are a risk monitor. You DO NOT trade. Your job is to watch,
+analyze, and alert. You're the sober voice in the room.
+
+# Responsibilities
+- Monitor all open positions across wallets every 2 hours
+- Alert on: drawdown > 5%, concentration > 40% in one asset,
+  funding rate flip on held positions, unusual volume spikes
+- Daily risk report at 8am UTC: exposure summary, correlation
+  analysis, top risks
+- Weekly deep review: what went right, what went wrong, suggested
+  adjustments
+
+# Personality
+You're conservative, thorough, and never alarmist. You present facts
+and probabilities, not panic. When you flag something, you always
+include the data behind it.
+```
+
+### Example: Research analyst
+
+```markdown
+# Identity
+You're a crypto research analyst. You synthesize information from
+multiple sources into actionable intelligence. You're opinionated
+but evidence-based.
+
+# Focus areas
+- Macro regime classification (risk-on/off/uncertain)
+- Funding rate and OI patterns across HyperLiquid
+- Polymarket odds as leading indicators for crypto moves
+- Narrative tracking: what's gaining attention, what's fading
+
+# Output
+- Morning brief at 9am UTC: overnight summary, key levels, today's
+  events, regime assessment
+- Alert immediately on: major odds shifts on Polymarket, funding
+  rate extremes, whale position changes
+- When asked for a view, give a probability and confidence level,
+  not just "bullish" or "bearish"
+
+# What you don't do
+You don't trade. You inform. Let the user make the final call.
+```
+
+<Tip>
+Changes to soul.md take effect on the next message — no restart needed. Iterate fast. If your agent isn't behaving right, tweak the soul and send another message.
+</Tip>
+
+## Playbooks
+
+Don't want to write a soul.md from scratch? Pick a [playbook](/core-features/playbooks) — a pre-built agent strategy with soul.md, interactive onboarding, and skill dependencies. Launch it, answer a few setup questions, and the agent configures itself.
+
+Browse official playbooks from the dashboard or [create your own](/core-features/playbooks#creating-a-custom-playbook) by pushing a repo to GitHub.
+
+## Memory
+
+SuperAgents have two files that define who they are and what they know:
+
+- **soul.md** — your instructions. You write it, you control it.
+- **memory.md** — the agent's brain. It writes it, it controls it. You can read it.
+
+### How memory works
+
+Your agent automatically maintains memory.md as it operates. It remembers:
+
+- Trade outcomes and what it learned from them
+- Market observations and patterns it's noticed
+- Your preferences and communication style
+- Strategies that worked and ones that didn't
+
+This creates a genuine learning loop. The agent isn't just executing — it's reflecting, updating its mental model, and getting sharper over time.
+
+### Working with memory
+
+<CardGroup cols={2}>
+  <Card title="Read it regularly" icon="eye">
+    Check memory.md from the dashboard or API. Understand what your agent thinks it knows. This is the most underrated thing you can do.
+  </Card>
+  <Card title="Course-correct via soul.md" icon="pen">
+    If memory shows the agent learning wrong lessons ("ETH always bounces at $3k"), add guidance in soul.md to override it ("Don't assume historical levels hold — markets change").
+  </Card>
+</CardGroup>
+
+<Warning>
+Don't edit memory.md directly. It's the agent's space. If you want to change its behavior, change soul.md — the agent will update its own memory accordingly.
+</Warning>
+
+## Scheduling
+
+Tell your agent what to do and when, in natural language. It handles the rest.
+
+### How to set schedules
+
+Just tell it via Telegram or the chat interface:
+
+- "Check BTC funding rates every 4 hours and alert me if they're extreme"
+- "Run a portfolio review every morning at 8am UTC"
+- "Scan Polymarket for new high-volume markets every 6 hours"
+- "Check if ETH breaks $4k in 30 minutes"
+
+### Supported intervals
+
+| Format | Example |
+|--------|---------|
+| Natural language | "every 4 hours", "daily at 9am UTC", "every Monday at noon" |
+| Cron expressions | `0 */4 * * *`, `0 9 * * *` |
+| One-time delays | "in 30 minutes", "at 3pm UTC today" |
+
+### Good scheduling patterns
+
+```markdown
+# Monitoring routines
+"Check funding rates across all HL perps every 4 hours.
+ Alert me only if any rate exceeds ±0.05%."
+
+# Daily review
+"Every morning at 8am UTC, review my portfolio: positions, P&L,
+ overnight developments, and anything I should know."
+
+# Event-driven scanning
+"Every 6 hours, scan Polymarket for markets with >$500k volume
+ where odds shifted more than 10% in 24h."
+
+# News scanning
+"Every 2 hours, check for breaking news that could impact my
+ open positions. Only alert me if it's material."
+```
+
+<Tip>
+Each scheduled check uses one LLM call. Prefer longer intervals unless urgency demands it — "every 4 hours" is usually better than "every 15 minutes" for monitoring tasks.
+</Tip>
+
+Schedules persist across restarts. The agent manages them autonomously — it creates, updates, and removes schedules as needed. When a schedule fires and finds something worth reporting, it sends you a Telegram message.
+
+## Skills
+
+Skills extend what your agent can do. They follow the [Agent Skills](https://agentskills.io) open standard — the same format used by Claude Code, OpenClaw, Cursor, and 26+ other platforms.
+
+### What's built in
+
+Every SuperAgent ships with official skills for the core trading stack:
+
+| Skill | Capability |
+|-------|-----------|
+| **hyperliquid** | Perp and spot trading, position management, account analytics |
+| **polymarket** | Prediction markets — discovery, research, trading, portfolio |
+| **gigabrain-intel** | Market research, web search, news, sentiment, on-chain data |
+| **portfolio-tracker** | Cross-chain portfolio overview and P&L |
+| **evm-wallet** | EVM transfers, balances, transaction history |
+| **solana-wallet** | Solana transfers, balances, token management |
+| **solana-swap** | Token swaps via Jupiter |
+
+### Installing community skills
+
+Paste a GitHub URL to your agent in chat. It installs and syncs automatically. Browse skills on [skills.sh](https://skills.sh) (110,000+), [ClawHub](https://clawhub.ai) (2,800+), or [GitHub](https://github.com/GigabrainGG/skills).
+
+### Writing your own
+
+A skill is a folder with a `SKILL.md` file and optional scripts. No SDK, no API wrapper — just markdown instructions. Write one in 10 minutes.
+
+Skills can also include long-running background scripts (via PM2) for data collection, webhook listeners, or custom monitoring.
+
+See the full [Skills documentation](/core-features/skills) for format details, examples, and management.
+
+## Models
+
+Choose the right LLM for your agent's job.
+
+### Supported providers
+
+| Provider | Models | Best for |
+|----------|--------|----------|
+| **Anthropic** | Claude Opus 4.6, Sonnet 4.6 | Deep reasoning, careful risk assessment, detailed analysis |
+| **OpenAI** | GPT-5.4, GPT-5.4 Pro, o3, o4-mini | Fast execution, broad knowledge, strong reasoning |
+| **xAI** | Grok 4.20 | Real-time X/Twitter awareness, fast agentic tool use |
+| **OpenRouter** | 200+ models | Access to any model — Llama, Mistral, Gemini, and more |
+| **Venice** | Privacy-focused models | Uncensored inference, no content filtering |
+
+### Bring your own subscription
+
+Already paying for ChatGPT? Use it with your SuperAgent:
+
+- **ChatGPT Plus/Pro** — paste your token to use GPT and o-series models via your subscription
+
+### Choosing a model
+
+- **Complex analysis** (macro regimes, multi-factor decisions) — reasoning models like GPT-5.4 Pro, o3, or Claude Opus 4.6
+- **Fast execution** (scalping, time-sensitive trades) — GPT-5.4, Claude Sonnet 4.6, or Grok 4.20
+- **Research-heavy** (news analysis, narrative tracking) — Claude Sonnet 4.6 or GPT-5.4
+- **Experimental** — try different models and see what clicks with your strategy
+
+Switch models anytime from the dashboard — no restart needed. The change takes effect on the next message.
+
+## Lifecycle tips
+
+<CardGroup cols={2}>
+  <Card title="Pause when idle" icon="pause">
+    Not trading? Pause the agent. Costs nothing. All state is preserved — memory, files, schedules, everything.
+  </Card>
+  <Card title="Resume seamlessly" icon="play">
+    Resume picks up exactly where it left off. Memory intact, schedules restart, files untouched.
+  </Card>
+  <Card title="Restart without fear" icon="rotate">
+    Restarts are seamless. No state is lost. Use it if something feels stuck.
+  </Card>
+  <Card title="Iterate on soul.md" icon="pen-to-square">
+    Soul.md and model changes take effect immediately — no restart needed. Iterate fast and often.
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Setup Guide" icon="rocket" href="/guides/superagents-setup">
+    Create and launch your first SuperAgent
+  </Card>
+  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/skills">
+    Browse available skills and write your own
+  </Card>
+  <Card title="Use Cases" icon="lightbulb" href="/guides/superagents-use-cases">
+    Strategy ideas and inspiration
+  </Card>
+  <Card title="API Reference" icon="code" href="/developers/superagents-api">
+    Manage agents programmatically
+  </Card>
+</CardGroup>
