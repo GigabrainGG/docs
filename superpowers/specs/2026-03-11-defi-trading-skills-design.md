@@ -249,7 +249,7 @@ skills/
 ├── hyperliquid/          # Existing
 ├── polymarket/           # Existing
 ├── portfolio-tracker/    # Existing
-├── gigabrain-intel/      # Existing
+├── brain/               # Existing
 ├── evm-swap/             # NEW
 │   ├── SKILL.md
 │   └── scripts/
