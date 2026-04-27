@@ -4,7 +4,7 @@ description: "What you can build with the Gigabrain API"
 icon: "code"
 ---
 
-The Gigabrain API gives you two things: a reasoning engine for crypto markets, and infrastructure to run autonomous trading agents.
+The Gigabrain API gives you three surfaces: a reasoning engine for crypto markets, an Alpha stream for generated signals, and infrastructure to run autonomous trading agents.
 
 ## Brain API
 
@@ -14,6 +14,14 @@ You get back structured JSON you can pipe straight into your execution logic. No
 
 <Card title="Brain API Overview" icon="brain" href="/developers/brain-api-overview">
   See what your bot can do with real examples
+</Card>
+
+## Alpha
+
+A live signal stream for Radar insights and Alpha trade setups. Use it when your system should react as soon as Gigabrain generates new market intelligence.
+
+<Card title="Alpha Overview" icon="chart-line" href="/developers/alpha-overview">
+  Understand Radar, Alpha, and webhook delivery
 </Card>
 
 ## SuperAgents
@@ -33,6 +41,10 @@ Always-on AI agents with persistent memory, installable skills, and multi-chain 
 
   <Card title="Auth & Basics" icon="lock" href="/developers/introduction">
     Rate limits, response format, status codes
+  </Card>
+
+  <Card title="Alpha Webhooks" icon="plug" href="/developers/webhooks">
+    Receive Radar insights and Alpha trade signals
   </Card>
 
   <Card title="Agent Skills" icon="puzzle-piece" href="/openclaw/overview">
