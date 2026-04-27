@@ -9,11 +9,11 @@ Webhooks let you stream Gigabrain-generated market intelligence into your own au
 Configure endpoints in the dashboard at **Profile -> Integrations -> Webhooks**. Alpha trade signals are the primary event and are selected by default. Add Radar insights when you also want earlier market context.
 
 <CardGroup cols={2}>
-  <Card title="Alpha" icon="chart-line">
-    `alpha.created` events when a new Alpha trade signal is generated. Costs `0.5` credits per real delivery.
+  <Card title="Alpha" icon="fire">
+    Primary event selected by default. Sends `alpha.created` trade signals. Costs `0.5` credits per real delivery.
   </Card>
   <Card title="Radar" icon="gauge-high">
-    `radar.created` events when a new Radar insight is generated. Costs `0.1` credits per real delivery.
+    Optional upstream context. Sends `radar.created` insights. Costs `0.1` credits per real delivery.
   </Card>
 </CardGroup>
 
@@ -55,9 +55,9 @@ Every webhook request includes:
 | `X-GigaBrain-Delivery-Id` | Delivery id |
 | `X-GigaBrain-Event-Type` | `radar` or `alpha` |
 
-## Verify Signatures
+## Verify Signatures (Optional)
 
-Store the signing secret when you create the webhook. It is shown only once.
+Signature verification is optional, but recommended before trusting or processing webhook payloads. Store the signing secret when you create the webhook. It is shown only once.
 
 The signature is `HMAC_SHA256(secret, timestamp + "." + raw_body)`.
 
