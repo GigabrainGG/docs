@@ -93,6 +93,13 @@
             ]
           },
           {
+            "group": "Alpha",
+            "pages": [
+              "developers/alpha-overview",
+              "developers/webhooks"
+            ]
+          },
+          {
             "group": "SuperAgents",
             "pages": [
               "developers/superagents-api",

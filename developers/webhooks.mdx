@@ -1,0 +1,297 @@
+---
+title: "Alpha Webhooks"
+description: "Receive Radar insights and Alpha trade signals at your own endpoint"
+icon: "plug"
+---
+
+Webhooks let you stream Gigabrain-generated market intelligence into your own automation stack.
+
+Configure endpoints in the dashboard at **Profile -> Integrations -> Webhooks**. Each endpoint can subscribe to Radar insights, Alpha trade signals, or both.
+
+<CardGroup cols={2}>
+  <Card title="Radar" icon="gauge-high">
+    `radar.created` events when a new Radar insight is generated. Costs `0.1` credits per real delivery.
+  </Card>
+  <Card title="Alpha" icon="chart-line">
+    `alpha.created` events when a new Alpha trade signal is generated. Costs `0.5` credits per real delivery.
+  </Card>
+</CardGroup>
+
+<Note>
+Test deliveries from the dashboard are free. Real deliveries are charged once before the webhook request is sent.
+</Note>
+
+## Delivery Model
+
+Gigabrain sends webhook requests from the backend webhook worker. Internal Python service IPs are not exposed to your endpoint.
+
+| Event option | `type` | `event_type` | Cost |
+| --- | --- | --- | --- |
+| Radar | `radar` | `radar.created` | `0.1` credits |
+| Alpha | `alpha` | `alpha.created` | `0.5` credits |
+
+Each request uses this envelope:
+
+```json
+{
+  "id": "delivery_uuid",
+  "type": "alpha",
+  "event_type": "alpha.created",
+  "object": "trade_signal",
+  "created_at": "2026-04-27T10:56:52.941Z",
+  "data": {}
+}
+```
+
+## Headers
+
+Every webhook request includes:
+
+| Header | Description |
+| --- | --- |
+| `Content-Type` | Always `application/json` |
+| `X-GigaBrain-Signature` | HMAC signature, formatted as `t=<unix>,v1=<hex_digest>` |
+| `X-GigaBrain-Webhook-Id` | Delivery id |
+| `X-GigaBrain-Delivery-Id` | Delivery id |
+| `X-GigaBrain-Event-Type` | `radar` or `alpha` |
+
+## Verify Signatures
+
+Store the signing secret when you create the webhook. It is shown only once.
+
+The signature is `HMAC_SHA256(secret, timestamp + "." + raw_body)`.
+
+```ts
+import crypto from "crypto";
+
+export function verifyGigabrainWebhook(
+  rawBody: string,
+  signature: string,
+  secret: string
+) {
+  const parts = Object.fromEntries(
+    signature.split(",").map((part) => {
+      const [key, value] = part.split("=");
+      return [key, value];
+    })
+  );
+
+  const timestamp = Number(parts.t);
+  if (!timestamp) return false;
+
+  const ageSeconds = Math.abs(Date.now() / 1000 - timestamp);
+  if (ageSeconds > 300) return false;
+
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(`${timestamp}.${rawBody}`)
+    .digest("hex");
+
+  const received = parts.v1 || "";
+  const receivedBuffer = Buffer.from(received, "hex");
+  const expectedBuffer = Buffer.from(expected, "hex");
+
+  if (receivedBuffer.length !== expectedBuffer.length) return false;
+
+  return crypto.timingSafeEqual(receivedBuffer, expectedBuffer);
+}
+```
+
+<Warning>
+Verify against the raw request body before JSON parsing. Re-stringifying parsed JSON can change whitespace or key ordering and break signature checks.
+</Warning>
+
+## Radar Payload
+
+Radar events are created when a Radar insight is generated. The `raw` object mirrors the insight JSON content.
+
+```json
+{
+  "id": "67349fba-72bd-4434-897b-8fbc030ed37a",
+  "type": "radar",
+  "event_type": "radar.created",
+  "object": "alpha_insight",
+  "created_at": "2026-04-27T10:56:52.941Z",
+  "data": {
+    "id": "radar-insight-123",
+    "title": "BTC Open Interest Reset",
+    "insight": "BTC open interest reset while spot bid stayed firm.",
+    "summary": "BTC open interest reset while spot bid stayed firm.",
+    "category": "market_structure",
+    "impact_rating": 5,
+    "directional_bias": "bullish",
+    "affected_tokens": ["BTC"],
+    "confidence": "high",
+    "metadata": {
+      "source_tweet": {
+        "tweet_id": "tweet-123",
+        "author_username": "gigabrain",
+        "created_at": "2026-04-27T10:54:00.000Z",
+        "is_quoted_tweet": false,
+        "is_reply": false,
+        "quoted_tweet_id": null
+      }
+    },
+    "created_at": "2026-04-27T10:55:02.100Z",
+    "updated_at": "2026-04-27T10:55:02.100Z",
+    "raw": {
+      "title": "BTC Open Interest Reset",
+      "insight": "BTC open interest reset while spot bid stayed firm.",
+      "category": "market_structure",
+      "impact_rating": 5,
+      "directional_bias": "bullish",
+      "affected_tokens": ["BTC"],
+      "confidence": "high",
+      "metadata": {
+        "source_tweet": {
+          "tweet_id": "tweet-123",
+          "author_username": "gigabrain",
+          "created_at": "2026-04-27T10:54:00.000Z",
+          "is_quoted_tweet": false,
+          "is_reply": false,
+          "quoted_tweet_id": null
+        }
+      }
+    }
+  }
+}
+```
+
+## Alpha Payload
+
+Alpha events are created when an Alpha trade signal is generated. The `signal` object mirrors the trade signal JSON contract so downstream automation can build directly on it.
+
+```json
+{
+  "id": "67349fba-72bd-4434-897b-8fbc030ed37a",
+  "type": "alpha",
+  "event_type": "alpha.created",
+  "object": "trade_signal",
+  "created_at": "2026-04-27T10:56:52.941Z",
+  "data": {
+    "id": "trade-signal-123",
+    "token": "BTC",
+    "direction": "long",
+    "timeframe": "1H",
+    "source": "radar",
+    "radar_insight_id": "radar-insight-123",
+    "confidence": 82,
+    "status": "open",
+    "valid_until": "2026-04-27T11:56:52.877Z",
+    "entry_price": 75660,
+    "stop_loss_price": 74200,
+    "take_profit_price": 78500,
+    "title": "BTC Breakout Reclaim Toward $78.5K",
+    "one_liner": "BTC reclaimed the breakout shelf with improving momentum.",
+    "created_at": "2026-04-27T10:56:52.877Z",
+    "updated_at": "2026-04-27T10:56:52.877Z",
+    "signal": {
+      "id": "trade-signal-123",
+      "token": "BTC",
+      "venue": "hyperliquid",
+      "direction": "long",
+      "timeframe": "1H",
+      "source": "radar",
+      "radar_insight_id": "radar-insight-123",
+      "snapshot_price": 75660,
+      "snapshot_at": "2026-04-27T10:56:52.877Z",
+      "entry": {
+        "price": 75660,
+        "reason": "Limit long on a reclaim of the local breakout level.",
+        "invalidates_if": ["BTC loses the breakout level on a 1H close"],
+        "exit_percent": 0
+      },
+      "stop_loss": {
+        "price": 74200,
+        "reason": "Below the prior consolidation low and invalidation shelf.",
+        "invalidates_if": ["1H close below 74200"],
+        "exit_percent": 100
+      },
+      "take_profits": [
+        {
+          "price": 78500,
+          "reason": "First upside liquidity pocket above the breakout.",
+          "invalidates_if": ["Momentum stalls before entry fill"],
+          "exit_percent": 60
+        },
+        {
+          "price": 81200,
+          "reason": "Higher timeframe resistance and final measured-move target.",
+          "invalidates_if": ["Funding spikes before TP1"],
+          "exit_percent": 40
+        }
+      ],
+      "rr_to_first_tp": 1.95,
+      "rr_to_final_tp": 3.8,
+      "suggested_leverage": 2,
+      "leverage_reason": "Moderate leverage because the stop is defined but volatility is elevated.",
+      "title": "BTC Breakout Reclaim Toward $78.5K",
+      "one_liner": "BTC reclaimed the breakout shelf with improving momentum.",
+      "thesis": [
+        "Price reclaimed the local breakout shelf after a shallow pullback.",
+        "Momentum is improving while invalidation remains close enough for defined risk."
+      ],
+      "catalysts": [
+        "Breakout continuation after range reclaim",
+        "Potential short squeeze above the recent high"
+      ],
+      "key_risks": [
+        "BTC loses the reclaim level before entry fills",
+        "Market-wide risk-off move drags majors lower"
+      ],
+      "related_radar_insights": ["radar-insight-123"],
+      "confidence": 82,
+      "confidence_drivers": [
+        "Clean level reclaim",
+        "Defined stop with favorable R:R",
+        "Momentum confirms the radar bias"
+      ],
+      "missing_for_higher_confidence": [
+        "More spot volume confirmation",
+        "Lower funding on the next reset"
+      ],
+      "valid_until": "2026-04-27T11:56:52.877Z",
+      "global_invalidations": [
+        "BTC closes below 74200 on the 1H chart",
+        "Funding spikes while price fails to extend"
+      ]
+    },
+    "metadata": {
+      "model": {
+        "model_id": "signal-model",
+        "model_class": "SignalAgent",
+        "provider": "openai",
+        "reasoning_effort": "medium"
+      }
+    }
+  }
+}
+```
+
+## Retries and Billing
+
+- Treat any `2xx` response as success.
+- Timeouts and non-`2xx` responses are retried up to 3 attempts with exponential backoff.
+- Your endpoint has 10 seconds to respond.
+- Real deliveries are charged before the request is sent.
+- If the account has insufficient credits, the delivery is marked failed and your endpoint is not called.
+- Retries reuse the same delivery id and do not double-charge.
+- Duplicate source events are deduped per webhook, event type, and resource id.
+
+Return quickly, then process asynchronously:
+
+```ts
+export async function POST(req: Request) {
+  const rawBody = await req.text();
+  const signature = req.headers.get("x-gigabrain-signature") || "";
+
+  if (!verifyGigabrainWebhook(rawBody, signature, process.env.GIGABRAIN_WEBHOOK_SECRET!)) {
+    return new Response("invalid signature", { status: 401 });
+  }
+
+  const event = JSON.parse(rawBody);
+  await enqueue(event);
+
+  return new Response(null, { status: 204 });
+}
+```
