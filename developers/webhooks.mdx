@@ -103,7 +103,7 @@ Verify against the raw request body before JSON parsing. Re-stringifying parsed 
 
 ## Alpha Payload
 
-Alpha events are created when an Alpha trade signal is generated. The `signal` object mirrors the trade signal JSON contract so downstream automation can build directly on it.
+Alpha events are created when an Alpha trade signal is generated. The payload contains the same trade setup fields shown in the Gigabrain UI.
 
 ```json
 {
@@ -117,8 +117,6 @@ Alpha events are created when an Alpha trade signal is generated. The `signal` o
     "token": "BTC",
     "direction": "long",
     "timeframe": "1H",
-    "source": "radar",
-    "radar_insight_id": "radar-insight-123",
     "confidence": 82,
     "status": "open",
     "valid_until": "2026-04-27T11:56:52.877Z",
@@ -130,13 +128,9 @@ Alpha events are created when an Alpha trade signal is generated. The `signal` o
     "created_at": "2026-04-27T10:56:52.877Z",
     "updated_at": "2026-04-27T10:56:52.877Z",
     "signal": {
-      "id": "trade-signal-123",
       "token": "BTC",
-      "venue": "hyperliquid",
       "direction": "long",
       "timeframe": "1H",
-      "source": "radar",
-      "radar_insight_id": "radar-insight-123",
       "snapshot_price": 75660,
       "snapshot_at": "2026-04-27T10:56:52.877Z",
       "entry": {
@@ -183,7 +177,6 @@ Alpha events are created when an Alpha trade signal is generated. The `signal` o
         "BTC loses the reclaim level before entry fills",
         "Market-wide risk-off move drags majors lower"
       ],
-      "related_radar_insights": ["radar-insight-123"],
       "confidence": 82,
       "confidence_drivers": [
         "Clean level reclaim",
@@ -199,14 +192,6 @@ Alpha events are created when an Alpha trade signal is generated. The `signal` o
         "BTC closes below 74200 on the 1H chart",
         "Funding spikes while price fails to extend"
       ]
-    },
-    "metadata": {
-      "model": {
-        "model_id": "signal-model",
-        "model_class": "SignalAgent",
-        "provider": "openai",
-        "reasoning_effort": "medium"
-      }
     }
   }
 }
@@ -214,7 +199,7 @@ Alpha events are created when an Alpha trade signal is generated. The `signal` o
 
 ## Radar Payload
 
-Radar events are created when a Radar insight is generated. The `raw` object mirrors the insight JSON content.
+Radar events are created when a Radar insight is generated. The payload contains the same insight fields shown in the Gigabrain UI.
 
 ```json
 {
@@ -233,37 +218,8 @@ Radar events are created when a Radar insight is generated. The `raw` object mir
     "directional_bias": "bullish",
     "affected_tokens": ["BTC"],
     "confidence": "high",
-    "metadata": {
-      "source_tweet": {
-        "tweet_id": "tweet-123",
-        "author_username": "gigabrain",
-        "created_at": "2026-04-27T10:54:00.000Z",
-        "is_quoted_tweet": false,
-        "is_reply": false,
-        "quoted_tweet_id": null
-      }
-    },
     "created_at": "2026-04-27T10:55:02.100Z",
-    "updated_at": "2026-04-27T10:55:02.100Z",
-    "raw": {
-      "title": "BTC Open Interest Reset",
-      "insight": "BTC open interest reset while spot bid stayed firm.",
-      "category": "market_structure",
-      "impact_rating": 5,
-      "directional_bias": "bullish",
-      "affected_tokens": ["BTC"],
-      "confidence": "high",
-      "metadata": {
-        "source_tweet": {
-          "tweet_id": "tweet-123",
-          "author_username": "gigabrain",
-          "created_at": "2026-04-27T10:54:00.000Z",
-          "is_quoted_tweet": false,
-          "is_reply": false,
-          "quoted_tweet_id": null
-        }
-      }
-    }
+    "updated_at": "2026-04-27T10:55:02.100Z"
   }
 }
 ```
