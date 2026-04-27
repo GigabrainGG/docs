@@ -1,19 +1,19 @@
 ---
 title: "Alpha Webhooks"
-description: "Receive Radar insights and Alpha trade signals at your own endpoint"
+description: "Receive Alpha trade signals and Radar insights at your own endpoint"
 icon: "plug"
 ---
 
 Webhooks let you stream Gigabrain-generated market intelligence into your own automation stack.
 
-Configure endpoints in the dashboard at **Profile -> Integrations -> Webhooks**. Each endpoint can subscribe to Radar insights, Alpha trade signals, or both.
+Configure endpoints in the dashboard at **Profile -> Integrations -> Webhooks**. Alpha trade signals are the primary event and are selected by default. Add Radar insights when you also want earlier market context.
 
 <CardGroup cols={2}>
-  <Card title="Radar" icon="gauge-high">
-    `radar.created` events when a new Radar insight is generated. Costs `0.1` credits per real delivery.
-  </Card>
   <Card title="Alpha" icon="chart-line">
     `alpha.created` events when a new Alpha trade signal is generated. Costs `0.5` credits per real delivery.
+  </Card>
+  <Card title="Radar" icon="gauge-high">
+    `radar.created` events when a new Radar insight is generated. Costs `0.1` credits per real delivery.
   </Card>
 </CardGroup>
 
@@ -27,8 +27,8 @@ Gigabrain sends webhook requests from the backend webhook worker. Internal Pytho
 
 | Event option | `type` | `event_type` | Cost |
 | --- | --- | --- | --- |
-| Radar | `radar` | `radar.created` | `0.1` credits |
 | Alpha | `alpha` | `alpha.created` | `0.5` credits |
+| Radar | `radar` | `radar.created` | `0.1` credits |
 
 Each request uses this envelope:
 
@@ -100,62 +100,6 @@ export function verifyGigabrainWebhook(
 <Warning>
 Verify against the raw request body before JSON parsing. Re-stringifying parsed JSON can change whitespace or key ordering and break signature checks.
 </Warning>
-
-## Radar Payload
-
-Radar events are created when a Radar insight is generated. The `raw` object mirrors the insight JSON content.
-
-```json
-{
-  "id": "67349fba-72bd-4434-897b-8fbc030ed37a",
-  "type": "radar",
-  "event_type": "radar.created",
-  "object": "alpha_insight",
-  "created_at": "2026-04-27T10:56:52.941Z",
-  "data": {
-    "id": "radar-insight-123",
-    "title": "BTC Open Interest Reset",
-    "insight": "BTC open interest reset while spot bid stayed firm.",
-    "summary": "BTC open interest reset while spot bid stayed firm.",
-    "category": "market_structure",
-    "impact_rating": 5,
-    "directional_bias": "bullish",
-    "affected_tokens": ["BTC"],
-    "confidence": "high",
-    "metadata": {
-      "source_tweet": {
-        "tweet_id": "tweet-123",
-        "author_username": "gigabrain",
-        "created_at": "2026-04-27T10:54:00.000Z",
-        "is_quoted_tweet": false,
-        "is_reply": false,
-        "quoted_tweet_id": null
-      }
-    },
-    "created_at": "2026-04-27T10:55:02.100Z",
-    "updated_at": "2026-04-27T10:55:02.100Z",
-    "raw": {
-      "title": "BTC Open Interest Reset",
-      "insight": "BTC open interest reset while spot bid stayed firm.",
-      "category": "market_structure",
-      "impact_rating": 5,
-      "directional_bias": "bullish",
-      "affected_tokens": ["BTC"],
-      "confidence": "high",
-      "metadata": {
-        "source_tweet": {
-          "tweet_id": "tweet-123",
-          "author_username": "gigabrain",
-          "created_at": "2026-04-27T10:54:00.000Z",
-          "is_quoted_tweet": false,
-          "is_reply": false,
-          "quoted_tweet_id": null
-        }
-      }
-    }
-  }
-}
-```
 
 ## Alpha Payload
 
@@ -262,6 +206,62 @@ Alpha events are created when an Alpha trade signal is generated. The `signal` o
         "model_class": "SignalAgent",
         "provider": "openai",
         "reasoning_effort": "medium"
+      }
+    }
+  }
+}
+```
+
+## Radar Payload
+
+Radar events are created when a Radar insight is generated. The `raw` object mirrors the insight JSON content.
+
+```json
+{
+  "id": "67349fba-72bd-4434-897b-8fbc030ed37a",
+  "type": "radar",
+  "event_type": "radar.created",
+  "object": "alpha_insight",
+  "created_at": "2026-04-27T10:56:52.941Z",
+  "data": {
+    "id": "radar-insight-123",
+    "title": "BTC Open Interest Reset",
+    "insight": "BTC open interest reset while spot bid stayed firm.",
+    "summary": "BTC open interest reset while spot bid stayed firm.",
+    "category": "market_structure",
+    "impact_rating": 5,
+    "directional_bias": "bullish",
+    "affected_tokens": ["BTC"],
+    "confidence": "high",
+    "metadata": {
+      "source_tweet": {
+        "tweet_id": "tweet-123",
+        "author_username": "gigabrain",
+        "created_at": "2026-04-27T10:54:00.000Z",
+        "is_quoted_tweet": false,
+        "is_reply": false,
+        "quoted_tweet_id": null
+      }
+    },
+    "created_at": "2026-04-27T10:55:02.100Z",
+    "updated_at": "2026-04-27T10:55:02.100Z",
+    "raw": {
+      "title": "BTC Open Interest Reset",
+      "insight": "BTC open interest reset while spot bid stayed firm.",
+      "category": "market_structure",
+      "impact_rating": 5,
+      "directional_bias": "bullish",
+      "affected_tokens": ["BTC"],
+      "confidence": "high",
+      "metadata": {
+        "source_tweet": {
+          "tweet_id": "tweet-123",
+          "author_username": "gigabrain",
+          "created_at": "2026-04-27T10:54:00.000Z",
+          "is_quoted_tweet": false,
+          "is_reply": false,
+          "quoted_tweet_id": null
+        }
       }
     }
   }
