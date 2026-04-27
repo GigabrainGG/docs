@@ -1,17 +1,17 @@
 ---
 title: "Alpha Overview"
-description: "Use Radar insights and Alpha trade signals in automated systems"
+description: "Use Alpha trade signals and Radar insights in automated systems"
 icon: "chart-line"
 ---
 
 Alpha is Gigabrain's market intelligence stream for automation. It gives you two levels of signal:
 
 <CardGroup cols={2}>
-  <Card title="Radar" icon="gauge-high">
-    Early market intelligence: narrative shifts, structure changes, catalysts, and risk signals.
-  </Card>
   <Card title="Alpha" icon="chart-line">
     Trade-ready setups with direction, entry, stop, take profits, confidence, and invalidation logic.
+  </Card>
+  <Card title="Radar" icon="gauge-high">
+    Early market intelligence: narrative shifts, structure changes, catalysts, and risk signals.
   </Card>
 </CardGroup>
 
@@ -20,7 +20,7 @@ Alpha is Gigabrain's market intelligence stream for automation. It gives you two
 Use webhooks when you want Gigabrain to push new signals into your own bot, trading engine, alerting system, or workflow automation.
 
 <Card title="Alpha Webhooks" icon="plug" href="/developers/webhooks">
-  Receive Radar insights and Alpha trade signals at your endpoint
+  Receive Alpha trade signals and Radar insights at your endpoint
 </Card>
 
 ## When To Use It
@@ -30,9 +30,9 @@ Use Alpha when you want a live stream of generated market intelligence instead o
 | Need | Use |
 | --- | --- |
 | Ask a custom market question | Brain API |
-| React when new Radar or Alpha is generated | Alpha Webhooks |
+| React when new Alpha or Radar is generated | Alpha Webhooks |
 | Run an autonomous trader with memory and tools | SuperAgents |
 
 <Note>
-Radar webhook deliveries cost `0.1` credits and Alpha webhook deliveries cost `0.5` credits. Test deliveries from the dashboard are free.
+Alpha webhook deliveries cost `0.5` credits and Radar webhook deliveries cost `0.1` credits. Test deliveries from the dashboard are free.
 </Note>
