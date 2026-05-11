@@ -1,27 +1,27 @@
 ---
-title: "SuperAgent Custom Events"
-description: "Trigger a SuperAgent from external systems with inbound webhooks"
+title: "SuperAgent Triggers"
+description: "Wake up a SuperAgent from Alpha, schedules, or external events"
 ---
 
-Custom events let an external system wake up a SuperAgent by sending a JSON payload to a webhook endpoint. Use them when an exchange alert, TradingView signal, Zapier workflow, internal service, or monitoring script should become an agent message.
+Triggers define what can wake up a SuperAgent. They can be Alpha events, schedules, or custom external events from systems like TradingView, Zapier, internal services, exchange alerts, and monitoring scripts.
 
 <Note>
-This is the inbound flow: your system calls a SuperAgent. For the outbound Alpha/Radar flow where Gigabrain calls your endpoint, see [Alpha Webhooks](/developers/webhooks).
+This page covers SuperAgent triggers. For the outbound Alpha/Radar flow where Gigabrain calls your endpoint, see [Alpha Webhooks](/developers/webhooks).
 </Note>
 
 ## How it works
 
-1. Create a custom webhook on the agent's **Webhooks** tab.
-2. Choose a webhook name, such as `price-alert` or `risk_event`.
-3. Set or generate a security key.
-4. Add a prompt template that turns the incoming JSON into instructions for the agent.
+1. Open the agent's **Triggers** tab.
+2. Create a custom trigger.
+3. Choose a trigger name, such as `price-alert` or `risk_event`.
+4. Leave the optional fields blank, or expand advanced options to customize them.
 5. Send a `POST` request to the generated endpoint.
 
-When an event is accepted, the agent creates a new webhook session and processes the rendered prompt asynchronously.
+When an event is accepted, the agent creates a new trigger session and processes the rendered prompt asynchronously. If no custom instructions are set, the agent receives the full JSON payload.
 
 ## Endpoint
 
-Each custom event webhook has this format:
+Each custom external trigger has this endpoint format:
 
 ```txt
 POST https://api.gigabrain.gg/webhooks/{agent_id}/{webhook_name}?token={security_key}
@@ -31,29 +31,29 @@ Content-Type: application/json
 | Part | Description |
 | --- | --- |
 | `agent_id` | The SuperAgent id. |
-| `webhook_name` | The custom webhook name. Letters, numbers, `_`, and `-` are supported. |
-| `security_key` | Secret token for this webhook. Keep it private. |
+| `webhook_name` | The custom trigger name. Letters, numbers, `_`, and `-` are supported. |
+| `security_key` | Secret token for this trigger. Keep it private. |
 
 <Warning>
-Anyone with the full endpoint URL can trigger that webhook. Treat the security key like a password and rotate it if it leaks.
+Anyone with the full endpoint URL can trigger that agent. Treat the security key like a password and rotate it if it leaks.
 </Warning>
 
-## Create a webhook
+## Create a trigger
 
 From the dashboard:
 
 1. Open the SuperAgent.
-2. Go to **Webhooks**.
-3. Under **Custom webhooks**, click **Add webhook**.
+2. Go to **Triggers**.
+3. Under **Custom triggers**, click **Add trigger**.
 4. Fill in the fields below.
 
 | Field | Description |
 | --- | --- |
-| Name | Stable webhook name used in the URL, for example `price-alert`. |
-| Security key | Token required in the endpoint query string. Generate one unless your integration needs a pre-shared value. |
-| Prompt template | Text the agent receives after placeholders are filled from the event payload. |
+| Name | Stable trigger name used in the URL, for example `price-alert`. |
+| Security key | Optional. Leave empty to generate one unless your integration needs a pre-shared value. |
+| Instructions | Optional. Leave empty to send the full event payload to the agent. |
 | Filter JSON | Optional strict filter that decides whether an event should trigger the agent. |
-| Session prefix | Prefix for webhook-created chat sessions. Defaults to `webhook`. |
+| Session prefix | Prefix for trigger-created chat sessions. Defaults to `trigger` in the dashboard. |
 
 ## Payloads
 
@@ -71,17 +71,17 @@ curl -X POST "https://api.gigabrain.gg/webhooks/<agent_id>/price-alert?token=<se
   }'
 ```
 
-If the webhook accepts the event, the response looks like:
+If the trigger accepts the event, the response looks like:
 
 ```json
 {
   "accepted": true,
   "webhook": "price-alert",
-  "session_id": "webhook-price-alert-a1b2c3d4"
+  "session_id": "trigger-price-alert-a1b2c3d4"
 }
 ```
 
-If the event does not match the webhook filter, the response is:
+If the event does not match the trigger filter, the response is:
 
 ```json
 {
@@ -131,7 +131,7 @@ Unmatched placeholders are removed. Keep important fields explicit in the templa
 
 ## Filters
 
-Filters are optional. If no filter is set, every valid event triggers the webhook.
+Filters are optional. If no filter is set, every valid event triggers the agent.
 
 Filters are strict: every configured filter key must exist in the payload and match.
 
@@ -154,13 +154,13 @@ Example filter:
 }
 ```
 
-With this filter, the webhook ignores events that do not include both `token` and `confidence`.
+With this filter, the trigger ignores events that do not include both `token` and `confidence`.
 
 ## Examples
 
 ### TradingView alert
 
-Use the generated webhook URL as the alert webhook URL and send JSON like:
+Use the generated endpoint URL as the alert webhook URL and send JSON like:
 
 ```json
 {
@@ -208,16 +208,16 @@ Review open exposure and tell me what should change.
 | `200` | Accepted or filtered. |
 | `400` | Invalid agent id, webhook name, or JSON body. |
 | `401` | Missing or invalid token. |
-| `404` | Agent or webhook not found. |
-| `410` | Webhook is disabled. |
+| `404` | Agent or trigger not found. |
+| `410` | Trigger is disabled. |
 | `429` | Too many requests from the same IP. |
 | `502` | The agent service could not be reached. |
 
-Custom event webhooks are rate-limited to `60` requests per minute per IP. A matched event starts an agent run, so use filters to avoid noisy or duplicate events.
+Custom event triggers are rate-limited to `60` requests per minute per IP. A matched event starts an agent run, so use filters to avoid noisy or duplicate events.
 
 ## Best practices
 
-- Use one webhook per event type, for example `price-alert`, `risk-event`, or `deposit-detected`.
+- Use one trigger per event type, for example `price-alert`, `risk-event`, or `deposit-detected`.
 - Keep the security key private and rotate it if it is exposed.
 - Send only the fields the agent needs.
 - Use filters for noisy integrations.

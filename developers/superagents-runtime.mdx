@@ -231,14 +231,14 @@ Each scheduled check uses one LLM call. Prefer longer intervals unless urgency d
 
 Schedules persist across restarts. The agent manages them autonomously — it creates, updates, and removes schedules as needed. When a schedule fires and finds something worth reporting, it sends you a Telegram message.
 
-## Custom events
+## Triggers
 
-Custom events let external systems trigger a SuperAgent with an inbound webhook. Use them for TradingView alerts, internal monitoring, workflow automation, exchange events, or any service that can send JSON.
+Triggers define what can wake up a SuperAgent. Use them for schedules, Alpha events, TradingView alerts, internal monitoring, workflow automation, exchange events, or any service that can send JSON.
 
-Each custom event webhook has a security key, an optional strict filter, and a prompt template that turns the incoming payload into instructions for the agent. Matching events create a new webhook session and run asynchronously.
+Each custom external trigger has a security key, an optional strict filter, and a prompt template that turns the incoming payload into instructions for the agent. Matching events create a new trigger session and run asynchronously.
 
-<Card title="SuperAgent Custom Events" icon="webhook" href="/developers/superagents-custom-events">
-  Configure inbound webhook endpoints for external events
+<Card title="SuperAgent Triggers" icon="bolt" href="/developers/superagents-triggers">
+  Configure schedules, Alpha events, and custom external events
 </Card>
 
 ## Skills

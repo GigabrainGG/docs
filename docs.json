@@ -45,7 +45,7 @@
               "core-features/superagents",
               "guides/superagents-setup",
               "developers/superagents-runtime",
-              "developers/superagents-custom-events",
+              "developers/superagents-triggers",
               "core-features/skills",
               "core-features/playbooks",
               "guides/superagents-use-cases",
@@ -104,7 +104,7 @@
             "group": "SuperAgents",
             "pages": [
               "developers/superagents-api",
-              "developers/superagents-custom-events",
+              "developers/superagents-triggers",
               {
                 "group": "Agents",
                 "expanded": true,
