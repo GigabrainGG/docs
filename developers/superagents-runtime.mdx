@@ -231,6 +231,16 @@ Each scheduled check uses one LLM call. Prefer longer intervals unless urgency d
 
 Schedules persist across restarts. The agent manages them autonomously — it creates, updates, and removes schedules as needed. When a schedule fires and finds something worth reporting, it sends you a Telegram message.
 
+## Triggers
+
+Triggers define what can wake up a SuperAgent. Use them for schedules, Alpha events, TradingView alerts, internal monitoring, workflow automation, exchange events, or any service that can send JSON.
+
+Each custom external trigger has a security key, an optional strict filter, and a prompt template that turns the incoming payload into instructions for the agent. Matching events create a new trigger session and run asynchronously.
+
+<Card title="SuperAgent Triggers" icon="bolt" href="/developers/superagents-triggers">
+  Configure schedules, Alpha events, and custom external events
+</Card>
+
 ## Skills
 
 Skills extend what your agent can do. They follow the [Agent Skills](https://agentskills.io) open standard — the same format used by Claude Code, OpenClaw, Cursor, and 26+ other platforms.

@@ -1,0 +1,225 @@
+---
+title: "SuperAgent Triggers"
+description: "Wake up a SuperAgent from Alpha, schedules, or external events"
+---
+
+Triggers define what can wake up a SuperAgent. They can be Alpha events, schedules, or custom external events from systems like TradingView, Zapier, internal services, exchange alerts, and monitoring scripts.
+
+<Note>
+This page covers SuperAgent triggers. For the outbound Alpha/Radar flow where Gigabrain calls your endpoint, see [Alpha Webhooks](/developers/webhooks).
+</Note>
+
+## How it works
+
+1. Open the agent's **Triggers** tab.
+2. Create a custom trigger.
+3. Choose a trigger name, such as `price-alert` or `risk_event`.
+4. Leave the optional fields blank, or expand advanced options to customize them.
+5. Send a `POST` request to the generated endpoint.
+
+When an event is accepted, the agent creates a new trigger session and processes the rendered prompt asynchronously. If no custom instructions are set, the agent receives the full JSON payload.
+
+## Endpoint
+
+Each custom external trigger has this endpoint format:
+
+```txt
+POST https://api.gigabrain.gg/webhooks/{agent_id}/{webhook_name}?token={security_key}
+Content-Type: application/json
+```
+
+| Part | Description |
+| --- | --- |
+| `agent_id` | The SuperAgent id. |
+| `webhook_name` | The custom trigger name. Letters, numbers, `_`, and `-` are supported. |
+| `security_key` | Secret token for this trigger. Keep it private. |
+
+<Warning>
+Anyone with the full endpoint URL can trigger that agent. Treat the security key like a password and rotate it if it leaks.
+</Warning>
+
+## Create a trigger
+
+From the dashboard:
+
+1. Open the SuperAgent.
+2. Go to **Triggers**.
+3. Under **Custom triggers**, click **Add trigger**.
+4. Fill in the fields below.
+
+| Field | Description |
+| --- | --- |
+| Name | Stable trigger name used in the URL, for example `price-alert`. |
+| Security key | Optional. Leave empty to generate one unless your integration needs a pre-shared value. |
+| Instructions | Optional. Leave empty to send the full event payload to the agent. |
+| Filter JSON | Optional strict filter that decides whether an event should trigger the agent. |
+| Session prefix | Prefix for trigger-created chat sessions. Defaults to `trigger` in the dashboard. |
+
+## Payloads
+
+The request body must be a JSON object.
+
+```bash
+curl -X POST "https://api.gigabrain.gg/webhooks/<agent_id>/price-alert?token=<security_key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "token": "BTC",
+    "direction": "long",
+    "price": 104250,
+    "source": "tradingview",
+    "message": "BTC reclaimed the breakout level"
+  }'
+```
+
+If the trigger accepts the event, the response looks like:
+
+```json
+{
+  "accepted": true,
+  "webhook": "price-alert",
+  "session_id": "trigger-price-alert-a1b2c3d4"
+}
+```
+
+If the event does not match the trigger filter, the response is:
+
+```json
+{
+  "filtered": true,
+  "webhook": "price-alert"
+}
+```
+
+## Prompt templates
+
+Prompt templates use `{{key}}` placeholders. Each placeholder is replaced by the matching top-level field from the JSON payload.
+
+Template:
+
+```txt
+TradingView alert for {{token}}.
+Direction: {{direction}}
+Price: {{price}}
+Message: {{message}}
+
+Review this event against current market structure and tell me whether it changes your plan.
+```
+
+Payload:
+
+```json
+{
+  "token": "BTC",
+  "direction": "long",
+  "price": 104250,
+  "message": "BTC reclaimed the breakout level"
+}
+```
+
+The agent receives:
+
+```txt
+TradingView alert for BTC.
+Direction: long
+Price: 104250
+Message: BTC reclaimed the breakout level
+
+Review this event against current market structure and tell me whether it changes your plan.
+```
+
+Unmatched placeholders are removed. Keep important fields explicit in the template so the agent knows what to do with the event.
+
+## Filters
+
+Filters are optional. If no filter is set, every valid event triggers the agent.
+
+Filters are strict: every configured filter key must exist in the payload and match.
+
+| Filter | Meaning |
+| --- | --- |
+| `{ "token": "BTC" }` | Exact match. |
+| `{ "token": ["BTC", "ETH"] }` | Any-of match. |
+| `{ "confidence": { "gte": 70 } }` | Numeric greater-than-or-equal. |
+| `{ "confidence": { "lte": 40 } }` | Numeric less-than-or-equal. |
+| `{ "token": ["BTC", "ETH"], "confidence": { "gte": 70 } }` | Combined conditions. |
+
+Example filter:
+
+```json
+{
+  "token": ["BTC", "ETH"],
+  "confidence": {
+    "gte": 70
+  }
+}
+```
+
+With this filter, the trigger ignores events that do not include both `token` and `confidence`.
+
+## Examples
+
+### TradingView alert
+
+Use the generated endpoint URL as the alert webhook URL and send JSON like:
+
+```json
+{
+  "source": "tradingview",
+  "token": "{{ticker}}",
+  "price": "{{close}}",
+  "message": "{{strategy.order.comment}}"
+}
+```
+
+Prompt template:
+
+```txt
+TradingView event for {{token}} at {{price}}: {{message}}
+
+Check current market context and decide whether this requires action.
+```
+
+### Internal risk event
+
+```bash
+curl -X POST "https://api.gigabrain.gg/webhooks/<agent_id>/risk-event?token=<security_key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "portfolio": "main",
+    "risk": "drawdown",
+    "value": 5.4,
+    "message": "Daily drawdown crossed 5%"
+  }'
+```
+
+Prompt template:
+
+```txt
+Risk event for {{portfolio}}: {{risk}} is now {{value}}%.
+Context: {{message}}
+
+Review open exposure and tell me what should change.
+```
+
+## Responses and limits
+
+| Status | Meaning |
+| --- | --- |
+| `200` | Accepted or filtered. |
+| `400` | Invalid agent id, webhook name, or JSON body. |
+| `401` | Missing or invalid token. |
+| `404` | Agent or trigger not found. |
+| `410` | Trigger is disabled. |
+| `429` | Too many requests from the same IP. |
+| `502` | The agent service could not be reached. |
+
+Custom event triggers are rate-limited to `60` requests per minute per IP. A matched event starts an agent run, so use filters to avoid noisy or duplicate events.
+
+## Best practices
+
+- Use one trigger per event type, for example `price-alert`, `risk-event`, or `deposit-detected`.
+- Keep the security key private and rotate it if it is exposed.
+- Send only the fields the agent needs.
+- Use filters for noisy integrations.
+- Make the prompt template action-oriented: tell the agent whether to review, alert, trade, summarize, or update a file.
+- Include source and timestamp fields when possible so the agent can reason about freshness.
