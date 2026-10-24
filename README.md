@@ -40,3 +40,5 @@ mint dev
 ## Publishing
 
 Push to the default branch. The Mintlify GitHub app deploys automatically.
+
+The project must recognize the Mintlify GitHub app installation for `GigabrainGG/docs`, and editor users must authorize their GitHub account. Check **Settings → Git** and **Profile → Integrations** in Mintlify. Use **Publishes** to inspect deployment errors; a successful manual update does not verify automatic Git-triggered publishing.
