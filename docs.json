@@ -46,7 +46,7 @@
               "guides/superagents-setup",
               "developers/superagents-runtime",
               "developers/superagents-triggers",
-              "core-features/skills",
+              "core-features/superagent-skills",
               "core-features/playbooks",
               "guides/superagents-use-cases",
               "guides/migrate-to-superagents"
@@ -55,6 +55,7 @@
           {
             "group": "Integrations",
             "pages": [
+              "core-features/skills",
               "guides/integrations"
             ]
           },

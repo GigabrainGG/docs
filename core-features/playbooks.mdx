@@ -17,7 +17,7 @@ When you launch a SuperAgent with a playbook, the agent:
 You answer a few questions (risk limits, preferences, wallets to track), and the agent configures itself. The bootstrap runs once — after that, the agent operates from its soul.md and memory.
 
 <Tip>
-Playbooks compose [skills](/core-features/skills) — they don't replace them. A playbook is a finished product. Skills are the building blocks it uses. You can always add or remove skills after launch.
+Playbooks compose [skills](/core-features/superagent-skills) — they don't replace them. A playbook is a finished product. Skills are the building blocks it uses. You can always add or remove skills after launch.
 </Tip>
 
 ## Official playbooks
@@ -78,7 +78,7 @@ author: your-name
 version: "1.0"
 
 skills:
-  - hyperliquid                                          # official skill (from GigabrainGG/skills)
+  - hyperliquid                                          # official skill (from GigabrainGG/superagent-skills)
   - brain                                      # official skill
   - https://github.com/Virtual-Protocol/dgclaw-skill     # custom skill (cloned from GitHub)
 ```
@@ -94,7 +94,7 @@ skills:
 | `skills` | Yes | List of skill dependencies |
 
 Skills are resolved at boot:
-- **Plain names** like `hyperliquid` are loaded from [GigabrainGG/skills](https://github.com/GigabrainGG/skills)
+- **Plain names** like `hyperliquid` are loaded from [GigabrainGG/superagent-skills](https://github.com/GigabrainGG/superagent-skills)
 - **GitHub URLs** like `https://github.com/Virtual-Protocol/dgclaw-skill` are cloned directly
 
 ### soul.md
@@ -230,7 +230,7 @@ Version-pin with a branch, tag, or commit hash for reproducibility.
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/skills">
+  <Card title="Skills Reference" icon="puzzle-piece" href="/core-features/superagent-skills">
     The building blocks that playbooks compose
   </Card>
   <Card title="Official Playbooks" icon="github" href="https://github.com/GigabrainGG/playbooks">
